@@ -1,5 +1,6 @@
 import React from 'react';
-import Header from './Header.js'
+import Header from '../comps/Header.js'
+import Footer from '../comps/Footer.js'
 
 
 
@@ -19,10 +20,12 @@ class LandingPage extends React.Component {
                     <canvas id="canvas"></canvas>
                 </div> 
                 <div className = "above-jumbo" >
-                    <h1>
+                    <h1 className="landing-main-txt">
                         <span className = "main-header" > Team 53 </span> 
                     </h1> 
                 </div>
+
+                <Footer />
 
             </div>
         )
