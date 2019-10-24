@@ -3,6 +3,7 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import './style/App.css';
 import './style/Landing.css'
 import './style/Login.css'
+import './style/Group.css'
 import '../node_modules/font-awesome/css/font-awesome.min.css'
 
 import GroupsPage from './pages/GroupsPage';
