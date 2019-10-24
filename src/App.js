@@ -10,6 +10,7 @@ import GroupsPage from './pages/GroupsPage';
 import LandingPage from './pages/LandingPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import Group from './pages/Group';
 
 class App extends React.Component {
   render() {
@@ -21,6 +22,7 @@ class App extends React.Component {
             <Route exact path='/groups' component={GroupsPage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
+            <Route exact path="/group/:group_number" component={Group}/>
           </Switch>
         </BrowserRouter>
       </div>

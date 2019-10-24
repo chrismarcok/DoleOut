@@ -3,18 +3,49 @@
     "id": 0,
     "name": "Group 0",
     "icon": "home",
-    "colorBg": "#CCC"
+    "colorBg": "#ff8a80",
+    "members": ["Joe", "Billy"]
   },
   {
     "id": 1,
     "name": "Group 1",
     "icon": "check",
-    "colorBg": "#DDD"
+    "colorBg": "#ff80ab",
+    "members": ["Joe", "Alice"]
   },
   {
     "id": 2,
     "name": "Group 2",
-    "icon": "apple-alt",
-    "colorBg": "#EEE"
+    "icon": "file",
+    "colorBg": "#ea80fc",
+    "members": ["Alice", "Billy"]
+  },
+  {
+    "id": 3,
+    "name": "Group 3",
+    "icon": "file",
+    "colorBg": "#b388ff",
+    "members": ["Joe"]
+  },
+  {
+    "id": 4,
+    "name": "My Group",
+    "icon": "file",
+    "colorBg": "#8c9eff",
+    "members": []
+  },
+  {
+    "id": 5,
+    "name": "Group 5",
+    "icon": "file",
+    "colorBg": "#82b1ff",
+    "members": []
+  },
+  {
+    "id": 6,
+    "name": "Group 6",
+    "icon": "file",
+    "colorBg": "#80d8ff",
+    "members": []
   }
 ]

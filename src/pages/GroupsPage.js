@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../comps/Header.js'
-import Group from '../comps/Group.js'
+import GroupComp from '../comps/Group.js'
 import dummy_group_list from './dummy_group_list.json'
 import { uid } from 'react-uid'
 
@@ -21,12 +21,15 @@ class GroupsPage extends React.Component {
           {
             this.groups.map( group => {
               return (
-                <Group key={ uid(group) }
-                       name={ group.name }
-                       icon={ group.icon }
-                       colorBg={ group.colorBg }
-                       id={ group.id }
-                />
+                <a href={ "/group/" + group.id }>
+                  <GroupComp key={ uid(group) }
+                        name={ group.name }
+                        icon={ group.icon }
+                        colorBg={ group.colorBg }
+                        id={ group.id }
+                        members={ group.members }
+                  />
+                </a>
               )
             })
           }
