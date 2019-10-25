@@ -1,10 +1,10 @@
 [
   {
     "id": 0,
-    "name": "Group 0",
+    "name": "bad boys",
     "icon": "home",
     "colorBg": "#ff8a80",
-    "members": ["Joe", "Billy"]
+    "members": ["Joe", "Billy", "Edward", "Sam", "Joel", "Bob", "Frank", "Timmy", "John", "Anthony", "Chuck", "Dan", "Sean", "Dave", "George"]
   },
   {
     "id": 1,

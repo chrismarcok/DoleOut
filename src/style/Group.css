@@ -32,6 +32,8 @@ Individual Group Page
   height: calc(100vh - 60px);
   background-color: #eee; 
   float: left;
+  overflow-x: hidden; 
+  
 }
 
 .group-main-col {
@@ -48,6 +50,7 @@ Individual Group Page
   height: calc(100vh - 60px);
   background-color: #eee;
   float: right;
+  overflow-x: hidden;
 }
 
 .group-title{
@@ -55,6 +58,8 @@ Individual Group Page
   top: 20px;
   left: 20px;
   font-size: 24px;
+  max-width: 80%;
+  
 }
 
 /* GROUP MEMBER */
@@ -106,5 +111,63 @@ Individual Group Page
 
 .other-group-container:hover {
   background-color: #ccc;
+
+}
+
+.group-main-content {
+  padding: 20px;
+  padding-bottom: 0px;
+  /* minus header, minus input, minus padding*/
+  height: calc(100vh - 60px - 100px - 25px);
+  background-color: white;
+}
+
+.group-input-container {
+  height: 50px;
+  width: 100%;
+}
+
+.group-input-container input{
+  height: 50px;
+  width: calc(100% - 120px);
+  float: left;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+}
+
+.group-main-send-btn {
+  float: right;
+  width: 100px;
+  height: 30px;
+  background-color: #2979ff;
+  color: white;
+  border-radius: 6px;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all ease 0.25s;
+}
+
+.group-main-send-btn:hover{
+  background-color: rgb(32, 94, 201);
+
+}
+
+.group-main-add-btn {
+  position: fixed;
+  right: 200px;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: #2979ff;
+  padding: 20px;
+  border-radius: 6px;
+  color: white;
+  transition: all ease 0.25s;
+}
+
+.group-main-add-btn:hover{
+  background-color: rgb(32, 94, 201);
 
 }

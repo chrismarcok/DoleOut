@@ -1,5 +1,7 @@
 import React from 'react'
 
+/* This is the group COMPONENT that is listed in the GroupPage*/
+
 class Group extends React.Component {
 
   constructor(props){
