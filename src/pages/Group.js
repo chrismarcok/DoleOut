@@ -4,6 +4,7 @@ import dummy_group_list from './dummy_group_list.json'
 import GroupMember from '../comps/GroupMember'
 import OtherGroupComp from '../comps/OtherGroupComp'
 import { uid } from 'react-uid'
+import { Redirect } from 'react-router-dom'
 
 /* This is the actual group page. the group page that has 3 columns*/
 
@@ -55,12 +56,16 @@ class Group extends React.Component {
   render() {
     const group = this.getGroup()
     const groups = this.fetchGroups()
+
+    //No group exists with this id. redirect to 404 page.
+    if (group === undefined){
+      return <Redirect to='/404'/>
+    }
     
     return (
       <div>
         <Header/>
         <div className="group-container">
-          
             <div className="group-col group-members-col">
               <ul className="group-members-ul">
                 {
@@ -79,7 +84,7 @@ class Group extends React.Component {
                 {group.name}
               </div>
               <div className="group-main-add-btn">
-              <i className="fa fa-plus"></i> New Expense
+                <i className="fa fa-plus"></i> New Expense
               </div>
             </div>
             <div className="group-main-content">

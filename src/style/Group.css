@@ -94,6 +94,8 @@ Individual Group Page
   padding-top: 10px;
 }
 
+/* OTHER COL */
+
 .group-col .other-title{
   text-align: center;
   margin-top: 10px;
@@ -113,6 +115,8 @@ Individual Group Page
   background-color: #ccc;
 
 }
+
+/* MAIN COLUMN */
 
 .group-main-content {
   padding: 20px;
@@ -156,8 +160,10 @@ Individual Group Page
 }
 
 .group-main-add-btn {
-  position: fixed;
-  right: 200px;
+  position: relative;
+  float: right;
+  top: -20px;
+  width: 125px;
   cursor: pointer;
   margin-right: 10px;
   background-color: #2979ff;
@@ -169,5 +175,4 @@ Individual Group Page
 
 .group-main-add-btn:hover{
   background-color: rgb(32, 94, 201);
-
 }

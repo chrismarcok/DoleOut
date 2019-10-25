@@ -21,7 +21,7 @@ class GroupsPage extends React.Component {
           {
             this.groups.map( group => {
               return (
-                <a href={ "/group/" + group.id }>
+                
                   <GroupComp key={ uid(group) }
                         name={ group.name }
                         icon={ group.icon }
@@ -29,7 +29,7 @@ class GroupsPage extends React.Component {
                         id={ group.id }
                         members={ group.members }
                   />
-                </a>
+                
               )
             })
           }

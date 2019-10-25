@@ -4,7 +4,7 @@
     "name": "bad boys",
     "icon": "home",
     "colorBg": "#ff8a80",
-    "members": ["Joe", "Billy", "Edward", "Sam", "Joel", "Bob", "Frank", "Timmy", "John", "Anthony", "Chuck", "Dan", "Sean", "Dave", "George"]
+    "members": ["Joe", "Billy", "Edward", "Sam", "Joel", "Bob", "Frank", "Timmy", "John", "Anthony", "Chuck", "Dan", "Sean", "Dave", "George", "Aaron", "Huell", "Blahaj"]
   },
   {
     "id": 1,
@@ -22,7 +22,7 @@
   },
   {
     "id": 3,
-    "name": "Group 3",
+    "name": "Family",
     "icon": "file",
     "colorBg": "#b388ff",
     "members": ["Joe"]
@@ -36,14 +36,14 @@
   },
   {
     "id": 5,
-    "name": "Group 5",
+    "name": "Friends",
     "icon": "file",
     "colorBg": "#82b1ff",
     "members": []
   },
   {
     "id": 6,
-    "name": "Group 6",
+    "name": "School Council",
     "icon": "file",
     "colorBg": "#80d8ff",
     "members": []

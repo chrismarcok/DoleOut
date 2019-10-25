@@ -51,6 +51,7 @@ class Group extends React.Component {
 
     return (
       <div>
+        <a href={"/g/" + this.props.id}>
         <div style={colorBg} className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>
             
             <h1 className="grouppage-title">
@@ -59,7 +60,8 @@ class Group extends React.Component {
             <h3>
               Members: { this.stringifyMembers(this.props.members) }
             </h3>
-        </div>     
+        </div>   
+        </a>  
       </div>
     )
   }
