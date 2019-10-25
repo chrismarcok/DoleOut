@@ -21,7 +21,6 @@ class LoginPage extends React.Component {
           <div className="login-container">
           <LoginHeader title="Login"/>
             <form className="login-form">
-              
               <h3>
                 Username
               </h3>

@@ -17,8 +17,9 @@ const green = "#73C557";
 const purple = "#C3648E";
 const blue = "#5380BE";
 const red = "#DB373E";
-const yellow = "#F9E298";
+const yellow = green;
 const colors = [green, purple, blue, red, yellow];
+
 
 function Circle(x, y, dx, dy, radius) {
     this.x = x;

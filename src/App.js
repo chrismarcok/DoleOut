@@ -11,6 +11,7 @@ import LandingPage from './pages/LandingPage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import Group from './pages/Group'
+import Profile from './pages/Profile'
 import NoMatch from './pages/NoMatch'
 
 class App extends React.Component {
@@ -23,7 +24,8 @@ class App extends React.Component {
             <Route exact path='/groups' component={GroupsPage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
-            <Route exact path="/g/:group_number" component={Group}/>
+            <Route exact path='/g/:group_number' component={Group}/>
+            <Route exact path='/u/:user_number' component={Profile}/>
             <Route component={NoMatch}/>
           </Switch>
         </BrowserRouter>

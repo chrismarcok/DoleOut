@@ -11,7 +11,7 @@
     "name": "Group 1",
     "icon": "check",
     "colorBg": "#ff80ab",
-    "members": ["Joe", "Alice"]
+    "members": ["Joe", "Alice", "Eggo"]
   },
   {
     "id": 2,
