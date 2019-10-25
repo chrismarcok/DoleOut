@@ -51,7 +51,7 @@ class Group extends React.Component {
       <div>
         <div style={colorBg} className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>
             
-            <h1 className="group-title">
+            <h1 className="grouppage-title">
             <i id={"icon" + this.props.id}></i> {this.props.name}
             </h1>
             <h3>
