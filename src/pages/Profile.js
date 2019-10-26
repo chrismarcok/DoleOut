@@ -1,6 +1,8 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import Header from '../comps/Header'
 import dummy_user_list from './dummy_user_list.json'
+import '../style/Profile.css'
 
 class Profile extends React.Component{
     getUserNum(){
@@ -17,6 +19,14 @@ class Profile extends React.Component{
         return userList.filter(user => user.id === parseInt(userNumber))[0]
     }
 
+    componentDidMount(){
+        const user = this.getUser()
+        if (user){
+            const pic = document.querySelector("#profile-pic-" + user.id)
+            pic.style.backgroundImage = "url('" + user.picUrl + "')"
+        }
+    }
+
     render() {
 
         const user = this.getUser()
@@ -27,7 +37,21 @@ class Profile extends React.Component{
         console.log(user)
         return (
             <div>
-                { user.username }
+                <Header />
+                <div className="profile-container">
+                    <div className="profile-pic-and-name">
+                        <div className="profile-pic" id={"profile-pic-" + user.id}>
+                        </div>
+                        <div className="profile-name-container">
+                            <h1>{user.username}</h1>
+                            {user.firstName} {user.lastName}
+                        </div>
+                    </div>
+                    <div className="profile-info-contianer">
+                        <h3>Email</h3>
+                        <h4>{user.email}</h4>
+                    </div>
+                </div>
             </div>
         )
     }

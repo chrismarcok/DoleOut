@@ -4,28 +4,137 @@
     "name": "bad boys",
     "icon": "home",
     "colorBg": "#ff8a80",
-    "members": ["Joe", "Billy", "Edward", "Sam", "Joel", "Bob", "Frank", "Timmy", "John", "Anthony", "Chuck", "Dan", "Sean", "Dave", "George", "Aaron", "Huell", "Blahaj"]
+    "members": [
+      {
+        "id": 2,
+        "username": "billy",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/2"
+      },
+      {
+        "id": 3,
+        "username": "joe",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/3"
+      },
+      {
+        "id": 4,
+        "username": "alfred",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/4"
+      },
+      {
+        "id": 5,
+        "username": "sam",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/5"
+      },
+      {
+        "id": 6,
+        "username": "alice",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/6"
+      },
+      {
+        "id": 7,
+        "username": "emma",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/7"
+      },
+      {
+        "id": 8,
+        "username": "anne",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/8"
+      },
+      {
+        "id": 9,
+        "username": "joey",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/9"
+      },
+      {
+        "id": 10,
+        "username": "bob",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/10"
+      },
+      {
+        "id": 11,
+        "username": "timmy",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/11"
+      },
+      {
+        "id": 12,
+        "username": "george",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/12"
+      },
+      {
+        "id": 13,
+        "username": "margret",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/13"
+      },
+      {
+        "id": 14,
+        "username": "jen",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/14"
+      },
+      {
+        "id": 15,
+        "username": "paul",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/15"
+      },
+      {
+        "id": 16,
+        "username": "rick",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/16"
+      },
+      {
+        "id": 17,
+        "username": "donald",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/17"
+      },
+      {
+        "id": 18,
+        "username": "daniel",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/18"
+      },
+      {
+        "id": 19,
+        "username": "grace",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/19"
+      }
+    ]
   },
   {
     "id": 1,
     "name": "Group 1",
     "icon": "check",
     "colorBg": "#ff80ab",
-    "members": ["Joe", "Alice", "Eggo"]
+    "members": []
   },
   {
     "id": 2,
     "name": "Group 2",
     "icon": "file",
     "colorBg": "#ea80fc",
-    "members": ["Alice", "Billy"]
+    "members": []
   },
   {
     "id": 3,
     "name": "Family",
     "icon": "file",
     "colorBg": "#b388ff",
-    "members": ["Joe"]
+    "members": []
   },
   {
     "id": 4,

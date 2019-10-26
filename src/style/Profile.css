@@ -1,0 +1,27 @@
+.profile-container{
+  font-family: 'Poppins', sans-serif;
+  padding-top: 50px;
+  width: 1000px;
+  margin: auto;
+}
+
+.profile-pic{
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  float: left;
+}
+
+.profile-pic-and-name{
+  height: 200px;
+  width: 100%;
+}
+
+.profile-name-container{
+  text-align: center;
+}
+
+.profile-info-contianer {
+  margin-top: 50px;
+  
+}

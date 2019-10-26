@@ -53,6 +53,7 @@ class Group extends React.Component {
     })
   }
 
+
   render() {
     const group = this.getGroup()
     const groups = this.fetchGroups()
@@ -71,7 +72,7 @@ class Group extends React.Component {
                 {
                   group.members.map( member => {
                     return (
-                      <GroupMember name={member} key={ uid(member) }/>
+                      <GroupMember member={member} key={ uid(member) } />
                     )
                   })
                 }

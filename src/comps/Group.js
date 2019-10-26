@@ -27,7 +27,7 @@ class Group extends React.Component {
     }
     let r = ""
     for (let i = 0; i < membersList.length; i++){
-      r += membersList[i] + ", "
+      r += membersList[i].username + ", "
     }
     return r.substring(0, r.length - 2)
   }
