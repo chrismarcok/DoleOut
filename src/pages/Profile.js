@@ -34,7 +34,7 @@ class Profile extends React.Component{
         if (user === undefined){
             return <Redirect to='/404'/>
         }
-        console.log(user)
+        
         return (
             <div>
                 <Header />

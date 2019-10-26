@@ -1,6 +1,9 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Header from '../comps/Header'
+import GroupMessage from '../comps/GroupMessage'
 import dummy_group_list from './dummy_group_list.json'
+import dummy_group_msgs from './dummy_group_msgs.json'
 import GroupMember from '../comps/GroupMember'
 import OtherGroupComp from '../comps/OtherGroupComp'
 import { uid } from 'react-uid'
@@ -24,6 +27,10 @@ class Group extends React.Component {
     return dummy_group_list
   }
 
+  fetchGroupMsgs(){
+    return dummy_group_msgs
+  }
+
   getGroup(){
     const { group_number } = this.props.match.params
     const groups = this.fetchGroups()
@@ -44,7 +51,32 @@ class Group extends React.Component {
 
   getInput(){
     const val = this.state.groupInput
-    console.log(val)
+    if (val === ""){
+      return
+    }
+
+    const m = {
+      "id": 123,
+      "groupId": this.getGroup().id,
+      "date": 102,
+      "user":   
+        {
+          "id": 1,
+          "username": "user",
+          "password": "user",
+          "picUrl": "https://api.adorable.io/avatars/200/1",
+          "email": "dummy@dummy.com",
+          "firstName": "Firstname",
+          "lastName": "McLastname"
+        },
+      "content": val
+    }
+    m.id = uid( m )
+    const newMsg = document.createElement("div")
+    newMsg.id = m.id
+    document.querySelector(".group-main-content").appendChild(newMsg)
+    console.log(m)
+    ReactDOM.render(<GroupMessage msg={ m } key={ m.id }/>, document.querySelector("#" + m.id))
     
     //Reset the state, and make textbox empty
     document.querySelector("#group-input").value = ""
@@ -57,6 +89,7 @@ class Group extends React.Component {
   render() {
     const group = this.getGroup()
     const groups = this.fetchGroups()
+    const msgs = this.fetchGroupMsgs()
 
     //No group exists with this id. redirect to 404 page.
     if (group === undefined){
@@ -89,7 +122,14 @@ class Group extends React.Component {
               </div>
             </div>
             <div className="group-main-content">
-              Nothing is here
+              {
+                msgs.filter(m => m.groupId === group.id).map(msg => {
+                  return (
+                    <GroupMessage msg={ msg } key={ uid(msg) }/>
+                  )
+                })
+              }
+                
             </div>
             <div className="group-input-container">
               <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={this.handleInputChange} maxLength="255"></input>
