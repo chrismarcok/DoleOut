@@ -9,6 +9,26 @@
   font-family: 'Poppins', sans-serif;
   transition: all ease 0.25s;
   padding: 16px;
+  
+}
+
+.group-div-change-btns{
+ float: right;
+ margin-top: -50px;
+}
+
+.group-div-change-btns i {
+  display: inline-block;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 3px;
+  margin: 5px;
+  transition: all ease 0.25s;
+}
+
+.group-div-change-btns i:hover{
+  background-color: black;
+  color: white;
 }
 
 /*
