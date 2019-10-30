@@ -6,4 +6,10 @@
 .no-match{
   font-size: 32px;
   text-align: center;
+  
+}
+
+.no-match a:hover{
+font-size: 1000px;
+transition: all ease 10s;
 }

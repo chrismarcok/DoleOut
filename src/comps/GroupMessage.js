@@ -1,4 +1,6 @@
 import React from 'react'
+import ExpensePic from '../comps/ExpensePic'
+import { uid } from 'react-uid'
 
 class GroupMessage extends React.Component {
 
@@ -7,14 +9,18 @@ class GroupMessage extends React.Component {
     //Todo: why does only the first pic work for any user ????????????? 
     const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg.user.id)
     pic.style.backgroundImage = "url('" + this.props.msg.user.picUrl + "')"
-    console.log(pic.style.backgroundImage)
+    //console.log(pic.style.backgroundImage)
+  }
+
+  redirect(){
+    window.location = "/u/" + this.props.msg.user.id;
   }
 
   getMsg() {
     return (
       <div>
         <div className="group-main-msg">
-          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.user.id}>
+          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.user.id} onClick={() => this.redirect()}>
           </div>
           <div className="group-main-msg-content">
             <strong>{this.props.msg.user.username}</strong> <br />
@@ -27,8 +33,46 @@ class GroupMessage extends React.Component {
 
   getExpense() {
     return (
-      <div>
-        this is an expense
+      <div className="group-expense-msg-container">
+        <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.user.id} onClick={() => this.redirect()}>
+        </div>
+        <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}:
+        <div className="group-main-msg-content">
+          <div className="expense-container">
+            <div className="expense-upper">
+              <div className="expense-upper-left">
+                <h3>{this.props.msg.expense.title}</h3>
+                <p>You Owe:</p>
+                $unknown
+              </div>
+              <div className="expense-upper-right">
+                <div className="expense-total-remaining-title">
+                  Total Remaining:
+                </div>
+                <div className="expense-remaining">
+                  ${this.props.msg.expense.remaining}
+                </div>
+                 
+              </div>
+            </div>
+            <div className="expense-lower">
+              <div className="expense-faces">
+                {
+                  this.props.msg.expense.members.map( m => {
+                    return(
+                      <ExpensePic key={ uid(m) } member={ m }/>
+                    );
+                  })
+                }
+              </div>
+              <div className="expense-pay">
+                <div className="expense-pay-btn">
+                  PAY
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

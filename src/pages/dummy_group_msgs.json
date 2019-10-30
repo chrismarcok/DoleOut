@@ -228,6 +228,7 @@
     "expense": {
       "title": "Toilet Paper",
       "cost": 9.99,
+      "remaining": 9.99,
       "members": [
         {
           "id": 19,
@@ -250,13 +251,16 @@
       ]
     },
     "user": {
-      "id": 19,
-      "username": "grace",
+      "id": 15,
+      "username": "paul",
       "password": "123",
-      "picUrl": "https://api.adorable.io/avatars/200/19",
+      "picUrl": "https://api.adorable.io/avatars/200/15",
       "email": "dummy@dummy.com",
       "firstName": "Firstname",
-      "lastName": "McLastname"
+      "lastName": "McLastname",
+      "paypal": "https://www.paypal.me/chrismarcok",
+      "preference": "paypal",
+      "description": "send me money please thank u :)"
     },
     "content": "pay me back plzzzz"
   }

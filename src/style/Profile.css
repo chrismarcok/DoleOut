@@ -26,7 +26,23 @@
   text-align: center;
 }
 
+.profile-name-container i{
+  color: #d3dceb;
+  padding: 8px;
+  background-color: #2979ff;
+  border-radius: 3px;
+}
+
+.profile-name-container i:hover{
+  color: white;
+  transition: all ease 0.25s;
+}
+
 .profile-info-contianer {
-  margin-top: 50px;
+  margin-top: 50px; 
+}
+
+.profile-desc {
   
+  margin-left: 220px;
 }

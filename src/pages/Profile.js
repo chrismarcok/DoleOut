@@ -43,13 +43,20 @@ class Profile extends React.Component{
                         <div className="profile-pic" id={"profile-pic-" + user.id}>
                         </div>
                         <div className="profile-name-container">
-                            <h1>{user.username}</h1>
+                            <h1>{user.username} <a href={user.paypal} target="_blank" rel="noopener noreferrer"><i className="fa fa-cc-paypal"></i></a></h1> 
                             {user.firstName} {user.lastName}
+                        </div>
+                        <div className="profile-desc">
+                            <b>Description</b> 
+                            <p>{user.description}</p>
+                            <br/>
+                            <b>Preferred Payment Method</b>
+                            <p>{user.preference}</p>
                         </div>
                     </div>
                     <div className="profile-info-contianer">
                         <h3>Email</h3>
-                        <h4>{user.email}</h4>
+                        <p>{user.email}</p>
                     </div>
                 </div>
             </div>

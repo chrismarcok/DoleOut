@@ -209,7 +209,7 @@ Messages
   height: 50px;
   width: 50px;
   border-radius: 50%;
-  
+  cursor: pointer;
   background-size: cover;
   float: left;
   margin-right: 10px;
@@ -224,4 +224,89 @@ Messages
   border-bottom: 1px solid #999;
   margin-left: 60px;
   padding-bottom: 10px;
+}
+
+/* EXPENSE */
+
+.expense-container{
+  margin-top: 10px;
+  width: 500px;
+  min-height: 200px;
+  background-color: white;
+  position: relative;
+}
+
+.expense-lower{
+  height: 60px;
+  background-color: #b2ebf2;
+  vertical-align: bottom;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.expense-pay{
+  float: right;
+}
+
+.expense-pay-btn{
+  padding: 5px;
+  width: 75px;
+  text-align: center;
+  background-color: #c8e6c9;
+  color: black;
+  border-radius: 3px;
+  margin-right: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all ease 0.25s;
+}
+
+.expense-pay-btn:hover{
+  background-color: #2e7d32;
+  color: white;
+  transition: all ease 0.25s;
+}
+
+.expense-faces{
+  float: left;
+}
+
+.expense-upper-left{
+  float: left;
+  width: 50%;
+  
+}
+
+.expense-upper-left h3{
+  font-size: 24px;
+}
+
+.expense-upper-right{
+  float: right;
+  width: 50%;
+
+  
+}
+
+.expense-total-remaining-title {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.expense-remaining{
+  font-size: 50px;
+  text-align: center;
+}
+
+.expense-pic-small {
+  height: 36px;
+  width: 36px;
+  background-size: contain;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 10px;
+  cursor: pointer;
 }
