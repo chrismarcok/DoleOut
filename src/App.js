@@ -24,15 +24,17 @@ Register -> Profile
 Display Profiles in Group
 *******************
 GROUP
-Add Messages to group-main-col
-Add Expenses to group-main-col
-Make sure there is overflow-y: scroll for group-main-col
 Click on user -> Little popup with link to profile, discord style
+Create new group
+Add new group member
+Put expenses on the right column
+Profile pic bug!
 *******************
 EXPENSES
-Create expenses
+Create expenses form
 Create dummy_expense.JSON
-Be able to deduct money from the expense
+Be able to deduct money from the expense / pay an expense
+  partway
 *******************
 REGISTER/LOGIN
 Make errors show up
@@ -41,6 +43,11 @@ Admin/User dummy functionality
     Renaming, Deleting Groups
     Edit, Deleting Users
     See how much in total is owed by a user/how much is owed to them
+*******************
+USER PAGE
+See joined groups
+See owed debts
+See user debts
 *******************
 Some sort of ping system
 */

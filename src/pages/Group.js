@@ -68,6 +68,7 @@ class Group extends React.Component {
       "id": 123,
       "groupId": this.getGroup().id,
       "date": 102,
+      "type": "msg",
       "user":
       {
         "id": 1,
