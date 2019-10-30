@@ -13,7 +13,7 @@ import { Redirect } from 'react-router-dom'
 
 class Group extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -22,19 +22,28 @@ class Group extends React.Component {
     this.getInput = this.getInput.bind(this)
   }
 
+  componentDidMount() {
+    this.scrollToBottomOfChat();
+  }
+
+  scrollToBottomOfChat() {
+    const msgBox = document.querySelector(".group-main-content");
+    msgBox.scrollTop = msgBox.scrollHeight;
+  }
+
   fetchGroups() {
     //here is where we would get stuff from a server
     return dummy_group_list
   }
 
-  fetchGroupMsgs(){
+  fetchGroupMsgs() {
     return dummy_group_msgs
   }
 
-  getGroup(){
+  getGroup() {
     const { group_number } = this.props.match.params
     const groups = this.fetchGroups()
-    const thisGroupLst = groups.filter( g => g.id === parseInt(group_number))
+    const thisGroupLst = groups.filter(g => g.id === parseInt(group_number))
     return thisGroupLst[0]
   }
 
@@ -42,16 +51,16 @@ class Group extends React.Component {
     const target = event.target
     const value = target.value
     const name = target.name
-    
+
     this.setState({
       [name]: value
     })
     // console.log(this.state)
   }
 
-  getInput(){
+  getInput() {
     const val = this.state.groupInput
-    if (val === ""){
+    if (val === "") {
       return
     }
 
@@ -59,30 +68,32 @@ class Group extends React.Component {
       "id": 123,
       "groupId": this.getGroup().id,
       "date": 102,
-      "user":   
-        {
-          "id": 1,
-          "username": "user",
-          "password": "user",
-          "picUrl": "https://api.adorable.io/avatars/200/1",
-          "email": "dummy@dummy.com",
-          "firstName": "Firstname",
-          "lastName": "McLastname"
-        },
+      "user":
+      {
+        "id": 1,
+        "username": "user",
+        "password": "user",
+        "picUrl": "https://api.adorable.io/avatars/200/1",
+        "email": "dummy@dummy.com",
+        "firstName": "Firstname",
+        "lastName": "McLastname"
+      },
       "content": val
     }
-    m.id = uid( m )
+    m.id = uid(m)
     const newMsg = document.createElement("div")
     newMsg.id = m.id
     document.querySelector(".group-main-content").appendChild(newMsg)
     console.log(m)
-    ReactDOM.render(<GroupMessage msg={ m } key={ m.id }/>, document.querySelector("#" + m.id))
-    
+    ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
+
     //Reset the state, and make textbox empty
     document.querySelector("#group-input").value = ""
     this.setState({
       "groupInput": ""
     })
+    this.scrollToBottomOfChat();
+
   }
 
 
@@ -92,26 +103,26 @@ class Group extends React.Component {
     const msgs = this.fetchGroupMsgs()
 
     //No group exists with this id. redirect to 404 page.
-    if (group === undefined){
-      return <Redirect to='/404'/>
+    if (group === undefined) {
+      return <Redirect to='/404' />
     }
-    
+
     return (
       <div>
-        <Header/>
+        <Header />
         <div className="group-container">
-            <div className="group-col group-members-col">
-              <ul className="group-members-ul">
-                {
-                  group.members.map( member => {
-                    return (
-                      <GroupMember member={member} key={ uid(member) } />
-                    )
-                  })
-                }
-              </ul>
-            </div>
-          
+          <div className="group-col group-members-col">
+            <ul className="group-members-ul">
+              {
+                group.members.map(member => {
+                  return (
+                    <GroupMember member={member} key={uid(member)} />
+                  )
+                })
+              }
+            </ul>
+          </div>
+
           <div className="group-col group-main-col">
             <div>
               <div className="group-title">
@@ -125,11 +136,11 @@ class Group extends React.Component {
               {
                 msgs.filter(m => m.groupId === group.id).map(msg => {
                   return (
-                    <GroupMessage msg={ msg } key={ uid(msg) }/>
+                    <GroupMessage msg={msg} key={uid(msg)} />
                   )
                 })
               }
-                
+
             </div>
             <div className="group-input-container">
               <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={this.handleInputChange} maxLength="255"></input>
@@ -143,11 +154,11 @@ class Group extends React.Component {
             <ul className="group-col-other-ul">
               {
                 /* Get all groups but current one*/
-                groups.filter(g => g.id !== group.id).map( g => {
+                groups.filter(g => g.id !== group.id).map(g => {
                   return (
-                    <OtherGroupComp group={ g } key={ uid(g) }/>
+                    <OtherGroupComp group={g} key={uid(g)} />
                   )
-                }) 
+                })
               }
             </ul>
           </div>

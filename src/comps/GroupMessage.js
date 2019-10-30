@@ -1,28 +1,44 @@
 import React from 'react'
 
-class GroupMessage extends React.Component{
+class GroupMessage extends React.Component {
 
-  componentDidMount(){
+  componentDidMount() {
 
     //Todo: why does only the first pic work for any user ????????????? 
     const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg.user.id)
-    pic.style.backgroundImage = "url('"+ this.props.msg.user.picUrl +"')"
+    pic.style.backgroundImage = "url('" + this.props.msg.user.picUrl + "')"
     console.log(pic.style.backgroundImage)
   }
 
-  render() {
+  getMsg() {
     return (
       <div>
         <div className="group-main-msg">
           <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.user.id}>
           </div>
           <div className="group-main-msg-content">
-            <strong>{this.props.msg.user.username}</strong> <br/>
+            <strong>{this.props.msg.user.username}</strong> <br />
             {this.props.msg.content}
           </div>
         </div>
       </div>
     )
+  }
+
+  getExpense() {
+    return (
+      <div>
+        this is an expense
+      </div>
+    )
+  }
+
+  render() {
+    if (this.props.msg.type === "msg") {
+      return this.getMsg();
+    } else if (this.props.msg.type === "expense") {
+      return this.getExpense();
+    }
   }
 }
 

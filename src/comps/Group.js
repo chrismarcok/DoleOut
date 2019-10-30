@@ -63,8 +63,9 @@ class Group extends React.Component {
             </h1>
             <div className="group-div-change-btns">
               <div>
-                <i className="fa fa-edit" ></i>
-                <i className="fa fa-trash" ></i>
+                <i className="fa fa-check"></i>
+                <i className="fa fa-edit"></i>
+                <i className="fa fa-trash"></i>
               </div>
             </div>
             <h3>

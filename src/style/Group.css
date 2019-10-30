@@ -145,7 +145,7 @@ Individual Group Page
   margin-top: 20px;
   padding-bottom: 0px;
   /* minus header, minus input, minus padding, minus margin*/
-  max-height: calc(100vh - 60px - 100px - 25px - 20px);
+  height: calc(100vh - 60px - 100px - 25px - 20px);
   background-color: white;
   overflow-y: scroll;
 }
@@ -216,8 +216,12 @@ Messages
 }
 
 .group-main-msg{
-  border-bottom: 1px solid #999;
   min-height: 50px;
-  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.group-main-msg-content{
+  border-bottom: 1px solid #999;
+  margin-left: 60px;
   padding-bottom: 10px;
 }
