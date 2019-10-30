@@ -48,6 +48,7 @@ USER PAGE
 See joined groups
 See owed debts
 See user debts
+User info editing
 *******************
 Some sort of ping system
 */
