@@ -43,6 +43,7 @@ class GroupMessage extends React.Component {
             <div className="expense-upper">
               <div className="expense-upper-left">
                 <h3>{this.props.msg.expense.title}</h3>
+                <p><i>{this.props.msg.content}</i></p>
                 <p>You Owe:</p>
                 $unknown
               </div>
@@ -61,7 +62,7 @@ class GroupMessage extends React.Component {
                 {
                   this.props.msg.expense.members.map(m => {
                     return (
-                      <ExpensePic key={uid(m)} member={m} />
+                      <ExpensePic key={uid(m)} member={m} id={this.props.msg.expense.id} />
                     );
                   })
                 }
