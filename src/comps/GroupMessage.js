@@ -4,6 +4,10 @@ import { uid } from 'react-uid'
 
 class GroupMessage extends React.Component {
 
+  /* 
+  A group message represents either a chat message, or an expense in the chat.
+  */
+
   componentDidMount() {
 
     //Todo: why does only the first pic work for any user ????????????? 
@@ -66,7 +70,7 @@ class GroupMessage extends React.Component {
                 }
               </div>
               <div className="expense-pay">
-                <div className="expense-pay-btn">
+                <div className="expense-pay-btn" onClick={() => window.location = "/e/" + this.props.msg.expense.id}>
                   PAY
                 </div>
               </div>

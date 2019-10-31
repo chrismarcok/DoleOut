@@ -19,19 +19,21 @@ class LoginPage extends React.Component {
       <div>
         <Header/>
           <div className="login-container">
-          <LoginHeader title="Login"/>
-            <form className="login-form">
-              <h3>
-                Username
-              </h3>
-              <input id="login-username" type="text" name="username" placeholder="Username"></input>
-              <h3>
-                Password
-              </h3>
-              <input id="login-password" type="password" name="password" placeholder="Password"></input>
-              
-            </form>
-            <button>Login <i className="fa fa-sign-in"></i></button>
+            <div className="login-inner">
+            <LoginHeader title="Login"/>
+              <form className="login-form">
+                <h3>
+                  Username
+                </h3>
+                <input id="login-username" type="text" name="username" placeholder="Username"></input>
+                <h3>
+                  Password
+                </h3>
+                <input id="login-password" type="password" name="password" placeholder="Password"></input>
+                
+              </form>
+              <button>Login <i className="fa fa-sign-in"></i></button>
+            </div>
           </div>
         <Footer/>
       </div>

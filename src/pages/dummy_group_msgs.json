@@ -226,6 +226,7 @@
     "date": 103,
     "type": "expense",
     "expense": {
+      "id": 0,
       "title": "Toilet Paper",
       "cost": 9.99,
       "remaining": 9.99,

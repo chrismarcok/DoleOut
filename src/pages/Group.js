@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Header from '../comps/Header'
+import OtherExpense from '../comps/OtherExpense'
 import GroupMessage from '../comps/GroupMessage'
 import dummy_group_list from './dummy_group_list.json'
 import dummy_group_msgs from './dummy_group_msgs.json'
@@ -24,6 +25,11 @@ class Group extends React.Component {
 
   componentDidMount() {
     this.scrollToBottomOfChat();
+    const group = this.getGroup();
+    const msgs = this.fetchGroupMsgs();
+    if (msgs.filter( m => m.groupId === group.id && m.type === "expense").length === 0){
+      document.querySelector(".other-title-expenses").style.display = "none";
+    }
   }
 
   scrollToBottomOfChat() {
@@ -58,43 +64,40 @@ class Group extends React.Component {
     // console.log(this.state)
   }
 
-  getInput() {
-    const val = this.state.groupInput
-    if (val === "") {
-      return
+  getInput(e) {
+    const val = this.state.groupInput;
+    if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn")) && val !== ""){
+      const m = {
+        "id": 123,
+        "groupId": this.getGroup().id,
+        "date": 102,
+        "type": "msg",
+        "user":
+        {
+          "id": 1,
+          "username": "user",
+          "password": "user",
+          "picUrl": "https://api.adorable.io/avatars/200/1",
+          "email": "dummy@dummy.com",
+          "firstName": "Firstname",
+          "lastName": "McLastname"
+        },
+        "content": val
+      }
+      m.id = uid(m)
+      const newMsg = document.createElement("div")
+      newMsg.id = m.id
+      document.querySelector(".group-main-content").appendChild(newMsg)
+      console.log(m)
+      ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
+
+      //Reset the state, and make textbox empty
+      document.querySelector("#group-input").value = ""
+      this.setState({
+        "groupInput": ""
+      })
+      this.scrollToBottomOfChat();
     }
-
-    const m = {
-      "id": 123,
-      "groupId": this.getGroup().id,
-      "date": 102,
-      "type": "msg",
-      "user":
-      {
-        "id": 1,
-        "username": "user",
-        "password": "user",
-        "picUrl": "https://api.adorable.io/avatars/200/1",
-        "email": "dummy@dummy.com",
-        "firstName": "Firstname",
-        "lastName": "McLastname"
-      },
-      "content": val
-    }
-    m.id = uid(m)
-    const newMsg = document.createElement("div")
-    newMsg.id = m.id
-    document.querySelector(".group-main-content").appendChild(newMsg)
-    console.log(m)
-    ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
-
-    //Reset the state, and make textbox empty
-    document.querySelector("#group-input").value = ""
-    this.setState({
-      "groupInput": ""
-    })
-    this.scrollToBottomOfChat();
-
   }
 
 
@@ -121,6 +124,13 @@ class Group extends React.Component {
                   )
                 })
               }
+              <div className="group-add-member-container">
+                <div className="group-add-member-inner">
+                  <div className="group-add-member-btn">
+                    <i className="fa fa-plus"></i>
+                  </div>
+                </div>
+              </div>
             </ul>
           </div>
 
@@ -129,7 +139,7 @@ class Group extends React.Component {
               <div className="group-title">
                 {group.name}
               </div>
-              <div className="group-main-add-btn">
+              <div className="group-main-add-btn" onClick={ () => window.location = "/g/" + group.id + "/new_expense"}>
                 <i className="fa fa-plus"></i> New Expense
               </div>
             </div>
@@ -144,11 +154,26 @@ class Group extends React.Component {
 
             </div>
             <div className="group-input-container">
-              <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={this.handleInputChange} maxLength="255"></input>
+              <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={this.handleInputChange} maxLength="150" onKeyDown={this.getInput}></input>
               <div className="group-main-send-btn" onClick={this.getInput}><i className="fa fa-paper-plane"></i></div>
             </div>
           </div>
           <div className="group-col group-other-col">
+            <div className="other-title-expenses">
+              <div className="other-title">
+                <h3>Current Expenses</h3>
+              </div>
+              <ul className="group-col-other-ul">
+                {
+                  msgs.filter(m => m.groupId === group.id && m.type === "expense").map( msg => {
+                    return (
+                      <OtherExpense msg={ msg }/>
+                    );
+                  })
+                  
+                }
+              </ul>
+            </div>
             <div className="other-title">
               <h3>Other Groups</h3>
             </div>
@@ -161,6 +186,13 @@ class Group extends React.Component {
                   )
                 })
               }
+              <div className="group-other-col-add-group-container">
+                <div className="group-other-col-add-group-inner" onClick={() => window.location = "/groups/new"}>
+                  <div className="group-other-col-add-group-btn">
+                    <i className="fa fa-plus"></i>
+                  </div>
+                </div>
+              </div>
             </ul>
           </div>
         </div>

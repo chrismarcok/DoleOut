@@ -1,5 +1,5 @@
 /*
-"Groups Page" Page
+"Groups Page" Page, the one with many colors
 */
 
 .group-div{
@@ -29,6 +29,40 @@
 .group-div-change-btns i:hover{
   background-color: black;
   color: white;
+}
+
+.group-add-btn{
+  max-width: 100%;
+  height: 150px;
+  margin: 0px;
+  background-color: #eee;
+  border-radius: 10px;
+  border-style: dashed;
+  border-color: #00C853;
+  border-width: 2px;
+  color: #00c853;
+  transition: all ease 0.25s;
+  cursor: pointer;
+}
+
+.group-add-btn:hover{
+  background-color: #00C853;
+  transition: all ease 0.5s;
+  color: white;
+
+}
+
+.group-add-icon-container{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+}
+
+.group-add-icon-container i{
+  align-self: center;
+  
 }
 
 /*
@@ -89,7 +123,7 @@ Individual Group Page
   background-color: #eee;
   width: 200px;
   height: 50px;
-  transition: all ease 0.25s;
+  transition: all ease 0.1s;
   cursor: pointer;
 }
 
@@ -114,6 +148,34 @@ Individual Group Page
   padding-top: 10px;
 }
 
+.group-add-member-container{
+  padding: 10px;
+}
+
+.group-add-member-inner{
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  border-style: dashed;
+  border-color: #00C853;
+  border-width: 2px;
+  color: #00c853;
+  cursor: pointer;
+  transition: all ease 0.25s;
+}
+
+.group-add-member-inner:hover{
+  background-color: #00c853;
+  color: white;
+  transition: all ease 0.25s;
+}
+
+.group-add-member-btn{
+  align-self: center;
+}
+
 /* OTHER COL */
 
 .group-col .other-title{
@@ -127,7 +189,7 @@ Individual Group Page
   height: 32px;
   padding-left: 10px;
   padding-top: 6px;
-  transition: all ease 0.25s;
+  transition: all ease 0.1s;
   
 }
 
@@ -309,4 +371,67 @@ Messages
   margin-right: 5px;
   margin-top: 10px;
   cursor: pointer;
+}
+
+/* SMALL-EXPENSE IN THE RIGHT (OTHER) COLUMN */
+
+.expense-small{
+  padding: 10px;
+  width: 100%;
+  background-color: #eee;
+  cursor: pointer;
+  transition: all ease 0.25s;
+}
+
+.expense-small:hover{
+  background-color: #ccc;
+  transition: all ease 0.1s;
+}
+
+.expense-small-pic-and-title{
+  height: 32px;
+  margin-bottom: 4px;
+}
+
+.expense-small-pic-and-title b{
+  margin-left: 4px;
+}
+
+.expense-small-pic{
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-size: cover;
+  float: left;
+}
+
+/* create new group button in other column */
+
+.group-other-col-add-group-container{
+  padding: 10px;
+  padding-right: 15px;
+}
+
+.group-other-col-add-group-inner{
+  width: 100%;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  border-style: dashed;
+  border-color: #00C853;
+  border-width: 2px;
+  color: #00c853;
+  cursor: pointer;
+  transition: all ease 0.25s;
+}
+
+.group-other-col-add-group-inner:hover{
+  background-color: #00c853;
+  color: white;
+  transition: all ease 0.25s;
+}
+
+.group-other-col-add-group-btn{
+  align-self: center;
 }

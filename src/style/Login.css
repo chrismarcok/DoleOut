@@ -4,11 +4,18 @@
   height: calc(100vh - 60px - 24px); /*hdr 60px, footer 24px*/
   margin: auto;
   font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.login-inner {
+  align-self: center;
+  width: 100%;
 }
 
 .login-hdr {
+  
   text-align: center;
-  padding-top: 30%;
   font-size: 28px;
 }
 

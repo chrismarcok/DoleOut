@@ -33,6 +33,13 @@ class GroupsPage extends React.Component {
               )
             })
           }
+          <div className="group-div">
+            <div className="group-add-btn" onClick={() => window.location = "/groups/new"}>
+              <div className="group-add-icon-container">
+                <i className="fa fa-plus"></i>
+              </div>
+            </div>
+          </div>
         </ul>
       </div>
     )

@@ -71,6 +71,7 @@ class RegisterPage extends React.Component {
       <div>
         <Header/>
         <div className="login-container">
+          <div className="login-inner">
             <LoginHeader title="Register"/>
             <form className="login-form">
               
@@ -90,7 +91,7 @@ class RegisterPage extends React.Component {
             </form>
             <button onClick={() => this.register()}>Register <i className="fa fa-user-plus"></i></button>
           </div>
-        
+        </div>
         <Footer/>
       </div>
     )
