@@ -4,7 +4,7 @@ class ExpensePic extends React.Component{
 
 
   componentDidMount(){
-    const pic = document.querySelector(".expense-pic-id-" + this.props.member.id);
+    const pic = document.querySelector(".expense-pic-id-" + this.props.member.id + "-" + this.props.id);
     pic.style.backgroundImage = "url('" + this.props.member.picUrl + "')";
   }
 
@@ -15,7 +15,7 @@ class ExpensePic extends React.Component{
   render() {
     return (
       
-        <div className={"expense-pic-small expense-pic-id-" + this.props.member.id} onClick={() => this.redirect()}></div>
+        <div className={"expense-pic-small expense-pic-id-" + this.props.member.id + "-" + this.props.id} onClick={() => this.redirect()}></div>
       
     )
   }
