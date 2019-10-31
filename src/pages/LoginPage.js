@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../comps/Header.js'
 import Footer from '../comps/Footer.js'
 import LoginHeader from '../comps/LoginHeader'
+import dummy_user_list from './dummy_user_list.json'
 
 class LoginPage extends React.Component {
   //TODO: do something with the inputs. probably should call the functions defined in 
@@ -11,7 +12,44 @@ class LoginPage extends React.Component {
   state = {
     username: "",
     password: "",
-    users: []
+    users: this.fetchUsers()
+  }
+
+  fetchUsers () {
+    //here would be the code to fetch json users from server. instead just use this dummy list.
+    return dummy_user_list
+  }
+
+  login() {
+    if(!this.checkRegistered(this.state.username) || (this.checkRegistered(this.state.username) && !(this.state.password === this.getUserPassword(this.state.username)))){
+      alert("Wrong username or password")
+    }
+    else{
+      alert(this.state.username + " logged in succesfully")
+      //log in here, link to profile page
+    }
+  }
+
+  getUserPassword(username){
+    const users = this.state.users
+    const user = users.filter(user => user.username === username)
+    return user[0].password
+  }
+
+  checkRegistered(username){
+    const users = this.state.users
+    const user = users.filter(user => user.username === username)
+    return user.length > 0
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target
+    const value = target.value
+    const name = target.name
+    
+    this.setState({
+      [name]: value
+    })
   }
   
   render() {
@@ -25,14 +63,14 @@ class LoginPage extends React.Component {
                 <h3>
                   Username
                 </h3>
-                <input id="login-username" type="text" name="username" placeholder="Username"></input>
+                <input id="login-username" type="text" name="username" placeholder="Username" onChange={this.handleInputChange}></input>
                 <h3>
                   Password
                 </h3>
-                <input id="login-password" type="password" name="password" placeholder="Password"></input>
+                <input id="login-password" type="password" name="password" placeholder="Password" onChange={this.handleInputChange}></input>
                 
               </form>
-              <button>Login <i className="fa fa-sign-in"></i></button>
+              <button onClick={() => this.login()}>Login <i className="fa fa-sign-in"></i></button>
             </div>
           </div>
         <Footer/>

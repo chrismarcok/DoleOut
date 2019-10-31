@@ -26,19 +26,25 @@ class RegisterPage extends React.Component {
   register() {
     console.log(this.state.users)
     if (this.state.username === ""){
-      console.log("username should be atleast one char")
+      console.log("username should be at least one char")
+      alert("your username should have at least one character")
     }
     else if (this.state.password.length <= 6){
       console.log("password should be greater than 6 chars")
+      alert("your password should have more than 6 characters")
     }
     else if (this.state.password !== this.state.rePassword){
       console.log("passwords don't match")
+      alert("the passwords don't match")
+      
     }
     else if (this.checkRegistered(this.state.username)){
       console.log(this.state.username + " already registered")
+      alert(this.state.username + " is already registered")
     }
     else {
       console.log("registered " + this.state.username)
+      alert(this.state.username + " has been registered.")
       const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
       this.setState({
         "users": newUsers
