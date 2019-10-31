@@ -14,7 +14,6 @@ import LoginPage from './pages/LoginPage';
 import Group from './pages/Group';
 import Profile from './pages/Profile';
 import NoMatch from './pages/NoMatch';
-import ExpensePage from './pages/ExpensePage';
 
 /*
 TODO:
@@ -63,7 +62,6 @@ class App extends React.Component {
             <Route exact path='/register' component={RegisterPage} />
             <Route exact path='/g/:group_number' component={Group} />
             <Route exact path='/u/:user_number' component={Profile} />
-            <Route exact path='/e/:expense_number' component={ExpensePage} />
             <Route component={NoMatch} />
           </Switch>
         </BrowserRouter>
