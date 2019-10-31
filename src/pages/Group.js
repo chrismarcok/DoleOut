@@ -27,7 +27,7 @@ class Group extends React.Component {
     this.scrollToBottomOfChat();
     const group = this.getGroup();
     const msgs = this.fetchGroupMsgs();
-    if (msgs.filter( m => m.groupId === group.id && m.type === "expense").length === 0){
+    if (msgs.filter(m => m.groupId === group.id && m.type === "expense").length === 0) {
       document.querySelector(".other-title-expenses").style.display = "none";
     }
   }
@@ -66,7 +66,7 @@ class Group extends React.Component {
 
   getInput(e) {
     const val = this.state.groupInput;
-    if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn")) && val !== ""){
+    if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn") || e.target === document.querySelector(".fa-paper-plane")) && val !== "") {
       const m = {
         "id": 123,
         "groupId": this.getGroup().id,
@@ -139,7 +139,7 @@ class Group extends React.Component {
               <div className="group-title">
                 {group.name}
               </div>
-              <div className="group-main-add-btn" onClick={ () => window.location = "/g/" + group.id + "/new_expense"}>
+              <div className="group-main-add-btn" onClick={() => window.location = "/g/" + group.id + "/new_expense"}>
                 <i className="fa fa-plus"></i> New Expense
               </div>
             </div>
@@ -165,12 +165,12 @@ class Group extends React.Component {
               </div>
               <ul className="group-col-other-ul">
                 {
-                  msgs.filter(m => m.groupId === group.id && m.type === "expense").map( msg => {
+                  msgs.filter(m => m.groupId === group.id && m.type === "expense").map(msg => {
                     return (
-                      <OtherExpense msg={ msg }/>
+                      <OtherExpense msg={msg} key={uid(msg)} />
                     );
                   })
-                  
+
                 }
               </ul>
             </div>

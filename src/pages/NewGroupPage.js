@@ -95,7 +95,9 @@ class NewGroupPage extends React.Component {
       colorBg: this.state.groupColor,
       members: []
     }
-    //Cant do anything with a group 
+    //here we could send it to a server, then redirect to that group.
+    //window.location = "/g/" + newGroup.newId;
+    return;
   }
 
   render() {

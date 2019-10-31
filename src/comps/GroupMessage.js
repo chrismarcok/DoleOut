@@ -9,11 +9,8 @@ class GroupMessage extends React.Component {
   */
 
   componentDidMount() {
-
-    //Todo: why does only the first pic work for any user ????????????? 
-    const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg.user.id)
-    pic.style.backgroundImage = "url('" + this.props.msg.user.picUrl + "')"
-    //console.log(pic.style.backgroundImage)
+    const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg.id);
+    pic.style.backgroundImage = "url('" + this.props.msg.user.picUrl + "')";
   }
 
   redirect() {
@@ -24,7 +21,7 @@ class GroupMessage extends React.Component {
     return (
       <div>
         <div className="group-main-msg">
-          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.user.id} onClick={() => this.redirect()}>
+          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
           </div>
           <div className="group-main-msg-content">
             <strong>{this.props.msg.user.username}</strong> <br />
@@ -38,7 +35,7 @@ class GroupMessage extends React.Component {
   getExpense() {
     return (
       <div className="group-expense-msg-container">
-        <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.user.id} onClick={() => this.redirect()}>
+        <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
         </div>
         <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}:
         <div className="group-main-msg-content">

@@ -22,7 +22,6 @@ TODO:
 *******************
 PROFILE
 Making profile
-View Profile
 Register -> Profile
 Display Profiles in Group
 *******************
@@ -30,16 +29,13 @@ GROUP
 Click on user -> Little popup with link to profile, discord style
 Create new group
 Add new group member
-Profile pic bug!
 *******************
 EXPENSES
 Create expenses form
-Create dummy_expense.JSON
 Be able to deduct money from the expense / pay an expense
   partway
 *******************
 REGISTER/LOGIN
-Make errors show up
 Abstract away methods to another file/module, import required ones
 Admin/User dummy functionality
     Renaming, Deleting Groups
