@@ -7,7 +7,6 @@ import './style/Group.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 import NewGroupPage from './pages/NewGroupPage';
-import NewExpensePage from './pages/NewExpensePage';
 import GroupsPage from './pages/GroupsPage';
 import LandingPage from './pages/LandingPage';
 import RegisterPage from './pages/RegisterPage';
@@ -60,7 +59,6 @@ class App extends React.Component {
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/groups' component={GroupsPage} />
             <Route exact path='/groups/new' component={NewGroupPage} />
-            <Route exact path='/g/:group_numer/new_expense' component={NewExpensePage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
             <Route exact path='/g/:group_number' component={Group} />

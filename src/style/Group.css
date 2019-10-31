@@ -184,6 +184,53 @@ Individual Group Page
   align-self: center;
 }
 
+.group-add-member-input-container{
+  height: 54px;
+  padding: 10px;
+  padding-right: 0;
+
+}
+
+#group-add-member-accept-btn{
+  cursor: pointer;
+  padding: 8px;
+  margin-left: 6px;
+  color: white;
+  border-radius: 3px;
+  background-color: #00c853;
+  
+}
+
+#group-add-member-accept-btn:hover{
+  background-color: green;
+}
+
+#group-add-member-input{
+  height: 30px;
+  width: 140px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+}
+
+.group-add-member-input-container{
+  display: none;
+}
+
+.group-add-member-cancel-btn{
+  font-size: 14px;
+  background-color: #ff5252;
+  border-radius: 3px;
+  color: white;
+  text-align: center;
+  width: 182px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.group-add-member-cancel-btn:hover{
+  background-color: #b71c1c;
+}
+
 /* OTHER COL */
 
 .group-col .other-title{

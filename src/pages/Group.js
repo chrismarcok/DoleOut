@@ -5,6 +5,7 @@ import OtherExpense from '../comps/OtherExpense'
 import GroupMessage from '../comps/GroupMessage'
 import dummy_group_list from './dummy_group_list.json'
 import dummy_group_msgs from './dummy_group_msgs.json'
+import dummy_user_list from './dummy_user_list.json'
 import GroupMember from '../comps/GroupMember'
 import OtherGroupComp from '../comps/OtherGroupComp'
 import { uid } from 'react-uid'
@@ -19,8 +20,12 @@ class Group extends React.Component {
 
     this.state = {
       groupInput: "",
+      groupMemberAddInput: "",
+      addingMember: false
     }
-    this.getInput = this.getInput.bind(this)
+    this.getInput = this.getInput.bind(this);
+    this.addMember = this.addMember.bind(this);
+    this.toggleAddUser = this.toggleAddUser.bind(this);
   }
 
   componentDidMount() {
@@ -39,15 +44,19 @@ class Group extends React.Component {
 
   fetchGroups() {
     //here is where we would get stuff from a server
-    return dummy_group_list
+    return dummy_group_list;
+  }
+
+  fetchUsers(){
+    return dummy_user_list;
   }
 
   fetchGroupMsgs() {
-    return dummy_group_msgs
+    return dummy_group_msgs;
   }
 
   getGroup() {
-    const { group_number } = this.props.match.params
+    const { group_number } = this.props.match.params;
     const groups = this.fetchGroups()
     const thisGroupLst = groups.filter(g => g.id === parseInt(group_number))
     return thisGroupLst[0]
@@ -99,6 +108,49 @@ class Group extends React.Component {
     }
   }
 
+  addMember(e){
+    if (e.target.id === "group-add-member-accept-btn" || e.keyCode === 13){
+      const users = this.fetchUsers();
+      const usersFiltered = users.filter( u => u.username === this.state.groupMemberAddInput);
+      if (usersFiltered.length === 0){
+        alert("no user by that username")
+        return;
+      }
+      const groupMembers = this.getGroup().members;
+      const usersInGroupWithSameUsername = groupMembers.filter( m => m.username === this.state.groupMemberAddInput);
+      if (usersInGroupWithSameUsername.length !== 0){
+        alert("that user is already in this group!");
+        return;
+      }
+      else {
+        //We dont check if you add the same member twice (altho this doesnt work anyways), 
+        //here we would have to update this group.members list (but we cant cuz its in json)
+        const newDiv = document.createElement("div");
+        const newDivClass = String(uid(usersFiltered[0]));
+        newDiv.className =  newDivClass;
+        document.querySelector(".group-generated-members").appendChild(newDiv);
+        ReactDOM.render(<GroupMember member={usersFiltered[0]}/>, document.querySelector("."+newDivClass));
+      }
+    }
+  }
+
+  toggleAddUser(){
+    const addUserInput = document.querySelector(".group-add-member-input-container");
+    const addMemberCntr = document.querySelector(".group-add-member-container");
+    if (!this.state.addingMember){
+      addUserInput.style.display = "block";
+      addMemberCntr.style.display = "none";
+    }
+    else {
+      addUserInput.style.display = "none";
+      addMemberCntr.style.display = "block";
+    }
+    this.setState({
+      addingMember: !this.state.addingMember
+    });
+    
+  }
+
 
   render() {
     const group = this.getGroup()
@@ -115,7 +167,8 @@ class Group extends React.Component {
         <Header />
         <div className="group-container">
           <div className="group-col group-members-col">
-            <ul className="group-members-ul">
+            <div className="group-members-div">
+              <div className="group-generated-members">
               {
                 group.members.map(member => {
                   return (
@@ -123,14 +176,24 @@ class Group extends React.Component {
                   )
                 })
               }
+              </div>
               <div className="group-add-member-container">
-                <div className="group-add-member-inner">
-                  <div className="group-add-member-btn">
+                <div className="group-add-member-inner" onClick={this.toggleAddUser}>
+                  <div className="group-add-member-btn" >
                     <i className="fa fa-plus"></i>
                   </div>
                 </div>
               </div>
-            </ul>
+              
+              <div className="group-add-member-input-container">
+                
+                <input id="group-add-member-input" type="text" name="groupMemberAddInput" placeholder="Enter Username" onChange={this.handleInputChange} maxLength="150" onKeyDown={this.addMember}></input>
+                
+                <i className="fa fa-check" id="group-add-member-accept-btn" onClick={this.addMember}></i>
+                <div className="group-add-member-cancel-btn" onClick={this.toggleAddUser}> Cancel </div>
+              </div>
+              
+            </div>
           </div>
 
           <div className="group-col group-main-col">
