@@ -47,3 +47,36 @@
 .new-group-container button:hover{
   background-color: rgb(32, 94, 201);
 }
+
+.color-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+.picker{
+  display: none;
+}
+
+.icon-container{
+  display: inline-block;
+  padding: 10px;
+  background-color: #2979ff;
+  border-radius: 10px;
+  margin-right: 10px;
+  color: white;
+  transition: all ease 0.1s;
+  cursor: pointer;
+}
+
+.icon-container:hover{
+  transition: all ease 0.1s;
+  background-color: rgb(32, 94, 201);
+
+}
+
+.icon-selected {
+  background-color: rgb(32, 94, 201);
+}

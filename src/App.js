@@ -30,7 +30,6 @@ GROUP
 Click on user -> Little popup with link to profile, discord style
 Create new group
 Add new group member
-Put expenses on the right column
 Profile pic bug!
 *******************
 EXPENSES
@@ -61,17 +60,17 @@ class App extends React.Component {
     return (
       <div>
         <BrowserRouter>
-          <Switch> 
+          <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/groups' component={GroupsPage} />
-            <Route exact path='/groups/new' component={NewGroupPage}/>
-            <Route exact path='/g/:group_numer/new_expense' component={NewExpensePage}/>
+            <Route exact path='/groups/new' component={NewGroupPage} />
+            <Route exact path='/g/:group_numer/new_expense' component={NewExpensePage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
-            <Route exact path='/g/:group_number' component={Group}/>
-            <Route exact path='/u/:user_number' component={Profile}/>
-            <Route exact path='/e/:expense_number' component={ExpensePage}/>
-            <Route component={NoMatch}/>
+            <Route exact path='/g/:group_number' component={Group} />
+            <Route exact path='/u/:user_number' component={Profile} />
+            <Route exact path='/e/:expense_number' component={ExpensePage} />
+            <Route component={NoMatch} />
           </Switch>
         </BrowserRouter>
       </div>

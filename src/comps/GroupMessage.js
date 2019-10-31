@@ -16,7 +16,7 @@ class GroupMessage extends React.Component {
     //console.log(pic.style.backgroundImage)
   }
 
-  redirect(){
+  redirect() {
     window.location = "/u/" + this.props.msg.user.id;
   }
 
@@ -56,22 +56,22 @@ class GroupMessage extends React.Component {
                 <div className="expense-remaining">
                   ${this.props.msg.expense.remaining}
                 </div>
-                 
+
               </div>
             </div>
             <div className="expense-lower">
               <div className="expense-faces">
                 {
-                  this.props.msg.expense.members.map( m => {
-                    return(
-                      <ExpensePic key={ uid(m) } member={ m }/>
+                  this.props.msg.expense.members.map(m => {
+                    return (
+                      <ExpensePic key={uid(m)} member={m} />
                     );
                   })
                 }
               </div>
               <div className="expense-pay">
                 <div className="expense-pay-btn" onClick={() => window.location = "/e/" + this.props.msg.expense.id}>
-                  PAY
+                  VIEW
                 </div>
               </div>
             </div>
