@@ -61,7 +61,6 @@ class Group extends React.Component {
     this.setState({
       [name]: value
     })
-    // console.log(this.state)
   }
 
   getInput(e) {
@@ -88,7 +87,7 @@ class Group extends React.Component {
       const newMsg = document.createElement("div")
       newMsg.id = m.id
       document.querySelector(".group-main-content").appendChild(newMsg)
-      console.log(m)
+      
       ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
 
       //Reset the state, and make textbox empty

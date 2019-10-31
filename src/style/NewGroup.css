@@ -11,6 +11,7 @@
 .new-group-inner {
   align-self: center;
   width: 100%;
+  
 }
 
 .new-group-hdr {
@@ -79,4 +80,10 @@
 
 .icon-selected {
   background-color: rgb(32, 94, 201);
+}
+
+@media only screen and (max-height: 650px) {
+  .new-group-container{
+    display: block;
+  }
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from '../comps/Header.js'
-import Footer from '../comps/Footer.js'
 import LoginHeader from '../comps/LoginHeader'
 import dummy_user_list from './dummy_user_list.json'
 
@@ -73,7 +72,6 @@ class LoginPage extends React.Component {
               <button onClick={() => this.login()}>Login <i className="fa fa-sign-in"></i></button>
             </div>
           </div>
-        <Footer/>
       </div>
     )
   }

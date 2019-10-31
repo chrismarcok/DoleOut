@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../comps/Header.js'
-import GroupComp from '../comps/Group.js'
+import GroupComp from '../comps/GroupComp.js'
 import dummy_group_list from './dummy_group_list.json'
 import { uid } from 'react-uid'
 

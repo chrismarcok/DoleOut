@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from '../comps/Header';
-import Footer from '../comps/Footer';
 import '../style/NewGroup.css';
 import dummy_group_list from './dummy_group_list.json';
 const AColorPicker = require('a-color-picker');
@@ -69,8 +68,8 @@ class NewGroupPage extends React.Component {
   }
 
   selectIcon(name) {
-    if (this.state.icon !== undefined) {
-      const curIcon = this.state.icon;
+    if (this.state.groupIcon !== "") {
+      const curIcon = this.state.groupIcon;
       document.querySelector("#icon-choice-" + curIcon).className = "icon-container";
     }
     this.setState({
@@ -97,6 +96,7 @@ class NewGroupPage extends React.Component {
     }
     //here we could send it to a server, then redirect to that group.
     //window.location = "/g/" + newGroup.newId;
+    console.log(newGroup)
     return;
   }
 
@@ -148,7 +148,6 @@ class NewGroupPage extends React.Component {
             <button onClick={() => this.createGroup()}>Create Group <i className="fa fa-users"></i></button>
           </div>
         </div>
-        <Footer />
       </div >
     );
   };

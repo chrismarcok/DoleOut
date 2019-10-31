@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from '../comps/Header.js'
-import Footer from '../comps/Footer.js'
 import LoginHeader from '../comps/LoginHeader.js'
 import dummy_user_list from './dummy_user_list.json'
 
@@ -98,7 +97,6 @@ class RegisterPage extends React.Component {
             <button onClick={() => this.register()}>Register <i className="fa fa-user-plus"></i></button>
           </div>
         </div>
-        <Footer/>
       </div>
     )
   }

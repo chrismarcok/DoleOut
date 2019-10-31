@@ -9,7 +9,7 @@
   font-family: 'Poppins', sans-serif;
   transition: all ease 0.25s;
   padding: 16px;
-  
+  cursor: pointer; 
 }
 
 .group-div-change-btns{
@@ -64,6 +64,14 @@
   align-self: center;
   
 }
+
+.group-comp-input{
+  display: none;
+  font-size: 24px;
+  height: 36px;
+}
+
+
 
 /*
 Individual Group Page
