@@ -10,6 +10,8 @@ import OtherGroupComp from '../comps/OtherGroupComp'
 import { uid } from 'react-uid'
 import { Redirect } from 'react-router-dom'
 
+import ExpensePopup from '../comps/ExpensePopup.js'
+
 /* This is the actual group page. the group page that has 3 columns*/
 
 class Group extends React.Component {
@@ -19,8 +21,15 @@ class Group extends React.Component {
 
     this.state = {
       groupInput: "",
+      showPopup: false
     }
     this.getInput = this.getInput.bind(this)
+  }
+
+  togglePopup(){
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
   }
 
   componentDidMount() {
@@ -61,6 +70,72 @@ class Group extends React.Component {
     this.setState({
       [name]: value
     })
+  }
+
+  createExpense = (title, content, cost, members) => {
+    const m = {
+      "id": 8,
+      "groupId": 0,
+      "date": 103,
+      "type": "expense",
+      "expense": {
+        "id": 0,
+        "title": title,
+        "cost": cost,
+        "remaining": cost,
+        "members": [
+          {
+            "id": 12,
+            "username": "george",
+            "password": "123",
+            "picUrl": "https://api.adorable.io/avatars/200/12",
+            "email": "dummy@dummy.com",
+            "firstName": "Firstname",
+            "lastName": "McLastname"
+          },
+          {
+            "id": 19,
+            "username": "grace",
+            "password": "123",
+            "picUrl": "https://api.adorable.io/avatars/200/19",
+            "email": "dummy@dummy.com",
+            "firstName": "Firstname",
+            "lastName": "McLastname"
+          },
+          {
+            "id": 17,
+            "username": "donald",
+            "password": "123",
+            "picUrl": "https://api.adorable.io/avatars/200/17",
+            "email": "dummy@dummy.com",
+            "firstName": "Firstname",
+            "lastName": "McLastname"
+          }
+        ]
+      },
+      "user": {
+        "id": 1,
+        "username": "user",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/1",
+        "email": "dummy@dummy.com",
+        "firstName": "Firstname",
+        "lastName": "McLastname",
+        "paypal": "https://www.paypal.me/chrismarcok",
+        "preference": "paypal",
+        "description": "send me money please thank u :)"
+      },
+      "content": content
+    }
+    m.id = uid(m)
+    m.expense.id = uid(m)
+    const newMsg = document.createElement("div")
+    newMsg.id = m.id
+    document.querySelector(".group-main-content").appendChild(newMsg)
+    
+    ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
+
+    this.scrollToBottomOfChat();
   }
 
   getInput(e) {
@@ -138,9 +213,17 @@ class Group extends React.Component {
               <div className="group-title">
                 {group.name}
               </div>
-              <div className="group-main-add-btn" onClick={() => window.location = "/g/" + group.id + "/new_expense"}>
+              {/* <div className="group-main-add-btn" onClick={() => window.location = "/g/" + group.id + "/new_expense"}>
                 <i className="fa fa-plus"></i> New Expense
+              </div> */}
+              <div className="group-main-add-btn">
+                <i className="fa fa-plus"></i> New Expense
+                <button onClick={this.togglePopup.bind(this)}> Create new expense</button>
+                {this.state.showPopup ? 
+                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)}/>
+                  : null}
               </div>
+              
             </div>
             <div className="group-main-content">
               {
