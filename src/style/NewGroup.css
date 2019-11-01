@@ -82,7 +82,37 @@
   background-color: rgb(32, 94, 201);
 }
 
-@media only screen and (max-height: 650px) {
+.new-group-member-row p{
+  font-size: 16px;
+}
+
+.new-member-row-btn{
+  font-size: 16px;
+  background-color: #2979ff;
+  border-radius: 3px;
+  padding: 6px;
+  float: right;
+  color: white;
+  cursor: pointer;
+}
+
+.new-member-row-btn:hover{
+  background-color: rgb(32, 94, 201);
+  transition: all ease 0.1s;
+}
+
+.new-group-member-row input{
+  width: calc(100% - 200px);
+}
+
+.new-member-confirmation{
+  
+  display: inline-block;
+  width: 110px;
+  text-align: center;
+}
+
+@media only screen and (max-height: 0px) {
   .new-group-container{
     display: block;
   }

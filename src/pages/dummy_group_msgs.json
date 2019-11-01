@@ -48,7 +48,7 @@
       "firstName": "Firstname",
       "lastName": "McLastname"
     },
-    "content": "No"
+    "content": "stop posting cringe"
   },
   {
     "id": 3,
@@ -243,5 +243,56 @@
       "description": "send me money please thank u :)"
     },
     "content": "eyo i needed bread"
+  },
+  {
+    "id": 9,
+    "groupId": 6,
+    "date": 10000000000,
+    "type": "msg",
+    "expense": {},
+    "user": {
+      "id": 19,
+      "username": "grace",
+      "password": "123",
+      "picUrl": "https://api.adorable.io/avatars/200/19",
+      "email": "dummy@dummy.com",
+      "firstName": "Firstname",
+      "lastName": "McLastname"
+    },
+    "content": "donald has been demoted to vice-bootlicker"
+  },
+  {
+    "id": 10,
+    "groupId": 6,
+    "date": 100000001000,
+    "type": "msg",
+    "expense": {},
+    "user": {
+      "id": 17,
+      "username": "donald",
+      "password": "123",
+      "picUrl": "https://api.adorable.io/avatars/200/17",
+      "email": "dummy@dummy.com",
+      "firstName": "Firstname",
+      "lastName": "McLastname"
+    },
+    "content": "as you command it"
+  },
+  {
+    "id": 11,
+    "groupId": 0,
+    "date": 696969420,
+    "type": "msg",
+    "expense": {},
+    "user": {
+      "id": 17,
+      "username": "donald",
+      "password": "123",
+      "picUrl": "https://api.adorable.io/avatars/200/17",
+      "email": "dummy@dummy.com",
+      "firstName": "Firstname",
+      "lastName": "McLastname"
+    },
+    "content": "EW ITS WHOLE GRAIN WTF!!!!!"
   }
 ]

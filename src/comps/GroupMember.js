@@ -14,7 +14,6 @@ class GroupMember extends React.Component {
   
   clickEvent(){
     //make this make a popup here. also need to hide all other popups if they are open.
-    console.log(this.props.member.id)
     //for now just redirect to the group member page
     window.location.href = "/u/" + this.props.member.id
   }

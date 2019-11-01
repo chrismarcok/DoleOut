@@ -153,7 +153,7 @@ class Group extends React.Component {
       const m = {
         "id": 123,
         "groupId": this.getGroup().id,
-        "date": 102,
+        "date": (new Date()).getTime() / 1000,
         "type": "msg",
         "user":
         {
@@ -167,7 +167,7 @@ class Group extends React.Component {
         },
         "content": val
       }
-      m.id = uid(m)
+      m.id = uid(m);
       const newMsg = document.createElement("div")
       newMsg.id = m.id
       document.querySelector(".group-main-content").appendChild(newMsg)
@@ -281,12 +281,9 @@ class Group extends React.Component {
               <div className="group-title">
                 {group.name}
               </div>
-              {/* <div className="group-main-add-btn" onClick={() => window.location = "/g/" + group.id + "/new_expense"}>
-                <i className="fa fa-plus"></i> New Expense
-              </div> */}
+
               <div className="group-main-add-btn">
-                <i className="fa fa-plus"></i> New Expense
-                <button onClick={this.togglePopup.bind(this)}> Create new expense</button>
+                <button onClick={this.togglePopup.bind(this)}> <i className="fa fa-plus"></i> New Expense</button>
                 {this.state.showPopup ? 
                   <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)}/>
                   : null}

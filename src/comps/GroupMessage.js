@@ -14,7 +14,7 @@ class GroupMessage extends React.Component {
   this.state = {
     currentlyPaying: false,
     payAmount: "0.01",
-    expenseRemaining: this.props.msg.expense.remaining
+    expenseRemaining: (this.props.msg.type === "expense") ? this.props.msg.expense.remaining : undefined
   }
   this.toggleExpense = this.toggleExpense.bind(this);
   this.handleInput = this.handleInput.bind(this);
@@ -60,11 +60,27 @@ class GroupMessage extends React.Component {
 
   deductPayment(){
     const amount = this.state.expenseRemaining - Number(this.state.payAmount)
-    const rounded = parseFloat(Math.round(amount * 100) / 100).toFixed(2);
+    let rounded = parseFloat(Math.round(amount * 100) / 100).toFixed(2);
+    if (rounded < 0){
+      rounded = Number(0).toFixed(2);
+    }
     this.setState({
       expenseRemaining: rounded
     })
+  }
 
+  // taken from https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+  timeConverter(UNIX_timestamp){
+    const a = new Date(UNIX_timestamp * 1000);
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const year = a.getFullYear();
+    const month = months[a.getMonth()];
+    const date = a.getDate();
+    const hour = a.getHours();
+    const min = a.getMinutes();
+    const sec = a.getSeconds();
+    const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return time;
   }
 
   getMsg() {
@@ -74,7 +90,7 @@ class GroupMessage extends React.Component {
           <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
           </div>
           <div className="group-main-msg-content">
-            <strong>{this.props.msg.user.username}</strong> <br />
+            <strong>{this.props.msg.user.username}</strong> <span className="date-span">{this.timeConverter(this.props.msg.date)}</span> <br />
             {this.props.msg.content}
           </div>
         </div>
@@ -87,13 +103,13 @@ class GroupMessage extends React.Component {
       <div className="group-expense-msg-container">
         <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
         </div>
-        <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}:
+        <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
         <div className="group-main-msg-content">
           <div className="expense-container">
             <div className="expense-upper">
               <div className="expense-upper-left">
                 <h3>{this.props.msg.expense.title}</h3>
-                <p><i>{this.props.msg.content}</i></p>
+                <p><i>"{this.props.msg.content}"</i></p>
                 <p>You Owe:</p>
                 $unknown
               </div>
@@ -129,7 +145,7 @@ class GroupMessage extends React.Component {
           </div>
           <div className={"expense-payment-container expense-payment-container" + this.props.msg.id }>
             <h3>How much would you like to pay?</h3>
-            <input id="paymentInput" type="number" min="0.01" step="0.10" max="2500" defaultValue="0.01" onChange={this.handleInput} />
+            <input id="paymentInput" type="number" min="0.01" max={String(this.props.msg.expense.remaining)} step="0.01" defaultValue="0.01" onChange={this.handleInput} />
             <i className="fa fa-check" id="expense-make-payment-btn" onClick={this.deductPayment}></i>
             </div>
         </div>

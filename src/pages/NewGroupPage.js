@@ -1,7 +1,12 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Header from '../comps/Header';
+import NewGroupMemberRow from '../comps/NewGroupMemberRow';
+import GroupIcon from '../comps/GroupIcon';
 import '../style/NewGroup.css';
 import dummy_group_list from './dummy_group_list.json';
+import dummy_user_list from './dummy_user_list.json';
+import { uid } from 'react-uid';
 const AColorPicker = require('a-color-picker');
 
 
@@ -10,6 +15,8 @@ class NewGroupPage extends React.Component {
   constructor(props) {
     super(props)
     this.selectColor = this.selectColor.bind(this)
+    this.newRow = this.newRow.bind(this)
+    this.getMembers = this.getMembers.bind(this)
   }
 
   getGroups() {
@@ -17,15 +24,24 @@ class NewGroupPage extends React.Component {
     return dummy_group_list;
   }
 
+  fetchUsers(){
+    //get info from db
+    return dummy_user_list;
+  }
+
   state = {
+    users: this.fetchUsers(),
     title: "",
     groupIcon: "",
     groupMembers: "",
     groupColor: "#eee",
     pickerOpen: false,
     selectColorTxt: "Select Color",
-    icon: undefined
+    iconLst: ["user", "user-secret", "user-md", "user-circle", "blind", "child", "male", "female", "wheelchair", "mouse-pointer"],
+    icon: undefined,
+    numMembers: 1
   }
+
 
   componentDidMount() {
     AColorPicker.from('.picker').on('change', (picker, color) => {
@@ -79,9 +95,23 @@ class NewGroupPage extends React.Component {
 
   }
 
+  getMembers(){
+    const usernameInputs = document.querySelectorAll(".group-member-input-field");
+    const memberLst = this.state.users;
+    const numMembers = this.state.numMembers;
+    const result = []
+    for (let i = 0; i < numMembers; i++){
+      const m = memberLst.filter( m => 
+        m.username === usernameInputs[i].value
+      );
+      result.push(m);
+    }
+    return result;
+  }
+
   createGroup() {
     const allGroups = this.getGroups();
-    if (this.state.title === "" || this.state.groupIcon === "" || this.state.groupMembers === "") {
+    if (this.state.title === "" || this.state.groupIcon === "") {
       alert("Please fill out all fields!");
       return;
     }
@@ -92,12 +122,27 @@ class NewGroupPage extends React.Component {
       name: this.state.title,
       icon: this.state.groupIcon,
       colorBg: this.state.groupColor,
-      members: []
+      members: this.getMembers()
     }
     //here we could send it to a server, then redirect to that group.
     //window.location = "/g/" + newGroup.newId;
     console.log(newGroup)
+    alert("The group was made successfully and you can see the object in the console. normally this would redirect you to the group you made, but since we can't write to the JSON file that stores the groups, we cant redirect you to the group you just made");
     return;
+  }
+
+  newRow(){
+    const newDiv = document.createElement("div")
+    newDiv.className = "new-group-member-row-" + this.state.numMembers;
+    document.querySelector(".new-group-members-container").appendChild(newDiv)
+    ReactDOM.render(<NewGroupMemberRow newRow={this.newRow} num={this.state.numMembers + 1}/>, document.querySelector(".new-group-member-row-" + this.state.numMembers))
+    this.setState({
+      numMembers: this.state.numMembers + 1
+    });
+    //If the group inner is too tall, then need to make container block display, otherwise it will look messed up
+    if (document.querySelector(".new-group-inner").clientHeight > window.innerHeight - 100){
+      document.querySelector(".new-group-container").style.display = "block";
+    }
   }
 
   render() {
@@ -118,7 +163,9 @@ class NewGroupPage extends React.Component {
               <h3>
                 Members
               </h3>
-              <input id="groupMembersInput" type="text" name="groupMembers" placeholder="3, 7, 11, 4, ..." onChange={this.handleInputChange}></input>
+              <div className="new-group-members-container">
+                <NewGroupMemberRow newRow={this.newRow} num={1}/>
+              </div>
               <h3>
                 Color <div className="color-preview"></div>
               </h3>
@@ -133,17 +180,16 @@ class NewGroupPage extends React.Component {
               <h3>
                 Icon
               </h3>
-              <div className="icon-container" id="icon-choice-user" onClick={() => this.selectIcon("user")}><i className="fa fa-user" ></i></div>
-              <div className="icon-container" id="icon-choice-user-secret" onClick={() => this.selectIcon("user-secret")}><i className="fa fa-user-secret" ></i></div>
-              <div className="icon-container" id="icon-choice-user-md" onClick={() => this.selectIcon("user-md")}><i className="fa fa-user-md" ></i></div>
-              <div className="icon-container" id="icon-choice-user-circle" onClick={() => this.selectIcon("user-circle")}><i className="fa fa-user-circle" ></i></div>
-              <div className="icon-container" id="icon-choice-blind" onClick={() => this.selectIcon("blind")}><i className="fa fa-blind" ></i></div>
-              <div className="icon-container" id="icon-choice-child" onClick={() => this.selectIcon("child")}><i className="fa fa-child" ></i></div>
-              <div className="icon-container" id="icon-choice-male" onClick={() => this.selectIcon("male")}><i className="fa fa-male" ></i></div>
-              <div className="icon-container" id="icon-choice-female" onClick={() => this.selectIcon("female")}><i className="fa fa-female" ></i></div>
-              <div className="icon-container" id="icon-choice-wheelchair" onClick={() => this.selectIcon("wheelchair")}><i className="fa fa-wheelchair" ></i></div>
-              <div className="icon-container" id="icon-choice-mouse-pointer" onClick={() => this.selectIcon("mouse-pointer")}><i className="fa fa-mouse-pointer" ></i></div>
 
+              {
+                this.state.iconLst.map( icon => {
+                  return(
+                    <span onClick={() => this.selectIcon(icon)} key={uid(icon)} >
+                      <GroupIcon iconName={icon} />
+                    </span>
+                  );
+                })
+              }
             </form>
             <button onClick={() => this.createGroup()}>Create Group <i className="fa fa-users"></i></button>
           </div>
