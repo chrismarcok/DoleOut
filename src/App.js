@@ -26,17 +26,22 @@ Display Profiles in Group
 GROUP
 Click on user -> Little popup with link to profile, discord style
 Create new group
-Add new group member
+update current expense sidebar
+
 *******************
 EXPENSES
-Create expenses form
-Be able to deduct money from the expense / pay an expense
-  partway
+Make expenses form pretty
+Make create expense button pretty
+Make pay button pretty
+
+Determine how much to pay
+Fix adding members in the expense form
+Variable/uneven debts
 *******************
 REGISTER/LOGIN
 Abstract away methods to another file/module, import required ones
+Create profile page, link to after registration
 Admin/User dummy functionality
-    Renaming, Deleting Groups
     Edit, Deleting Users
     See how much in total is owed by a user/how much is owed to them
 *******************
@@ -47,6 +52,7 @@ See user debts
 User info editing
 *******************
 Some sort of ping system
+do the README
 */
 
 class App extends React.Component {
