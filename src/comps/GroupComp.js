@@ -28,6 +28,8 @@ class GroupComp extends React.Component {
     const group = document.querySelector(".group-div-id-" + this.props.id);
     group.style.backgroundColor = this.props.colorBg;
 
+    const check = document.querySelector("#group-i-check-" + this.props.id);
+    check.style.display = "none";
   }
 
   stringifyMembers(membersList) {

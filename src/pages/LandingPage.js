@@ -2,8 +2,6 @@ import React from 'react';
 import Header from '../comps/Header.js'
 import Footer from '../comps/Footer.js'
 
-
-
 class LandingPage extends React.Component {
     componentDidMount () {
         const script = document.createElement("script");
@@ -21,12 +19,10 @@ class LandingPage extends React.Component {
                 </div> 
                 <div className = "above-jumbo" >
                     <h1 className="landing-main-txt">
-                        <span className = "main-header" > Team 53 </span> 
+                    <span className = "main-header" > FriendSpend </span> 
                     </h1> 
                 </div>
-
                 <Footer />
-
             </div>
         )
     }
