@@ -151,6 +151,11 @@ class Group extends React.Component {
     
   }
 
+  scrollToExpense(event, msg){
+    const elem = document.querySelector("#group-main-profile-pic-id-" + msg.id);
+    elem.scrollIntoView();
+  }
+
 
   render() {
     const group = this.getGroup()
@@ -201,7 +206,7 @@ class Group extends React.Component {
               <div className="group-title">
                 {group.name}
               </div>
-              <div className="group-main-add-btn" onClick={() => window.location = "/g/" + group.id + "/new_expense"}>
+              <div className="group-main-add-btn">
                 <i className="fa fa-plus"></i> New Expense
               </div>
             </div>
@@ -229,7 +234,9 @@ class Group extends React.Component {
                 {
                   msgs.filter(m => m.groupId === group.id && m.type === "expense").map(msg => {
                     return (
-                      <OtherExpense msg={msg} key={uid(msg)} />
+                      <div key={uid(msg)} onClick={(e) => this.scrollToExpense(e, msg)}>
+                        <OtherExpense msg={msg} />
+                      </div>
                     );
                   })
 
