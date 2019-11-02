@@ -46,6 +46,7 @@ class GroupsPage extends React.Component {
               )
             })
           }
+          
           <div className="group-div">
             <div className="group-add-btn" onClick={this.togglePopup.bind(this)}>
               <div className="group-add-icon-container">

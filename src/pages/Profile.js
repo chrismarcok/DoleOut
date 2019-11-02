@@ -5,6 +5,41 @@ import dummy_user_list from './dummy_user_list.json'
 import '../style/Profile.css'
 
 class Profile extends React.Component{
+    
+    state = {
+        user: undefined,
+        firstname: "",
+        lastname: "",
+        avatar: "",
+        description: "",
+        email: "", 
+        pref: "",
+        paypal: "",
+        editing: false
+    }
+
+    toggleEdit = () => {
+        if (!this.state.editing){
+            this.setState({
+                editing: true
+            });
+            document.querySelector(".profile-edit-container").style.display = "block";
+            document.querySelector(".profile-save-btn").style.display = "block";
+            document.querySelector(".profile-edit-btn").style.display = "none";
+        }
+        else {
+            this.setState({
+                editing: false
+            });
+            document.querySelector(".profile-edit-container").style.display = "none";
+            document.querySelector(".profile-save-btn").style.display = "none";
+            document.querySelector(".profile-edit-btn").style.display = "block";
+
+            const pic = document.querySelector("#profile-pic-" + this.state.user.id);
+            pic.style.backgroundImage = "url('" + this.state.avatar + "')";
+        }
+    }
+
     getUserNum(){
         const {user_number} = this.props.match.params
         return user_number
@@ -22,15 +57,33 @@ class Profile extends React.Component{
     componentDidMount(){
         const user = this.getUser()
         if (user){
-            const pic = document.querySelector("#profile-pic-" + user.id)
-            pic.style.backgroundImage = "url('" + user.picUrl + "')"
+            this.setState({
+                firstname: user.firstName,
+                lastname: user.lastName,
+                avatar: user.picUrl,
+                description: user.description,  
+                email: user.email, 
+                pref: user.preference,
+                paypal: user.paypal,
+                user: user
+            });
+            const pic = document.querySelector("#profile-pic-" + user.id);
+            pic.style.backgroundImage = "url('" + user.picUrl + "')";
         }
     }
 
+    handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        });
+      }
+
     render() {
-
-        const user = this.getUser()
-
+        const user = this.getUser();
         if (user === undefined){
             return <Redirect to='/404'/>
         }
@@ -38,25 +91,48 @@ class Profile extends React.Component{
         return (
             <div>
                 <Header />
+                <div className="profile-btn profile-edit-btn" onClick={this.toggleEdit}>
+                    Edit <i className="fa fa-pencil"></i>
+                </div>
+                <div className="profile-btn profile-save-btn" onClick={this.toggleEdit}>
+                    Save <i className="fa fa-check"></i>
+                </div>
+                
                 <div className="profile-container">
                     <div className="profile-pic-and-name">
                         <div className="profile-pic" id={"profile-pic-" + user.id}>
                         </div>
                         <div className="profile-name-container">
-                            <h1>{user.username} <a href={user.paypal} target="_blank" rel="noopener noreferrer"><i className="fa fa-cc-paypal"></i></a></h1> 
-                            {user.firstName} {user.lastName}
+                            <h1>{user.username} <a href={this.state.paypal} target="_blank" rel="noopener noreferrer"><i className="fa fa-cc-paypal"></i></a></h1> 
+                            {this.state.firstname} {this.state.lastname}
                         </div>
                         <div className="profile-desc">
                             <b>Description</b> 
-                            <p>{user.description}</p>
+                            <p>{this.state.description}</p>
                             <br/>
                             <b>Preferred Payment Method</b>
-                            <p>{user.preference}</p>
+                            <p>{this.state.pref}</p>
                         </div>
                     </div>
                     <div className="profile-info-container">
                         <h3>Email</h3>
-                        <p>{user.email}</p>
+                        <p>{this.state.email}</p>
+                    </div>
+                    <div className="profile-edit-container">
+                        <p>First Name</p>
+                        <input type="text" name="firstname" onChange={this.handleInputChange} defaultValue={this.state.firstname}></input>
+                        <p>Last Name</p>
+                        <input type="text" name="lastname" onChange={this.handleInputChange} defaultValue={this.state.lastname}></input>
+                        <p>Avatar URL</p>
+                        <input type="text" name="avatar" onChange={this.handleInputChange} defaultValue={this.state.avatar}></input>
+                        <p>Description</p>
+                        <input type="text" name="description" onChange={this.handleInputChange} defaultValue={this.state.description}></input>
+                        <p>Preferred Payment Method</p>
+                        <input type="text" name="pref" onChange={this.handleInputChange} defaultValue={this.state.pref}></input>
+                        <p>Email</p>
+                        <input type="text" name="email" onChange={this.handleInputChange} defaultValue={this.state.email}></input>
+                        <p>PayPal URL</p>
+                        <input type="text" name="paypal" onChange={this.handleInputChange} defaultValue={this.state.paypal}></input>
                     </div>
                 </div>
             </div>
