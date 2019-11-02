@@ -24,8 +24,9 @@ class LoginPage extends React.Component {
       alert("Wrong username or password")
     }
     else{
-      alert(this.state.username + " logged in succesfully")
-      //log in here, link to profile page
+      const users = this.state.users
+      const user = users.filter(user => user.username === this.state.username)
+      window.location = "/u/" + user[0].id;
     }
   }
 
