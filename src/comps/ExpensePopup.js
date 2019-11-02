@@ -34,35 +34,7 @@ class ExpensePopup extends React.Component {
         "title": this.state.expenseTitle,
         "cost": this.formatNum(this.state.expenseCost),
         "remaining": this.formatNum(this.state.expenseCost),
-        "members": [
-          {
-            "id": 12,
-            "username": "george",
-            "password": "123",
-            "picUrl": "https://api.adorable.io/avatars/200/12",
-            "email": "dummy@dummy.com",
-            "firstName": "Firstname",
-            "lastName": "McLastname"
-          },
-          {
-            "id": 19,
-            "username": "grace",
-            "password": "123",
-            "picUrl": "https://api.adorable.io/avatars/200/19",
-            "email": "dummy@dummy.com",
-            "firstName": "Firstname",
-            "lastName": "McLastname"
-          },
-          {
-            "id": 17,
-            "username": "donald",
-            "password": "123",
-            "picUrl": "https://api.adorable.io/avatars/200/17",
-            "email": "dummy@dummy.com",
-            "firstName": "Firstname",
-            "lastName": "McLastname"
-          }
-        ]
+        "members": this.getMembers()
       },
       "user": {
         "id": 1,
@@ -80,11 +52,34 @@ class ExpensePopup extends React.Component {
     }
     m.id = uid(m);
     m.expense.id = uid(m);
+
     this.props.addExpense(m);
     this.props.closePopup();
-}
+  }
 
-  handleInputChange = (event) => {
+  getMembers(){
+    const usernameInputs = document.querySelectorAll(".group-member-input-field");
+    
+    const memberLst = this.props.group.members;
+    const numMembers = this.state.numMembers;
+    const added = [];
+    const result = [];
+    for (let i = 0; i < numMembers; i++){
+      const m = memberLst.filter( m => 
+        m.username === usernameInputs[i].value
+      );
+
+      if (m.length === 0 || added.includes(m[0].id)){
+        continue;
+      }
+      console.log("pushing")
+      result.push(m[0]);
+      added.push(m[0].id);
+    }
+    return result;
+  }
+
+ handleInputChange = (event) => {
     const target = event.target
     const value = target.value
     const name = target.name
@@ -117,7 +112,7 @@ class ExpensePopup extends React.Component {
     const newDiv = document.createElement("div");
     newDiv.className = "new-member-expense-popup-id-" + this.state.numMembers;
     document.querySelector(".newGroupMemberRow-spawn-here").appendChild(newDiv);
-    ReactDOM.render(<NewGroupMemberRow newRow={this.createNewMemberRow} num={( this.state.numMembers + 1)} />, document.querySelector(".new-member-expense-popup-id-" + this.state.numMembers));
+    ReactDOM.render(<NewGroupMemberRow newRow={this.createNewMemberRow} num={( this.state.numMembers + 1)} groupId={this.props.group.id}/>, document.querySelector(".new-member-expense-popup-id-" + this.state.numMembers));
     this.setState({
       numMembers: this.state.numMembers + 1
     });
@@ -145,7 +140,7 @@ class ExpensePopup extends React.Component {
               <h3>
                 Members
               </h3>
-              <NewGroupMemberRow num={1} newRow={this.createNewMemberRow}/>
+              <NewGroupMemberRow num={1} newRow={this.createNewMemberRow} groupId={this.props.group.id}/>
               <div className="newGroupMemberRow-spawn-here">
               </div>
             </form>

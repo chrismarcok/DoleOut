@@ -1,5 +1,6 @@
 import React from 'react'
 import dummy_user_list from '../pages/dummy_user_list.json';
+import dummy_group_list from '../pages/dummy_group_list.json';
 
 class NewGroupMemberRow extends React.Component {
 
@@ -9,7 +10,14 @@ class NewGroupMemberRow extends React.Component {
   }
 
   checkValid(num){
-    const users = this.fetchUsers();
+    let users;
+    if (this.props.groupId !== -1){
+      const groupLst = dummy_group_list.filter( g => g.id === this.props.groupId);
+      const group = groupLst[0];
+      users = group.members;
+    } else {
+      users = this.fetchUsers();
+    }
     const val = document.querySelector("#groupMembersInput-" + num).value;
     const valid = users.filter( u => u.username === val).length !== 0;
     const validator = document.querySelector(".new-member-confirmation-" + num);
