@@ -20,7 +20,7 @@ class ExpensePopup extends React.Component {
   }
 
   createExpense = () => {
-    if (this.state.expenseTitle === "" || this.state.expenseCost === "" || this.state.expenseContent === ""){
+    if (this.state.expenseTitle === "" || this.state.expenseCost === "" || this.state.expenseContent === "" || this.getMembers().length === 1){
       alert("one or more fields is missing!");
       return;
     }
@@ -32,8 +32,8 @@ class ExpensePopup extends React.Component {
       "expense": {
         "id": 0,
         "title": this.state.expenseTitle,
-        "cost": this.formatNum(this.state.expenseCost),
-        "remaining": this.formatNum(this.state.expenseCost),
+        "cost": Number(this.state.expenseCost).toFixed(2),
+        "remaining": Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / this.getMembers().length),
         "members": this.getMembers()
       },
       "user": {
@@ -63,7 +63,20 @@ class ExpensePopup extends React.Component {
     const memberLst = this.props.group.members;
     const numMembers = this.state.numMembers;
     const added = [];
-    const result = [];
+    //default to current user added.
+    const result = [{
+      "id": 1,
+      "username": "user",
+      "password": "123",
+      "picUrl": "https://api.adorable.io/avatars/200/1",
+      "email": "dummy@dummy.com",
+      "firstName": "Firstname",
+      "lastName": "McLastname",
+      "paypal": "https://www.paypal.me/chrismarcok",
+      "preference": "paypal",
+      "description": "send me money please thank u :)",
+      "paid": true
+    }];
     for (let i = 0; i < numMembers; i++){
       const m = memberLst.filter( m => 
         m.username === usernameInputs[i].value
@@ -87,10 +100,6 @@ class ExpensePopup extends React.Component {
     this.setState({
       [name]: value
     })
-  }
-
-  formatNum(n){
-    return Number(n).toFixed(2);
   }
 
   formatCost(){

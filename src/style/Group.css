@@ -90,7 +90,7 @@ Individual Group Page
 }
 
 .group-members-col {
-  width: 200px;
+  width: 300px;
   height: calc(100vh - 60px);
   background-color: #eee; 
   float: left;
@@ -101,7 +101,7 @@ Individual Group Page
 .group-main-col {
   position: absolute;
   min-width: 400px;
-  width: calc(100% - 400px);
+  width: calc(100% - 500px);
   height: calc(100vh - 60px);
   background-color: #fff;
   float: left;
@@ -129,7 +129,7 @@ Individual Group Page
 .groupmember {
   padding: 6px;
   background-color: #eee;
-  width: 200px;
+  width: 284px;
   height: 50px;
   transition: all ease 0.1s;
   cursor: pointer;
@@ -154,6 +154,18 @@ Individual Group Page
   vertical-align: top;
   margin-left: 6px;
   padding-top: 10px;
+}
+
+.groupmember-delete{
+  float: right;
+  padding: 12px;
+  transition: all ease 0.1s;
+  border-radius: 3px;
+}
+
+.groupmember-delete:hover{
+  background-color: #ff5252;
+  transition: all ease 0.1s;
 }
 
 .group-add-member-container{
@@ -364,6 +376,20 @@ Messages
   margin-bottom: 10px;
 }
 
+.expense-delete-container{
+  float: right;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  transition: all ease 0.1s;
+  cursor: pointer;
+}
+
+.expense-delete-container:hover{
+  background-color: #ff5252;
+  transition: all ease 0.1s;
+}
+
 .expense-container{
   margin-top: 10px;
   width: 500px;
@@ -477,6 +503,16 @@ Messages
   margin-right: 5px;
   margin-top: 10px;
   cursor: pointer;
+}
+
+.you-owe-title{
+  font-size: 24px;
+
+}
+
+.you-owe-txt {
+  font-size: 32px;
+  color: red;
 }
 
 .expense-pic-cover{

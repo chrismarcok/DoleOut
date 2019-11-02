@@ -16,7 +16,7 @@ class OtherExpense extends React.Component{
             <div className={"expense-small-pic expense-small-pic-id-" + this.props.msg.user.id + "-" + this.props.msg.id }></div>
             <b>{this.props.msg.expense.title}</b>
           </div>
-          <p>${this.props.msg.expense.remaining} remaining</p>
+          <p>${Number(this.props.msg.expense.remaining).toFixed(2)} remaining</p>
         </div>
       
     )
