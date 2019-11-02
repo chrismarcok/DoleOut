@@ -1,41 +1,194 @@
 import React from 'react';
 import '../style/NewGroupPopup.css';
 
+import ReactDOM from 'react-dom';
+import NewGroupMemberRow from '../comps/NewGroupMemberRow';
+import GroupIcon from '../comps/GroupIcon';
+import dummy_group_list from '../pages/dummy_group_list.json';
+import dummy_user_list from '../pages/dummy_user_list.json';
+import { uid } from 'react-uid';
+const AColorPicker = require('a-color-picker');
+
 class NewGroupPopup extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.selectColor = this.selectColor.bind(this)
+        this.newRow = this.newRow.bind(this)
+        this.getMembers = this.getMembers.bind(this)
+    }
+
+    getGroups() {
+        //here we get from a server or smth.
+        return dummy_group_list;
+    }
+    
+      fetchUsers(){
+        //get info from db
+        return dummy_user_list;
+    }
+
+    state = {
+        users: this.fetchUsers(),
+        title: "",
+        groupIcon: "",
+        groupMembers: "",
+        groupColor: "#eee",
+        pickerOpen: false,
+        selectColorTxt: "Select Color",
+        iconLst: ["user", "user-secret", "user-md", "user-circle", "blind", "child", "male", "female", "wheelchair", "mouse-pointer"],
+        icon: undefined,
+        numMembers: 1
+    }
+
+    componentDidMount() {
+        AColorPicker.from('.picker').on('change', (picker, color) => {
+          const colorPrev = document.querySelector(".color-preview");
+          colorPrev.style.backgroundColor = color;
+          this.setState({
+            groupColor: String(color)
+          });
+        }
+        );
+    }
+
+    handleInputChange = (event) => {
+        const target = event.target
+        const value = target.value
+        const name = target.name
+    
+        this.setState({
+          [name]: value
+        })
+    }
+
+    selectColor(e) {
+        e.preventDefault();
+    
+        if (!this.state.pickerOpen) {
+          document.querySelector(".picker").style.display = "block";
+          this.setState({
+            pickerOpen: true,
+            selectColorTxt: "Confirm Color"
+          });
+        } else {
+          document.querySelector(".picker").style.display = "none";
+          this.setState({
+            pickerOpen: false,
+            selectColorTxt: "Select Color"
+          });
+        }
+    
+    }
+
+    getMembers(){
+        const usernameInputs = document.querySelectorAll(".group-member-input-field");
+        const memberLst = this.state.users;
+        const numMembers = this.state.numMembers;
+        const added = [];
+        const result = [];
+        for (let i = 0; i < numMembers; i++){
+          const m = memberLst.filter( m => 
+            m.username === usernameInputs[i].value
+          );
+          if (m.length === 0 || added.includes(m.id)){
+            continue;
+          }
+          result.push(m[0]);
+          added.push(m.id);
+        }
+        return result;
+    }
+
+    selectIcon(name) {
+        if (this.state.groupIcon !== "") {
+          const curIcon = this.state.groupIcon;
+          document.querySelector("#icon-choice-" + curIcon).className = "icon-container";
+        }
+        this.setState({
+          groupIcon: name
+        });
+        document.querySelector("#icon-choice-" + name).className = "icon-container icon-selected";
+    
+    }
+    
     close(e, closeFunction){
         if (e.target.className === "popup" || e.target.className === "popup-close-btn"){
         closeFunction();
         }
     }
 
+    createGroup() {
+        const allGroups = this.getGroups();
+        if (this.state.title === "" || this.state.groupIcon === "") {
+          alert("Please fill out all fields!");
+          return;
+        }
+        //TODO: Get the list of users from the user list based on what is in this.state.groupMembers
+        const newId = allGroups[allGroups.length - 1].id + 1;
+        const newGroup = {
+          id: newId,
+          name: this.state.title,
+          icon: this.state.groupIcon,
+          colorBg: this.state.groupColor,
+          members: this.getMembers()
+        }
+        //here we could send it to a server, then redirect to that group.
+        //window.location = "/g/" + newGroup.newId;
+        console.log(newGroup)
+        alert("The group was made successfully and you can see the object in the console. normally this would redirect you to the group you made, but since we can't write to the JSON file that stores the groups, we cant redirect you to the group you just made");
+        return;
+    }
+    
+    newRow(){
+        const newDiv = document.createElement("div")
+        newDiv.className = "new-group-member-row-" + this.state.numMembers;
+        document.querySelector(".new-group-members-container").appendChild(newDiv)
+        ReactDOM.render(<NewGroupMemberRow newRow={this.newRow} num={this.state.numMembers + 1} groupId={-1}/>, document.querySelector(".new-group-member-row-" + this.state.numMembers))
+        this.setState({
+          numMembers: this.state.numMembers + 1
+        });
+    }
+
     render() {
         return (
           <div className='popup' onPointerDown={(e) => this.close(e, this.props.closePopup)}>
             <div className='popup_inner'>
-              <h1>New Expense</h1>
-              <form className="new-expense-form">
-                  <h3>
-                    Expense Title
-                  </h3>
-                  <input className="new-expense-form-input" id="expenseTitleInput" type="text" name="expenseTitle" placeholder="Title" onChange={this.handleInputChange}></input>
-                  <h3>
-                    Content 
-                  </h3>
-                  <input className="new-expense-form-input" id="expenseContentInput" type="text" name="expenseContent" placeholder="A Message About Your Expense" onChange={this.handleInputChange}></input>
-                  <h3>
-                    Cost 
-                  </h3>
-                  <input className="new-expense-form-input" id="expenseCostInput" type="number" name="expenseCost" placeholder="Ex. '9.99'" min="0" onChange={this.handleInputChange} onBlur={this.formatCost}></input>
-                  <h3>
-                    Members
-                  </h3>
-                  
-                </form>
+              <h1>Create New Group</h1>
+              <form className = "new-group-form">
+                <h3> Group Title </h3>
+                <input id="groupTitleInput" type="text" name="title" placeholder="Title" onChange={this.handleInputChange}></input>
+                <h3> Members </h3>
+                <div className="new-group-members-container">
+                  <NewGroupMemberRow newRow={this.newRow} num={1} groupId={-1}/>
+                </div>
+                <h3> Color <div className="color-preview"></div> </h3>
+                <button onClick={this.selectColor}>
+                  {this.state.selectColorTxt}
+                </button>
+                <div className="picker"
+                  acp-show-hex="no"
+                  acp-show-rgb="no"
+                  acp-show-hsl="no"
+                  acp-palette="PALETTE_MATERIAL_CHROME"></div>
+
+                <h3> Icon </h3>
+                {
+                  this.state.iconLst.map( icon => {
+                    return(
+                      <span onClick={() => this.selectIcon(icon)} key={uid(icon)} >
+                        <GroupIcon iconName={icon} />
+                      </span>
+                    );
+                  })
+                }
+              </form>
+
               <div className="popup-btn-container">
-                <button className="popup-create-btn" onClick={() => this.createExpense()}> Create Expense </button>
-                <button className="popup-close-btn" onClick={(e) => this.close(e, this.props.closePopup)}> Close</button>
+                  <button className="popup-create-btn" onClick={() => this.createGroup()}> Create Group <i className="fa fa-users"></i></button>
+                  <button className="popup-close-btn" onClick={(e) => this.close(e, this.props.closePopup)}> Close</button>
               </div>
+              
             </div>
           </div>
         );
