@@ -52,7 +52,6 @@ class App extends React.Component {
           <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/groups' component={GroupsPage} />
-            <Route exact path='/groups/new' component={NewGroupPage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
             <Route exact path='/g/:group_number' component={Group} />
