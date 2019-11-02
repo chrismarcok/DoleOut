@@ -250,7 +250,7 @@ class Group extends React.Component {
               <div className="group-main-add-btn">
                 <button onClick={this.togglePopup.bind(this)}> <i className="fa fa-plus"></i> New Expense</button>
                 {this.state.showPopup ? 
-                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} addSmallExpense={this.createSmallExpense}/>
+                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} addSmallExpense={this.createSmallExpense} group={group}/>
                   : null}
               </div>
               

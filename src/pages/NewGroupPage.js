@@ -140,7 +140,7 @@ class NewGroupPage extends React.Component {
     const newDiv = document.createElement("div")
     newDiv.className = "new-group-member-row-" + this.state.numMembers;
     document.querySelector(".new-group-members-container").appendChild(newDiv)
-    ReactDOM.render(<NewGroupMemberRow newRow={this.newRow} num={this.state.numMembers + 1}/>, document.querySelector(".new-group-member-row-" + this.state.numMembers))
+    ReactDOM.render(<NewGroupMemberRow newRow={this.newRow} num={this.state.numMembers + 1} groupId={-1}/>, document.querySelector(".new-group-member-row-" + this.state.numMembers))
     this.setState({
       numMembers: this.state.numMembers + 1
     });
@@ -165,7 +165,7 @@ class NewGroupPage extends React.Component {
                 Members
               </h3>
               <div className="new-group-members-container">
-                <NewGroupMemberRow newRow={this.newRow} num={1}/>
+                <NewGroupMemberRow newRow={this.newRow} num={1} groupId={-1}/>
               </div>
               <h3>
                 Color <div className="color-preview"></div>
