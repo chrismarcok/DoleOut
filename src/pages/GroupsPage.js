@@ -21,6 +21,22 @@ class GroupsPage extends React.Component {
     });
   }
 
+  openPopup() {
+    if(this.state.showPopup == false){
+      this.setState({
+        showPopup: true
+      });
+    }
+  }
+
+  closePopup() {
+    if(this.state.showPopup == true){
+      this.setState({
+        showPopup: false
+      });
+    }
+  }
+
   fetchGroups() {
     //here is where we would get stuff from a server
     return dummy_group_list
@@ -48,13 +64,14 @@ class GroupsPage extends React.Component {
           }
           
           <div className="group-div">
-            <div className="group-add-btn" onClick={this.togglePopup.bind(this)}>
+            <div className="group-add-btn" onClick={this.openPopup.bind(this)}>
               <div className="group-add-icon-container">
                 <i className="fa fa-plus"></i>
-              </div>
-              {this.state.showPopup ? 
-                  <NewGroupPopup closePopup={this.togglePopup.bind(this)}/>
+                {this.state.showPopup ? 
+                  <NewGroupPopup closePopup={this.closePopup.bind(this)}/>
                   : null}
+              </div>
+              
             </div>
           </div>
         </ul>

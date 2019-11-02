@@ -113,7 +113,8 @@ class NewGroupPopup extends React.Component {
     }
     
     close(e, closeFunction){
-        if (e.target.className === "popup" || e.target.className === "popup-close-btn"){
+        console.log(e.target);
+        if (e.target.className === "popup-close-btn"){
         closeFunction();
         }
     }
@@ -152,7 +153,7 @@ class NewGroupPopup extends React.Component {
 
     render() {
         return (
-          <div className='popup' onPointerDown={(e) => this.close(e, this.props.closePopup)}>
+          <div className='popup' id ='new_group_popup'>
             <div className='popup_inner'>
               <h1>Create New Group</h1>
               <form className = "new-group-form">

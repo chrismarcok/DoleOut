@@ -10,6 +10,26 @@
     background-color: rgba(0,0,0, 0.5);
     padding: 20px;
   }
+
+  #new_group_popup {
+    cursor: default
+    
+  }
+
+  #new_group_popup button{
+    padding: 10px;
+    border: none;
+    background-color:#2979ff;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    cursor:pointer;
+  }
+
+  #new_group_popup button:hover{
+    background-color: rgb(32, 94, 201);
+  }
+
+
 .popup_inner {
   position: absolute;
   left: 25%;
