@@ -18,30 +18,19 @@ import NoMatch from './pages/NoMatch';
 /*
 TODO:
 *******************
-PROFILE
-Making profile
-Register -> Profile
-Display Profiles in Group
-*******************
 GROUP
 Click on user -> Little popup with link to profile, discord style
-Create new group
-update current expense sidebar
+Finish new group popup (*)
 
 *******************
 EXPENSES
-Make expenses form pretty
-Make create expense button pretty
-Make pay button pretty
-
-Determine how much to pay
-Fix adding members in the expense form
+Fix adding members in the expense form (*)
 Variable/uneven debts
 *******************
 REGISTER/LOGIN
 Abstract away methods to another file/module, import required ones
-Create profile page, link to after registration
-Admin/User dummy functionality
+
+Admin/User dummy functionality (*)
     Edit, Deleting Users
     See how much in total is owed by a user/how much is owed to them
 *******************
@@ -49,7 +38,7 @@ USER PAGE
 See joined groups
 See owed debts
 See user debts
-User info editing
+User info editing (*)
 *******************
 Some sort of ping system
 do the README
