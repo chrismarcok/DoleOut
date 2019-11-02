@@ -52,13 +52,17 @@ class GroupMessage extends React.Component {
 
   handleInput(){
     this.setState(
-      {
+      {    
         payAmount: document.querySelector("#paymentInput" + this.props.msg.id).value
       }
     );
   }
 
   deductPayment(){
+    if(Number(this.state.payAmount) < 0){
+      alert("Cannot pay a negative amount");
+      return;
+    }
     const amount = this.state.expenseRemaining - Number(this.state.payAmount)
     let rounded = parseFloat(Math.round(amount * 100) / 100).toFixed(2);
     if (rounded < 0){
