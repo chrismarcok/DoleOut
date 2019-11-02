@@ -1,15 +1,22 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import NewGroupMemberRow from '../comps/NewGroupMemberRow';
 import '../style/ExpensePopup.css';
 import { uid } from 'react-uid';
 
 class ExpensePopup extends React.Component {
 
+  constructor(props){
+    super(props);
+    this.createNewMemberRow = this.createNewMemberRow.bind(this)
+  }
+
   state = {
     expenseTitle: "",
     expenseContent: "",
     expenseCost: "",
-    expenseMembers: ""
+    expenseMembers: "",
+    numMembers: 1
   }
 
   createExpense = () => {
@@ -107,9 +114,15 @@ class ExpensePopup extends React.Component {
   }
 
   createNewMemberRow(){
-    
-    return
+    const newDiv = document.createElement("div");
+    newDiv.className = "new-member-expense-popup-id-" + this.state.numMembers;
+    document.querySelector(".newGroupMemberRow-spawn-here").appendChild(newDiv);
+    ReactDOM.render(<NewGroupMemberRow newRow={this.createNewMemberRow} num={( this.state.numMembers + 1)} />, document.querySelector(".new-member-expense-popup-id-" + this.state.numMembers));
+    this.setState({
+      numMembers: this.state.numMembers + 1
+    });
   }
+
 
   render() {
     return (

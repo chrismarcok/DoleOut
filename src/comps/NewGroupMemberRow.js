@@ -2,6 +2,7 @@ import React from 'react'
 import dummy_user_list from '../pages/dummy_user_list.json';
 
 class NewGroupMemberRow extends React.Component {
+
   fetchUsers(){
     //server call here
     return dummy_user_list;
