@@ -36,11 +36,12 @@ class RegisterPage extends React.Component {
       alert(this.state.username + " is already registered")
     }
     else {
-      alert(this.state.username + " has been registered.")
+      // alert(this.state.username + " has been registered.")
       const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
       this.setState({
         "users": newUsers
       });
+      window.location = "/u/1";
     }
   }
 
