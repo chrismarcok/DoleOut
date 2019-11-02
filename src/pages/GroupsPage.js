@@ -4,9 +4,22 @@ import GroupComp from '../comps/GroupComp.js'
 import dummy_group_list from './dummy_group_list.json'
 import { uid } from 'react-uid'
 
+import NewGroupPopup from '../comps/NewGroupPopup.js'
+
 class GroupsPage extends React.Component {
 
   groups = this.fetchGroups()
+
+  constructor(props){
+    super(props);
+    this.state = { showPopup: false };
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
 
   fetchGroups() {
     //here is where we would get stuff from a server
@@ -34,10 +47,13 @@ class GroupsPage extends React.Component {
             })
           }
           <div className="group-div">
-            <div className="group-add-btn" onClick={() => window.location = "/groups/new"}>
+            <div className="group-add-btn" onClick={this.togglePopup.bind(this)}>
               <div className="group-add-icon-container">
                 <i className="fa fa-plus"></i>
               </div>
+              {this.state.showPopup ? 
+                  <NewGroupPopup closePopup={this.togglePopup.bind(this)}/>
+                  : null}
             </div>
           </div>
         </ul>

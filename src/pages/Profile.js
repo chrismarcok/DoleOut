@@ -54,7 +54,7 @@ class Profile extends React.Component{
                             <p>{user.preference}</p>
                         </div>
                     </div>
-                    <div className="profile-info-contianer">
+                    <div className="profile-info-container">
                         <h3>Email</h3>
                         <p>{user.email}</p>
                     </div>
