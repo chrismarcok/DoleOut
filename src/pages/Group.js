@@ -38,12 +38,10 @@ class Group extends React.Component {
   }
 
   componentDidMount() {
-    this.scrollToBottomOfChat();
-    // const group = this.getGroup();
-    // const msgs = this.fetchGroupMsgs();
-    // if (msgs.filter(m => m.groupId === group.id && m.type === "expense").length === 0) {
-    //   document.querySelector(".other-title-expenses").style.innerText = "N";
-    // }
+    const group = this.getGroup();
+    if (group !== undefined){
+      this.scrollToBottomOfChat();
+    }
   }
 
   scrollToBottomOfChat() {

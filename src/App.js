@@ -6,7 +6,6 @@ import './style/Login.css';
 import './style/Group.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
 
-import NewGroupPage from './pages/NewGroupPage';
 import GroupsPage from './pages/GroupsPage';
 import LandingPage from './pages/LandingPage';
 import RegisterPage from './pages/RegisterPage';
@@ -24,7 +23,6 @@ Finish new group popup (*)
 
 *******************
 EXPENSES
-Fix adding members in the expense form (*)
 Variable/uneven debts
 *******************
 REGISTER/LOGIN
@@ -38,7 +36,6 @@ USER PAGE
 See joined groups
 See owed debts
 See user debts
-User info editing (*)
 *******************
 Some sort of ping system
 do the README
@@ -52,7 +49,6 @@ class App extends React.Component {
           <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/groups' component={GroupsPage} />
-            <Route exact path='/groups/new' component={NewGroupPage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
             <Route exact path='/g/:group_number' component={Group} />
