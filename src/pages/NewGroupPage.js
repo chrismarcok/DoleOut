@@ -99,12 +99,17 @@ class NewGroupPage extends React.Component {
     const usernameInputs = document.querySelectorAll(".group-member-input-field");
     const memberLst = this.state.users;
     const numMembers = this.state.numMembers;
-    const result = []
+    const added = [];
+    const result = [];
     for (let i = 0; i < numMembers; i++){
       const m = memberLst.filter( m => 
         m.username === usernameInputs[i].value
       );
-      result.push(m);
+      if (m.length === 0 || added.includes(m.id)){
+        continue;
+      }
+      result.push(m[0]);
+      added.push(m.id);
     }
     return result;
   }
@@ -139,10 +144,6 @@ class NewGroupPage extends React.Component {
     this.setState({
       numMembers: this.state.numMembers + 1
     });
-    //If the group inner is too tall, then need to make container block display, otherwise it will look messed up
-    if (document.querySelector(".new-group-inner").clientHeight > window.innerHeight - 100){
-      document.querySelector(".new-group-container").style.display = "block";
-    }
   }
 
   render() {

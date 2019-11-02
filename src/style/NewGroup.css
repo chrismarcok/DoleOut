@@ -4,14 +4,16 @@
   height: calc(100vh - 60px - 24px); /*hdr 60px, footer 24px*/
   margin: auto;
   font-family: 'Poppins', sans-serif;
-  display: flex;
+  display: block;
+  margin-top: 50px;
+  
   justify-content: center;
 }
 
 .new-group-inner {
   align-self: center;
   width: 100%;
-  
+  padding-bottom: 50px;
 }
 
 .new-group-hdr {
@@ -112,10 +114,4 @@
   display: inline-block;
   width: 110px;
   text-align: center;
-}
-
-@media only screen and (max-height: 0px) {
-  .new-group-container{
-    display: block;
-  }
 }

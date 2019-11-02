@@ -13,6 +13,10 @@ class ExpensePopup extends React.Component {
   }
 
   createExpense = () => {
+    if (this.state.expenseTitle === "" || this.state.expenseCost === "" || this.state.expenseContent === ""){
+      alert("one or more fields is missing!");
+      return;
+    }
     const m = {
       "id": 8,
       "groupId": 0,
@@ -21,8 +25,8 @@ class ExpensePopup extends React.Component {
       "expense": {
         "id": 0,
         "title": this.state.expenseTitle,
-        "cost": this.state.expenseCost,
-        "remaining": this.state.expenseCost,
+        "cost": this.formatNum(this.state.expenseCost),
+        "remaining": this.formatNum(this.state.expenseCost),
         "members": [
           {
             "id": 12,
@@ -70,6 +74,7 @@ class ExpensePopup extends React.Component {
     m.id = uid(m);
     m.expense.id = uid(m);
     this.props.addExpense(m);
+    this.props.closePopup();
 }
 
   handleInputChange = (event) => {
@@ -80,6 +85,10 @@ class ExpensePopup extends React.Component {
     this.setState({
       [name]: value
     })
+  }
+
+  formatNum(n){
+    return Number(n).toFixed(2);
   }
 
   formatCost(){

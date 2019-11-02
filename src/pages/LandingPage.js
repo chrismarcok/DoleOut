@@ -19,7 +19,7 @@ class LandingPage extends React.Component {
                 </div> 
                 <div className = "above-jumbo" >
                     <h1 className="landing-main-txt">
-                    <span className = "main-header" > FriendSpend </span> 
+                    <span className = "main-header" > DoleOut </span> 
                     </h1> 
                 </div>
                 <Footer />
