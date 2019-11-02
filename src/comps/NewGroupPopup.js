@@ -12,10 +12,10 @@ const AColorPicker = require('a-color-picker');
 class NewGroupPopup extends React.Component {
 
     constructor(props) {
-        super(props)
-        this.selectColor = this.selectColor.bind(this)
-        this.newRow = this.newRow.bind(this)
-        this.getMembers = this.getMembers.bind(this)
+        super(props);
+        this.selectColor = this.selectColor.bind(this);
+        this.newRow = this.newRow.bind(this);
+        this.getMembers = this.getMembers.bind(this);
     }
 
     getGroups() {
@@ -23,7 +23,7 @@ class NewGroupPopup extends React.Component {
         return dummy_group_list;
     }
     
-      fetchUsers(){
+    fetchUsers(){
         //get info from db
         return dummy_user_list;
     }
@@ -91,11 +91,12 @@ class NewGroupPopup extends React.Component {
           const m = memberLst.filter( m => 
             m.username === usernameInputs[i].value
           );
-          if (m.length === 0 || added.includes(m.id)){
+          if (m.length === 0 || added.includes(m[0].id)){
+            console.log("skipping");
             continue;
           }
           result.push(m[0]);
-          added.push(m.id);
+          added.push(m[0].id);
         }
         return result;
     }

@@ -219,7 +219,7 @@ Individual Group Page
 
 #group-add-member-input{
   height: 30px;
-  width: 140px;
+  width: calc(100% - 50px);
   font-family: 'Poppins', sans-serif;
   font-size: 16px;
 }
@@ -234,7 +234,7 @@ Individual Group Page
   border-radius: 3px;
   color: white;
   text-align: center;
-  width: 182px;
+  width: calc(100% - 10px);
   margin-top: 4px;
   cursor: pointer;
 }

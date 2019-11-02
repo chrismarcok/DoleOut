@@ -45,15 +45,15 @@ class GroupsPage extends React.Component {
 
   createGroup = (group) => {
     const newDiv = document.createElement("div");
-    newDiv.className = "new-group-" + group.id;
+    newDiv.className = "new-group-" + uid(group);
     document.querySelector(".new-groups-div").appendChild(newDiv);
     ReactDOM.render(<GroupComp key={ uid(group) }
                           name={ group.name }
                           icon={ group.icon }
                           colorBg={ group.colorBg }
-                          id={ group.id }
+                          id={ uid(group) }
                           members={ group.members }
-                      />, document.querySelector(".new-group-" + group.id));    
+                      />, document.querySelector(".new-group-" + uid(group)));    
   }
 
   render() {

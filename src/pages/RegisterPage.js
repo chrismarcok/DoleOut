@@ -22,26 +22,28 @@ class RegisterPage extends React.Component {
     return user.length > 0
   }
 
-  register() {
-    if (this.state.username === ""){
-      alert("your username should have at least one character")
-    }
-    else if (this.state.password.length <= 6){
-      alert("your password should have more than 6 characters")
-    }
-    else if (this.state.password !== this.state.rePassword){
-      alert("the passwords don't match")
-    }
-    else if (this.checkRegistered(this.state.username)){
-      alert(this.state.username + " is already registered")
-    }
-    else {
-      // alert(this.state.username + " has been registered.")
-      const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
-      this.setState({
-        "users": newUsers
-      });
-      window.location = "/u/1";
+  register(e) {
+    if (e.keyCode === 13 || e.target.className === "register-btn"){
+      if (this.state.username === ""){
+        alert("your username should have at least one character")
+      }
+      else if (this.state.password.length <= 6){
+        alert("your password should have more than 6 characters")
+      }
+      else if (this.state.password !== this.state.rePassword){
+        alert("the passwords don't match")
+      }
+      else if (this.checkRegistered(this.state.username)){
+        alert(this.state.username + " is already registered")
+      }
+      else {
+        // alert(this.state.username + " has been registered.")
+        const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
+        this.setState({
+          "users": newUsers
+        });
+        window.location = "/u/1";
+      }
     }
   }
 
@@ -76,18 +78,18 @@ class RegisterPage extends React.Component {
               <h3>
                 Username
               </h3>
-              <input id="register-username" type="text" name="username" placeholder="Username" onChange={this.handleInputChange}></input>
+              <input id="register-username" type="text" name="username" placeholder="Username" onChange={this.handleInputChange} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Password
               </h3>
-              <input id="register-password" type="password" name="password" placeholder="Password" onChange={this.handleInputChange}></input>
+              <input id="register-password" type="password" name="password" placeholder="Password" onChange={this.handleInputChange} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Confirm Password
               </h3>
-              <input id="register-repassword" type="password" name="rePassword" placeholder="Password" onChange={this.handleInputChange}></input>
+              <input id="register-repassword" type="password" name="rePassword" placeholder="Password" onChange={this.handleInputChange} onKeyDown={(e) => this.register(e)}></input>
               
             </form>
-            <button onClick={() => this.register()}>Register <i className="fa fa-user-plus"></i></button>
+            <button className="register-btn" onClick={(e) => this.register(e)}>Register <i className="fa fa-user-plus"></i></button>
           </div>
         </div>
       </div>

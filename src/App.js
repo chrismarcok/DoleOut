@@ -5,8 +5,8 @@ import './style/Landing.css';
 import './style/Login.css';
 import './style/Group.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
+import './style/NewGroup.css';
 
-import NewGroupPage from './pages/NewGroupPage';
 import GroupsPage from './pages/GroupsPage';
 import LandingPage from './pages/LandingPage';
 import RegisterPage from './pages/RegisterPage';

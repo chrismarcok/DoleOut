@@ -155,6 +155,7 @@ class Group extends React.Component {
         newDiv.className =  newDivClass;
         document.querySelector(".group-generated-members").appendChild(newDiv);
         ReactDOM.render(<GroupMember member={usersFiltered[0]}/>, document.querySelector("."+newDivClass));
+        document.querySelector("#group-add-member-input").value = "";
       }
     }
   }
