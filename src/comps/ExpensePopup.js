@@ -1,5 +1,7 @@
 import React from 'react';
+import NewGroupMemberRow from '../comps/NewGroupMemberRow';
 import '../style/ExpensePopup.css';
+import { uid } from 'react-uid';
 
 class ExpensePopup extends React.Component {
 
@@ -11,7 +13,63 @@ class ExpensePopup extends React.Component {
   }
 
   createExpense = () => {
-    this.props.addExpense(this.state.expenseTitle, this.state.expenseContent, this.state.expenseCost, this.state.expenseMembers);         
+    const m = {
+      "id": 8,
+      "groupId": 0,
+      "date": (new Date()).getTime() / 1000,
+      "type": "expense",
+      "expense": {
+        "id": 0,
+        "title": this.state.expenseTitle,
+        "cost": this.state.expenseCost,
+        "remaining": this.state.expenseCost,
+        "members": [
+          {
+            "id": 12,
+            "username": "george",
+            "password": "123",
+            "picUrl": "https://api.adorable.io/avatars/200/12",
+            "email": "dummy@dummy.com",
+            "firstName": "Firstname",
+            "lastName": "McLastname"
+          },
+          {
+            "id": 19,
+            "username": "grace",
+            "password": "123",
+            "picUrl": "https://api.adorable.io/avatars/200/19",
+            "email": "dummy@dummy.com",
+            "firstName": "Firstname",
+            "lastName": "McLastname"
+          },
+          {
+            "id": 17,
+            "username": "donald",
+            "password": "123",
+            "picUrl": "https://api.adorable.io/avatars/200/17",
+            "email": "dummy@dummy.com",
+            "firstName": "Firstname",
+            "lastName": "McLastname"
+          }
+        ]
+      },
+      "user": {
+        "id": 1,
+        "username": "user",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/1",
+        "email": "dummy@dummy.com",
+        "firstName": "Firstname",
+        "lastName": "McLastname",
+        "paypal": "https://www.paypal.me/chrismarcok",
+        "preference": "paypal",
+        "description": "send me money please thank u :)"
+      },
+      "content": this.state.expenseContent
+    }
+    m.id = uid(m);
+    m.expense.id = uid(m);
+    this.props.addExpense(m);
 }
 
   handleInputChange = (event) => {
@@ -24,30 +82,55 @@ class ExpensePopup extends React.Component {
     })
   }
 
+  formatCost(){
+    const costInputField = document.querySelector("#expenseCostInput");
+    const val = document.querySelector("#expenseCostInput").value;
+    costInputField.value = Number(val).toFixed(2);
+    if (Number(val) < 0){
+      costInputField.value = Number(0).toFixed(2);
+    }
+  }
+
+  close(e, closeFunction){
+    if (e.target.className === "popup" || e.target.className === "popup-close-btn"){
+      closeFunction();
+    }
+  }
+
+  createNewMemberRow(){
+    
+    return
+  }
+
   render() {
     return (
-      <div className='popup'>
+      <div className='popup' onPointerDown={(e) => this.close(e, this.props.closePopup)}>
         <div className='popup_inner'>
+          <h1>New Expense</h1>
           <form className="new-expense-form">
               <h3>
                 Expense Title
               </h3>
-              <input id="expenseTitleInput" type="text" name="expenseTitle" placeholder="Title" onChange={this.handleInputChange}></input>
+              <input className="new-expense-form-input" id="expenseTitleInput" type="text" name="expenseTitle" placeholder="Title" onChange={this.handleInputChange}></input>
               <h3>
                 Content 
               </h3>
-              <input id="expenseContentInput" type="text" name="expenseContent" placeholder="a message about your expense" onChange={this.handleInputChange}></input>
+              <input className="new-expense-form-input" id="expenseContentInput" type="text" name="expenseContent" placeholder="A Message About Your Expense" onChange={this.handleInputChange}></input>
               <h3>
                 Cost 
               </h3>
-              <input id="expenseCostInput" type="text" name="expenseCost" placeholder="the total cost of your expense" onChange={this.handleInputChange}></input>
+              <input className="new-expense-form-input" id="expenseCostInput" type="number" name="expenseCost" placeholder="Ex. '9.99'" min="0" onChange={this.handleInputChange} onBlur={this.formatCost}></input>
               <h3>
                 Members
               </h3>
-              <input id="expenseMembersInput" type="text" name="expenseMembers" placeholder="3, 7, 11, 4, ..." onChange={this.handleInputChange}></input>
+              <NewGroupMemberRow num={1} newRow={this.createNewMemberRow}/>
+              <div className="newGroupMemberRow-spawn-here">
+              </div>
             </form>
-          <button onClick={() => this.createExpense()}> Create Expense </button>
-          <button onClick={this.props.closePopup}> Close form </button>
+          <div className="popup-btn-container">
+            <button className="popup-create-btn" onClick={() => this.createExpense()}> Create Expense </button>
+            <button className="popup-close-btn" onClick={(e) => this.close(e, this.props.closePopup)}> Close</button>
+          </div>
         </div>
       </div>
     );

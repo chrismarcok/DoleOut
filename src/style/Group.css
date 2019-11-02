@@ -368,8 +368,16 @@ Messages
   margin-top: 10px;
   width: 500px;
   min-height: 200px;
-  background-color: white;
   position: relative;
+}
+
+.expense-cover{
+  background-color: rgba(0,0,0, 0.3);
+  position: absolute;
+  width: 500px;
+  height: 100%;
+  z-index: 1;
+  display: none;
 }
 
 .expense-lower{
@@ -379,6 +387,8 @@ Messages
   position: absolute;
   bottom: 0;
   width: 100%;
+  z-index: 0;
+  
 }
 
 .expense-pay{
@@ -453,16 +463,30 @@ Messages
   text-align: center;
 }
 
+.expense-pic-small-container{
+  display: inline-block;
+}
+
 .expense-pic-small {
   height: 36px;
   width: 36px;
   background-size: contain;
-  display: inline-block;
+  
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 10px;
   cursor: pointer;
+}
+
+.expense-pic-cover{
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  position: absolute;
+  margin-left: 5px;
+  margin-top: 10px;
+  background-color: rgba(0,0,0,0.5);
 }
 
 .expense-payment-container{

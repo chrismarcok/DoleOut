@@ -39,11 +39,11 @@ class Group extends React.Component {
 
   componentDidMount() {
     this.scrollToBottomOfChat();
-    const group = this.getGroup();
-    const msgs = this.fetchGroupMsgs();
-    if (msgs.filter(m => m.groupId === group.id && m.type === "expense").length === 0) {
-      document.querySelector(".other-title-expenses").style.display = "none";
-    }
+    // const group = this.getGroup();
+    // const msgs = this.fetchGroupMsgs();
+    // if (msgs.filter(m => m.groupId === group.id && m.type === "expense").length === 0) {
+    //   document.querySelector(".other-title-expenses").style.innerText = "N";
+    // }
   }
 
   scrollToBottomOfChat() {
@@ -81,70 +81,22 @@ class Group extends React.Component {
     })
   }
 
-  createExpense = (title, content, cost, members) => {
-    const m = {
-      "id": 8,
-      "groupId": 0,
-      "date": 103,
-      "type": "expense",
-      "expense": {
-        "id": 0,
-        "title": title,
-        "cost": cost,
-        "remaining": cost,
-        "members": [
-          {
-            "id": 12,
-            "username": "george",
-            "password": "123",
-            "picUrl": "https://api.adorable.io/avatars/200/12",
-            "email": "dummy@dummy.com",
-            "firstName": "Firstname",
-            "lastName": "McLastname"
-          },
-          {
-            "id": 19,
-            "username": "grace",
-            "password": "123",
-            "picUrl": "https://api.adorable.io/avatars/200/19",
-            "email": "dummy@dummy.com",
-            "firstName": "Firstname",
-            "lastName": "McLastname"
-          },
-          {
-            "id": 17,
-            "username": "donald",
-            "password": "123",
-            "picUrl": "https://api.adorable.io/avatars/200/17",
-            "email": "dummy@dummy.com",
-            "firstName": "Firstname",
-            "lastName": "McLastname"
-          }
-        ]
-      },
-      "user": {
-        "id": 1,
-        "username": "user",
-        "password": "123",
-        "picUrl": "https://api.adorable.io/avatars/200/1",
-        "email": "dummy@dummy.com",
-        "firstName": "Firstname",
-        "lastName": "McLastname",
-        "paypal": "https://www.paypal.me/chrismarcok",
-        "preference": "paypal",
-        "description": "send me money please thank u :)"
-      },
-      "content": content
-    }
-    m.id = uid(m)
-    m.expense.id = uid(m)
+  createExpense = (expense) => {
     const newMsg = document.createElement("div")
-    newMsg.id = m.id
+    newMsg.id = expense.id
     document.querySelector(".group-main-content").appendChild(newMsg)
-    
-    ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
-
+    ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense}/>, document.querySelector("#" + expense.id))
     this.scrollToBottomOfChat();
+    const newSmallExpense = (
+      <div key={uid(expense)} onClick={(e) => this.scrollToExpense(e, expense)}>
+        <OtherExpense msg={expense} />
+      </div>
+    )
+    const newDiv = document.createElement("div");
+    newDiv.className = uid(expense);
+    document.querySelector(".group-col-other-ul").appendChild(newDiv);
+    ReactDOM.render(newSmallExpense, document.querySelector("." + uid(expense)));
+    
   }
 
   getInput(e) {
@@ -231,6 +183,19 @@ class Group extends React.Component {
     elem.scrollIntoView();
   }
 
+  updateSmallExpense(id, amount){
+    const txt = document.querySelector(".expense-small-id-" + id + " p");
+    txt.innerText = `$${amount} remaining`;
+  }
+
+  hideSmallExpense(id){
+    document.querySelector(".expense-small-id-" + id).style.display = "none";
+  }
+
+  addSmallExpense(){
+
+  }
+
 
   render() {
     const group = this.getGroup()
@@ -285,7 +250,7 @@ class Group extends React.Component {
               <div className="group-main-add-btn">
                 <button onClick={this.togglePopup.bind(this)}> <i className="fa fa-plus"></i> New Expense</button>
                 {this.state.showPopup ? 
-                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)}/>
+                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} addSmallExpense={this.createSmallExpense}/>
                   : null}
               </div>
               
@@ -294,7 +259,7 @@ class Group extends React.Component {
               {
                 msgs.filter(m => m.groupId === group.id).map(msg => {
                   return (
-                    <GroupMessage msg={msg} key={uid(msg)} />
+                    <GroupMessage msg={msg} key={uid(msg)} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} />
                   )
                 })
               }
@@ -319,7 +284,6 @@ class Group extends React.Component {
                       </div>
                     );
                   })
-
                 }
               </ul>
             </div>
@@ -335,13 +299,14 @@ class Group extends React.Component {
                   )
                 })
               }
-              <div className="group-other-col-add-group-container">
+
+              {/* <div className="group-other-col-add-group-container">
                 <div className="group-other-col-add-group-inner" onClick={() => window.location = "/groups/new"}>
                   <div className="group-other-col-add-group-btn">
                     <i className="fa fa-plus"></i>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </ul>
           </div>
         </div>

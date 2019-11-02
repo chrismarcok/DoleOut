@@ -53,7 +53,7 @@ class GroupMessage extends React.Component {
   handleInput(){
     this.setState(
       {
-        payAmount: document.querySelector("#paymentInput").value
+        payAmount: document.querySelector("#paymentInput" + this.props.msg.id).value
       }
     );
   }
@@ -63,10 +63,18 @@ class GroupMessage extends React.Component {
     let rounded = parseFloat(Math.round(amount * 100) / 100).toFixed(2);
     if (rounded < 0){
       rounded = Number(0).toFixed(2);
+      const closebtn = document.querySelector(".expense-close-btn" + this.props.msg.id);
+      const container = document.querySelector(".expense-payment-container" + this.props.msg.id);
+      closebtn.style.display = "none";
+      container.style.display = "none";
+      this.props.hideExpense(this.props.msg.id);
+      document.querySelector(".expense-cover-" + this.props.msg.id).style.display = "block";
     }
     this.setState({
       expenseRemaining: rounded
-    })
+    });
+    const update = this.props.update;
+    update(this.props.msg.id, rounded);
   }
 
   // taken from https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
@@ -106,6 +114,8 @@ class GroupMessage extends React.Component {
         <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
         <div className="group-main-msg-content">
           <div className="expense-container">
+            <div className={"expense-cover expense-cover-" + this.props.msg.id}>
+            </div>
             <div className="expense-upper">
               <div className="expense-upper-left">
                 <h3>{this.props.msg.expense.title}</h3>
@@ -145,7 +155,7 @@ class GroupMessage extends React.Component {
           </div>
           <div className={"expense-payment-container expense-payment-container" + this.props.msg.id }>
             <h3>How much would you like to pay?</h3>
-            <input id="paymentInput" type="number" min="0.01" max={String(this.props.msg.expense.remaining)} step="0.01" defaultValue="0.01" onChange={this.handleInput} />
+            <input id={"paymentInput"+this.props.msg.id} type="number" min="0.01" max={String(this.props.msg.expense.remaining)} step="0.01" defaultValue="0.01" onChange={this.handleInput} />
             <i className="fa fa-check" id="expense-make-payment-btn" onClick={this.deductPayment}></i>
             </div>
         </div>

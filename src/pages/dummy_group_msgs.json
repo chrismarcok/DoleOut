@@ -93,7 +93,7 @@
       "id": 0,
       "title": "Toilet Paper",
       "cost": 9.99,
-      "remaining": 9.99,
+      "remaining": 6.66,
       "members": [
         {
           "id": 12,
@@ -102,7 +102,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/12",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": true
         },
         {
           "id": 19,
@@ -111,7 +112,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/19",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": false
         },
         {
           "id": 17,
@@ -120,7 +122,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/17",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": false
         }
       ]
     },
@@ -181,7 +184,7 @@
       "id": 1,
       "title": "Bread",
       "cost": 3.49,
-      "remaining": 3.49,
+      "remaining": 2.79,
       "members": [
         {
           "id": 16,
@@ -190,7 +193,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/16",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": true
         },
         {
           "id": 19,
@@ -199,7 +203,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/19",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": false
         },
         {
           "id": 17,
@@ -208,7 +213,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/17",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": false
         },
         {
           "id": 18,
@@ -217,7 +223,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/18",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": false
         },
         {
           "id": 1,
@@ -226,7 +233,8 @@
           "picUrl": "https://api.adorable.io/avatars/200/1",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
-          "lastName": "McLastname"
+          "lastName": "McLastname",
+          "paid": false
         }
       ]
     },
