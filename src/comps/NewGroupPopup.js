@@ -120,25 +120,24 @@ class NewGroupPopup extends React.Component {
     }
 
     createGroup() {
-        const allGroups = this.getGroups();
-        if (this.state.title === "" || this.state.groupIcon === "") {
-          alert("Please fill out all fields!");
-          return;
-        }
-        //TODO: Get the list of users from the user list based on what is in this.state.groupMembers
-        const newId = allGroups[allGroups.length - 1].id + 1;
-        const newGroup = {
-          id: newId,
-          name: this.state.title,
-          icon: this.state.groupIcon,
-          colorBg: this.state.groupColor,
-          members: this.getMembers()
-        }
-        //here we could send it to a server, then redirect to that group.
-        //window.location = "/g/" + newGroup.newId;
-        console.log(newGroup)
-        alert("The group was made successfully and you can see the object in the console. normally this would redirect you to the group you made, but since we can't write to the JSON file that stores the groups, we cant redirect you to the group you just made");
+      const allGroups = this.getGroups();
+      if (this.state.title === "" || this.state.groupIcon === "") {
+        alert("Please fill out all fields!");
         return;
+      }
+      //TODO: Get the list of users from the user list based on what is in this.state.groupMembers
+      const newId = allGroups[allGroups.length - 1].id + 1;
+      const newGroup = {
+        id: newId,
+        name: this.state.title,
+        icon: this.state.groupIcon,
+        colorBg: this.state.groupColor,
+        members: this.getMembers()
+      }
+      this.props.addGroup(newGroup);
+      this.props.closePopup();
+
+      return;
     }
     
     newRow(){
