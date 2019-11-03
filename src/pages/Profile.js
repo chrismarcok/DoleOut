@@ -1,3 +1,10 @@
+/**
+ * This is the Profile Page.
+ * This is the view from the admin's perspective (as opposed to the user's)
+ * The admin can rename fields. The user cannot (although the user should be 
+ * able to change their own fields when logging in is implemented).
+ */
+
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Header from '../comps/Header'
@@ -19,8 +26,28 @@ class Profile extends React.Component{
         editing: false
     }
 
+    componentDidMount(){
+        const user = this.getUser()
+        if (user){
+            this.setState({
+                firstname: user.firstName,
+                lastname: user.lastName,
+                avatar: user.picUrl,
+                description: user.description,  
+                email: user.email, 
+                pref: user.preference,
+                paypal: user.paypal,
+                user: user
+            });
+            const pic = document.querySelector("#profile-pic-" + user.id);
+            pic.style.backgroundImage = "url('" + user.picUrl + "')";
+        }
+    }
+
     /**
-     * Toggles whether the user can edit his or her information with displayed input fields.
+     * Toggles whether the user can edit his or her information with displayed 
+     * input fields. This is where we would need to update the server database that 
+     * has the user's information too. (in the else section)
      */
     toggleEdit = () => {
         if (!this.state.editing){
@@ -44,33 +71,21 @@ class Profile extends React.Component{
         }
     }
 
+    /**
+     * Get the id number of this user.
+     */
     getUserNum(){
         const {user_number} = this.props.match.params
         return user_number
     }
 
+    /**
+     * Get the object representing this user
+     */
     getUser(){
         const userNumber = this.getUserNum();
         const userList = Fetch.fetchUsers();
         return userList.filter(user => user.id === parseInt(userNumber))[0];
-    }
-
-    componentDidMount(){
-        const user = this.getUser()
-        if (user){
-            this.setState({
-                firstname: user.firstName,
-                lastname: user.lastName,
-                avatar: user.picUrl,
-                description: user.description,  
-                email: user.email, 
-                pref: user.preference,
-                paypal: user.paypal,
-                user: user
-            });
-            const pic = document.querySelector("#profile-pic-" + user.id);
-            pic.style.backgroundImage = "url('" + user.picUrl + "')";
-        }
     }
 
     render() {
@@ -81,7 +96,7 @@ class Profile extends React.Component{
         
         return (
             <div>
-                <Header />
+                <Header user="admin"/>
                 <div className="profile-btn profile-edit-btn" onClick={this.toggleEdit}>
                     Edit <i className="fa fa-pencil"></i>
                 </div>

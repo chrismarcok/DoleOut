@@ -1,3 +1,8 @@
+/**
+ * This is the group page from the ADMIN perspective (as opposed to the user's).
+ *  The user cannot delete users or messages. The admin can.
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../comps/Header';
@@ -9,7 +14,6 @@ import OtherGroupComp from '../comps/OtherGroupComp';
 import { uid } from 'react-uid';
 import { Redirect } from 'react-router-dom';
 import Helper from '../scripts/helper.js';
-
 import ExpensePopup from '../comps/ExpensePopup.js'
 
 /* This is the actual group page. the group page that has 3 columns*/
@@ -30,6 +34,13 @@ class Group extends React.Component {
     this.toggleAddUser = this.toggleAddUser.bind(this);
   }
 
+  componentDidMount() {
+    const group = this.getGroup();
+    if (group !== undefined){
+      this.scrollToBottomOfChat();
+    }
+  }
+
   /**
    * Toggles whether or not the expense popup is showing
    */
@@ -39,18 +50,17 @@ class Group extends React.Component {
     });
   }
 
-  componentDidMount() {
-    const group = this.getGroup();
-    if (group !== undefined){
-      this.scrollToBottomOfChat();
-    }
-  }
-
+  /**
+   * Scrolls to the bottom of the chat. Called when the component mounts.
+   */
   scrollToBottomOfChat() {
     const msgBox = document.querySelector(".group-main-content");
     msgBox.scrollTop = msgBox.scrollHeight;
   }
 
+  /**
+   * Return the group object that has this group number.
+   */
   getGroup() {
     const { group_number } = this.props.match.params;
     const groups = Fetch.fetchGroups()
@@ -175,6 +185,10 @@ class Group extends React.Component {
     
   }
 
+  /**
+   * Scrolls to the msg in question. Called when you click on the expense in the 
+   * sidebar.
+   */
   scrollToExpense(event, msg){
     const elem = document.querySelector("#group-main-profile-pic-id-" + msg.id);
     elem.scrollIntoView();
@@ -188,6 +202,9 @@ class Group extends React.Component {
     txt.innerText = `$${amount} remaining`;
   }
 
+  /**
+   * Hides the expense in the sidebar. Called when an expense is finished paying.
+   */
   hideSmallExpense(id){
     document.querySelector(".expense-small-id-" + id).style.display = "none";
   }

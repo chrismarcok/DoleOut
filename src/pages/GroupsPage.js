@@ -1,10 +1,15 @@
+/**
+ * This is the Group Page, where you select which group you want to open.
+ * This is the view from the admin's perspective (as opposed to the user's)
+ * The admin can rename and delete groups. The user cannot.
+ */
+
 import React from 'react'
 import ReactDOM from 'react-dom';
 import Header from '../comps/Header.js'
 import GroupComp from '../comps/GroupComp.js'
 import Fetch from '../scripts/fetch.js';
 import { uid } from 'react-uid'
-
 import NewGroupPopup from '../comps/NewGroupPopup.js'
 
 class GroupsPage extends React.Component {
@@ -17,14 +22,8 @@ class GroupsPage extends React.Component {
   }
 
   /**
-   * Toggles whether the new group popup is seen.
+   * Opens the new group popup.
    */
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
-  }
-
   openPopup() {
     if(this.state.showPopup === false){
       this.setState({
@@ -33,6 +32,9 @@ class GroupsPage extends React.Component {
     }
   }
 
+  /**
+   * Closes the new group popup.
+   */
   closePopup() {
     if(this.state.showPopup === true){
       this.setState({
@@ -56,6 +58,7 @@ class GroupsPage extends React.Component {
                           colorBg={ group.colorBg }
                           id={ uid(group) }
                           members={ group.members }
+                          admin={true}
                       />, document.querySelector(".new-group-" + uid(group)));    
   }
 
@@ -73,6 +76,7 @@ class GroupsPage extends React.Component {
                         colorBg={ group.colorBg }
                         id={ group.id }
                         members={ group.members }
+                        admin={true}
                   />
               )
             })

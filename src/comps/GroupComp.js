@@ -63,7 +63,12 @@ class GroupComp extends React.Component {
 
   redirect(e){
     if (!e.target.classList.contains("fa") && !e.target.classList.contains("group-comp-input")){
-      window.location = "/g/" + this.props.id;
+      if (this.props.admin){
+        window.location = "/g/" + this.props.id + "/admin";
+      } else {
+        window.location = "/g/" + this.props.id;
+      }
+      
     }
   }
 

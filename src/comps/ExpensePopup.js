@@ -104,7 +104,6 @@ class ExpensePopup extends React.Component {
       if (m.length === 0 || added.includes(m[0].id)){
         continue;
       }
-      console.log("pushing")
       result.push(m[0]);
       added.push(m[0].id);
     }

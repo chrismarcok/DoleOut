@@ -1,9 +1,14 @@
+/**
+ * This is the profile view from the USERS perpsective  (as opposed to the admin's)
+ * The admin can edit fields. The user cannot.
+ */
+
+
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Header from '../comps/Header'
 import Fetch from '../scripts/fetch.js';
 import '../style/Profile.css'
-import Helper from '../scripts/helper.js';
 
 class Profile extends React.Component{
     
@@ -17,39 +22,6 @@ class Profile extends React.Component{
         pref: "",
         paypal: "",
         editing: false
-    }
-
-    toggleEdit = () => {
-        if (!this.state.editing){
-            this.setState({
-                editing: true
-            });
-            document.querySelector(".profile-edit-container").style.display = "block";
-            document.querySelector(".profile-save-btn").style.display = "block";
-            document.querySelector(".profile-edit-btn").style.display = "none";
-        }
-        else {
-            this.setState({
-                editing: false
-            });
-            document.querySelector(".profile-edit-container").style.display = "none";
-            document.querySelector(".profile-save-btn").style.display = "none";
-            document.querySelector(".profile-edit-btn").style.display = "block";
-
-            const pic = document.querySelector("#profile-pic-" + this.state.user.id);
-            pic.style.backgroundImage = "url('" + this.state.avatar + "')";
-        }
-    }
-
-    getUserNum(){
-        const {user_number} = this.props.match.params
-        return user_number
-    }
-
-    getUser(){
-        const userNumber = this.getUserNum();
-        const userList = Fetch.fetchUsers();
-        return userList.filter(user => user.id === parseInt(userNumber))[0];
     }
 
     componentDidMount(){
@@ -68,6 +40,23 @@ class Profile extends React.Component{
             const pic = document.querySelector("#profile-pic-" + user.id);
             pic.style.backgroundImage = "url('" + user.picUrl + "')";
         }
+    }
+
+    /**
+     * Get the id number of this user.
+     */
+    getUserNum(){
+        const {user_number} = this.props.match.params
+        return user_number
+    }
+
+    /**
+     * Get the object representing this user
+     */
+    getUser(){
+        const userNumber = this.getUserNum();
+        const userList = Fetch.fetchUsers();
+        return userList.filter(user => user.id === parseInt(userNumber))[0];
     }
 
     render() {
@@ -99,22 +88,6 @@ class Profile extends React.Component{
                     <div className="profile-info-container">
                         <h3>Email</h3>
                         <p>{this.state.email}</p>
-                    </div>
-                    <div className="profile-edit-container">
-                        <p>First Name</p>
-                        <input type="text" name="firstname" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.firstname}></input>
-                        <p>Last Name</p>
-                        <input type="text" name="lastname" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.lastname}></input>
-                        <p>Avatar URL</p>
-                        <input type="text" name="avatar" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.avatar}></input>
-                        <p>Description</p>
-                        <input type="text" name="description" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.description}></input>
-                        <p>Preferred Payment Method</p>
-                        <input type="text" name="pref" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.pref}></input>
-                        <p>Email</p>
-                        <input type="text" name="email" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.email}></input>
-                        <p>PayPal URL</p>
-                        <input type="text" name="paypal" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.paypal}></input>
                     </div>
                 </div>
             </div>

@@ -76,7 +76,6 @@ class NewGroupPopup extends React.Component {
           m.username === usernameInputs[i].value
         );
         if (m.length === 0 || added.includes(m[0].id)){
-          console.log("skipping");
           continue;
         }
         result.push(m[0]);
@@ -104,7 +103,6 @@ class NewGroupPopup extends React.Component {
    * Closes the new group popup.
    */
   close(e, closeFunction){
-      console.log(e.target);
       if (e.target.className === "popup-close-btn"){
       closeFunction();
       }

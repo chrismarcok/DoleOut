@@ -9,6 +9,9 @@ class ExpensePic extends React.Component{
     picCover.style.display = this.props.member.paid ? "block" : "none";
   }
 
+  /**
+   * Redirects you to the user's profile page.
+   */
   redirect(){
     window.location = "/u/" + this.props.member.id;
   }

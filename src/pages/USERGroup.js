@@ -1,3 +1,8 @@
+/*
+This is the group page from the USER prospective (as opposed to the admin's).
+The user cannot delete users or messages. The admin can.
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../comps/Header';
@@ -9,7 +14,6 @@ import OtherGroupComp from '../comps/OtherGroupComp';
 import { uid } from 'react-uid';
 import { Redirect } from 'react-router-dom';
 import Helper from '../scripts/helper.js';
-
 import ExpensePopup from '../comps/ExpensePopup.js'
 
 /* This is the actual group page. the group page that has 3 columns*/
@@ -30,12 +34,6 @@ class Group extends React.Component {
     this.toggleAddUser = this.toggleAddUser.bind(this);
   }
 
-  togglePopup(){
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
-  }
-
   componentDidMount() {
     const group = this.getGroup();
     if (group !== undefined){
@@ -43,11 +41,26 @@ class Group extends React.Component {
     }
   }
 
+  /**
+   * Toggles whether or not the expense popup is showing
+   */
+  togglePopup(){
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
+
+  /**
+   * Scrolls to the bottom of the chat. Called when the component mounts.
+   */
   scrollToBottomOfChat() {
     const msgBox = document.querySelector(".group-main-content");
     msgBox.scrollTop = msgBox.scrollHeight;
   }
 
+  /**
+   * Return the group object that has this group number.
+   */
   getGroup() {
     const { group_number } = this.props.match.params;
     const groups = Fetch.fetchGroups()
@@ -55,6 +68,11 @@ class Group extends React.Component {
     return thisGroupLst[0]
   }
 
+  /**
+   * Creates an new expense and adds it to the group timeline and sidebar.
+   * This method is passed on as a prop to the create new expense popup.
+   * Would need a server call to update our database with the new expense.
+   */
   createExpense = (expense) => {
     const newMsg = document.createElement("div")
     newMsg.id = expense.id
@@ -75,6 +93,10 @@ class Group extends React.Component {
     
   }
 
+  /**
+   * Creates a new chat message and adds it to the group timeline based on the chat input field.
+   * Would need a server call to update our database with the new chat, as well as obtain the current logged in user.
+   */
   getInput(e) {
     const val = this.state.groupInput;
     if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn") || e.target === document.querySelector(".fa-paper-plane")) && val !== "") {
@@ -113,6 +135,10 @@ class Group extends React.Component {
     }
   }
 
+  /**
+   * Adds a new user to the group's member list.
+   * Would need a server call to update the group's new member in our database.
+   */
   addMember(e){
     if (e.target.id === "group-add-member-accept-btn" || e.keyCode === 13){
       const users = Fetch.fetchUsers();
@@ -140,6 +166,9 @@ class Group extends React.Component {
     }
   }
 
+  /**
+   * Toggles whether the add new user input field is displayed.
+   */
   toggleAddUser(){
     const addUserInput = document.querySelector(".group-add-member-input-container");
     const addMemberCntr = document.querySelector(".group-add-member-container");
@@ -157,16 +186,26 @@ class Group extends React.Component {
     
   }
 
+  /**
+   * Scrolls to the msg in question. Called when you click on the expense in the 
+   * sidebar.
+   */
   scrollToExpense(event, msg){
     const elem = document.querySelector("#group-main-profile-pic-id-" + msg.id);
     elem.scrollIntoView();
   }
 
+  /**
+   * Updates the expense in the sidebar.
+   */
   updateSmallExpense(id, amount){
     const txt = document.querySelector(".expense-small-id-" + id + " p");
     txt.innerText = `$${amount} remaining`;
   }
 
+  /**
+   * Hides the expense in the sidebar. Called when an expense is finished paying.
+   */
   hideSmallExpense(id){
     document.querySelector(".expense-small-id-" + id).style.display = "none";
   }
