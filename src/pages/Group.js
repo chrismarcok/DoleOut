@@ -30,6 +30,9 @@ class Group extends React.Component {
     this.toggleAddUser = this.toggleAddUser.bind(this);
   }
 
+  /**
+   * Toggles whether or not the expense popup is showing
+   */
   togglePopup(){
     this.setState({
       showPopup: !this.state.showPopup
@@ -55,6 +58,11 @@ class Group extends React.Component {
     return thisGroupLst[0]
   }
 
+  /**
+   * Creates an new expense and adds it to the group timeline and sidebar.
+   * This method is passed on as a prop to the create new expense popup.
+   * Would need a server call to update our database with the new expense.
+   */
   createExpense = (expense) => {
     const newMsg = document.createElement("div")
     newMsg.id = expense.id
@@ -75,10 +83,13 @@ class Group extends React.Component {
     
   }
 
+  /**
+   * Creates a new chat message and adds it to the group timeline based on the chat input field.
+   * Would need a server call to update our database with the new chat, as well as obtain the current logged in user.
+   */
   getInput(e) {
     const val = this.state.groupInput;
     if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn") || e.target === document.querySelector(".fa-paper-plane")) && val !== "") {
-
       //Here we would need to get the current user object from a server. for now, just use this dummy user.
       const m = {
         "id": 123,
@@ -113,7 +124,12 @@ class Group extends React.Component {
     }
   }
 
+  /**
+   * Adds a new user to the group's member list.
+   * Would need a server call to update the group's new member in our database.
+   */
   addMember(e){
+    //button or enter key
     if (e.target.id === "group-add-member-accept-btn" || e.keyCode === 13){
       const users = Fetch.fetchUsers();
       const usersFiltered = users.filter( u => u.username === this.state.groupMemberAddInput);
@@ -128,8 +144,7 @@ class Group extends React.Component {
         return;
       }
       else {
-        //We dont check if you add the same member twice (altho this doesnt work anyways), 
-        //here we would have to update this group.members list (but we cant cuz its in json)
+        // here we would make the server call to update our database
         const newDiv = document.createElement("div");
         const newDivClass = String(uid(usersFiltered[0]));
         newDiv.className =  newDivClass;
@@ -140,6 +155,9 @@ class Group extends React.Component {
     }
   }
 
+  /**
+   * Toggles whether the add new user input field is displayed.
+   */
   toggleAddUser(){
     const addUserInput = document.querySelector(".group-add-member-input-container");
     const addMemberCntr = document.querySelector(".group-add-member-container");
@@ -162,6 +180,9 @@ class Group extends React.Component {
     elem.scrollIntoView();
   }
 
+  /**
+   * Updates the expense in the sidebar.
+   */
   updateSmallExpense(id, amount){
     const txt = document.querySelector(".expense-small-id-" + id + " p");
     txt.innerText = `$${amount} remaining`;

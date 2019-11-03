@@ -13,12 +13,20 @@ class RegisterPage extends React.Component {
     users: Fetch.fetchUsers()
   }
 
+  /**
+   * Checks if the username is in the master user list.
+   */
   checkRegistered(username){
     const user = this.state.users.filter(user => user.username === username);
     return user.length > 0;
   }
 
+  /**
+   * Registers a new user if all the input fields are valid.
+   * Would need a server call to update our database with the new user.
+   */
   register(e) {
+    //button or enter key
     if (e.keyCode === 13 || e.target.className === "register-btn"){
       if (this.state.username === ""){
         alert("your username should have at least one character")

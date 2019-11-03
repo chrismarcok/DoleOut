@@ -19,6 +19,9 @@ class Profile extends React.Component{
         editing: false
     }
 
+    /**
+     * Toggles whether the user can edit his or her information with displayed input fields.
+     */
     toggleEdit = () => {
         if (!this.state.editing){
             this.setState({

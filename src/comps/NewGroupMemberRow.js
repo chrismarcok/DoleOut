@@ -3,7 +3,8 @@ import Fetch from '../scripts/fetch.js';
 
 class NewGroupMemberRow extends React.Component {
   /**
-   * Checks if a given group member row holds a valid member to be added.
+   * Determines if a given group member row holds a valid member to be added.
+   * Changes the text display of the group member row showing if the member is valid or not.
    * @param num the index of the new group member row
    */
   checkValid(num){

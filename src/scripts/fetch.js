@@ -4,17 +4,17 @@ import dummy_group_msgs from '../pages/dummy_group_msgs.json';
 
 const Fetch = {
   fetchGroups() {
-    //here is where we would get stuff from a server
+    //would require a server call to pull this information from our database
     return dummy_group_list;
   },
   
   fetchUsers(){
-    //here is where we would get stuff from a server
+    //would require a server call to pull this information from our database
     return dummy_user_list;
   },
   
   fetchGroupMsgs() {
-    //here is where we would get stuff from a server
+    //would require a server call to pull this information from our database
     return dummy_group_msgs;
   },
 }

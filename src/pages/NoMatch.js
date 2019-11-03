@@ -1,6 +1,9 @@
 import React from 'react'
 
 class NoMatch extends React.Component {
+  /**
+   * our humorous 404 page :)
+   */
   render() {
     return (
       <div className="no-match">
