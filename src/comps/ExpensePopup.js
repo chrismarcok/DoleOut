@@ -28,6 +28,11 @@ class ExpensePopup extends React.Component {
       alert("one or more fields is missing!");
       return;
     }
+
+    if(this.state.expenseCost <= 0){
+      alert("please enter a positive cost");
+      return;
+    }
     const m = {
       "id": 8,
       "groupId": 0,
