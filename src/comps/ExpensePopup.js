@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import NewGroupMemberRow from '../comps/NewGroupMemberRow';
 import '../style/ExpensePopup.css';
 import { uid } from 'react-uid';
+import Helper from  '../scripts/helper.js';
 
 class ExpensePopup extends React.Component {
 
@@ -92,16 +93,6 @@ class ExpensePopup extends React.Component {
     return result;
   }
 
- handleInputChange = (event) => {
-    const target = event.target
-    const value = target.value
-    const name = target.name
-
-    this.setState({
-      [name]: value
-    })
-  }
-
   formatCost(){
     const costInputField = document.querySelector("#expenseCostInput");
     const val = document.querySelector("#expenseCostInput").value;
@@ -137,15 +128,15 @@ class ExpensePopup extends React.Component {
               <h3>
                 Expense Title
               </h3>
-              <input className="new-expense-form-input" id="expenseTitleInput" type="text" name="expenseTitle" placeholder="Title" onChange={this.handleInputChange}></input>
+              <input className="new-expense-form-input" id="expenseTitleInput" type="text" name="expenseTitle" placeholder="Title" onChange={Helper.handleInputChange.bind(this)}></input>
               <h3>
                 Content 
               </h3>
-              <input className="new-expense-form-input" id="expenseContentInput" type="text" name="expenseContent" placeholder="A Message About Your Expense" onChange={this.handleInputChange}></input>
+              <input className="new-expense-form-input" id="expenseContentInput" type="text" name="expenseContent" placeholder="A Message About Your Expense" onChange={Helper.handleInputChange.bind(this)}></input>
               <h3>
                 Cost 
               </h3>
-              <input className="new-expense-form-input" id="expenseCostInput" type="number" name="expenseCost" placeholder="Ex. '9.99'" min="0" onChange={this.handleInputChange} onBlur={this.formatCost}></input>
+              <input className="new-expense-form-input" id="expenseCostInput" type="number" name="expenseCost" placeholder="Ex. '9.99'" min="0" onChange={Helper.handleInputChange.bind(this)} onBlur={this.formatCost}></input>
               <h3>
                 Members
               </h3>

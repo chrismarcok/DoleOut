@@ -1,22 +1,15 @@
 import React from 'react';
 import Header from '../comps/Header.js'
 import LoginHeader from '../comps/LoginHeader'
-import dummy_user_list from './dummy_user_list.json'
+import Fetch from '../scripts/fetch.js';
+import Helper from '../scripts/helper.js';
 
 class LoginPage extends React.Component {
-  //TODO: do something with the inputs. probably should call the functions defined in 
-  // registerpage.js. or abstract out those methods in regsiterpage.js and use them in both 
-  // login and register js files. (stuff like loading the user JSON and checking if user in user list etc)
   
   state = {
     username: "",
     password: "",
-    users: this.fetchUsers()
-  }
-
-  fetchUsers () {
-    //here would be the code to fetch json users from server. instead just use this dummy list.
-    return dummy_user_list
+    users: Fetch.fetchUsers()
   }
 
   login(e) {
@@ -44,16 +37,6 @@ class LoginPage extends React.Component {
     const user = users.filter(user => user.username === username)
     return user.length > 0
   }
-
-  handleInputChange = (event) => {
-    const target = event.target
-    const value = target.value
-    const name = target.name
-    
-    this.setState({
-      [name]: value
-    })
-  }
   
   render() {
     return (
@@ -66,11 +49,11 @@ class LoginPage extends React.Component {
                 <h3>
                   Username
                 </h3>
-                <input id="login-username" type="text" name="username" placeholder="Username" onChange={this.handleInputChange} onKeyDown={(e) => this.login(e)}></input>
+                <input id="login-username" type="text" name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
                 <h3>
                   Password
                 </h3>
-                <input id="login-password" type="password" name="password" placeholder="Password" onChange={this.handleInputChange} onKeyDown={(e) => this.login(e)}></input>
+                <input id="login-password" type="password" name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
                 
               </form>
               <button className="login-btn" onClick={(e) => this.login(e)}>Login <i className="fa fa-sign-in"></i></button>

@@ -1,15 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Header from '../comps/Header'
-import OtherExpense from '../comps/OtherExpense'
-import GroupMessage from '../comps/GroupMessage'
-import dummy_group_list from './dummy_group_list.json'
-import dummy_group_msgs from './dummy_group_msgs.json'
-import dummy_user_list from './dummy_user_list.json'
-import GroupMember from '../comps/GroupMember'
-import OtherGroupComp from '../comps/OtherGroupComp'
-import { uid } from 'react-uid'
-import { Redirect } from 'react-router-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Header from '../comps/Header';
+import OtherExpense from '../comps/OtherExpense';
+import GroupMessage from '../comps/GroupMessage';
+import Fetch from '../scripts/fetch.js';
+import GroupMember from '../comps/GroupMember';
+import OtherGroupComp from '../comps/OtherGroupComp';
+import { uid } from 'react-uid';
+import { Redirect } from 'react-router-dom';
+import Helper from '../scripts/helper.js';
 
 import ExpensePopup from '../comps/ExpensePopup.js'
 
@@ -49,34 +48,11 @@ class Group extends React.Component {
     msgBox.scrollTop = msgBox.scrollHeight;
   }
 
-  fetchGroups() {
-    //here is where we would get stuff from a server
-    return dummy_group_list;
-  }
-
-  fetchUsers(){
-    return dummy_user_list;
-  }
-
-  fetchGroupMsgs() {
-    return dummy_group_msgs;
-  }
-
   getGroup() {
     const { group_number } = this.props.match.params;
-    const groups = this.fetchGroups()
+    const groups = Fetch.fetchGroups()
     const thisGroupLst = groups.filter(g => g.id === parseInt(group_number))
     return thisGroupLst[0]
-  }
-
-  handleInputChange = (event) => {
-    const target = event.target
-    const value = target.value
-    const name = target.name
-
-    this.setState({
-      [name]: value
-    })
   }
 
   createExpense = (expense) => {
@@ -85,6 +61,8 @@ class Group extends React.Component {
     document.querySelector(".group-main-content").appendChild(newMsg)
     ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense}/>, document.querySelector("#" + expense.id))
     this.scrollToBottomOfChat();
+
+    // Create the small expense in the sidebar.
     const newSmallExpense = (
       <div key={uid(expense)} onClick={(e) => this.scrollToExpense(e, expense)}>
         <OtherExpense msg={expense} />
@@ -100,6 +78,8 @@ class Group extends React.Component {
   getInput(e) {
     const val = this.state.groupInput;
     if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn") || e.target === document.querySelector(".fa-paper-plane")) && val !== "") {
+
+      //Here we would need to get the current user object from a server. for now, just use this dummy user.
       const m = {
         "id": 123,
         "groupId": this.getGroup().id,
@@ -135,7 +115,7 @@ class Group extends React.Component {
 
   addMember(e){
     if (e.target.id === "group-add-member-accept-btn" || e.keyCode === 13){
-      const users = this.fetchUsers();
+      const users = Fetch.fetchUsers();
       const usersFiltered = users.filter( u => u.username === this.state.groupMemberAddInput);
       if (usersFiltered.length === 0){
         alert("no user by that username")
@@ -191,15 +171,10 @@ class Group extends React.Component {
     document.querySelector(".expense-small-id-" + id).style.display = "none";
   }
 
-  addSmallExpense(){
-
-  }
-
-
   render() {
     const group = this.getGroup()
-    const groups = this.fetchGroups()
-    const msgs = this.fetchGroupMsgs()
+    const groups = Fetch.fetchGroups()
+    const msgs = Fetch.fetchGroupMsgs()
 
     //No group exists with this id. redirect to 404 page.
     if (group === undefined) {
@@ -231,7 +206,7 @@ class Group extends React.Component {
               
               <div className="group-add-member-input-container">
                 
-                <input id="group-add-member-input" type="text" name="groupMemberAddInput" placeholder="Enter Username" onChange={this.handleInputChange} maxLength="150" onKeyDown={this.addMember}></input>
+                <input id="group-add-member-input" type="text" name="groupMemberAddInput" placeholder="Enter Username" onChange={Helper.handleInputChange.bind(this)} maxLength="150" onKeyDown={this.addMember}></input>
                 
                 <i className="fa fa-check" id="group-add-member-accept-btn" onClick={this.addMember}></i>
                 <div className="group-add-member-cancel-btn" onClick={this.toggleAddUser}> Cancel </div>
@@ -249,7 +224,7 @@ class Group extends React.Component {
               <div className="group-main-add-btn">
                 <button onClick={this.togglePopup.bind(this)}> <i className="fa fa-plus"></i> New Expense</button>
                 {this.state.showPopup ? 
-                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} addSmallExpense={this.createSmallExpense} group={group}/>
+                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} group={group}/>
                   : null}
               </div>
               
@@ -265,7 +240,7 @@ class Group extends React.Component {
 
             </div>
             <div className="group-input-container">
-              <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={this.handleInputChange} maxLength="150" onKeyDown={this.getInput}></input>
+              <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={Helper.handleInputChange.bind(this)} maxLength="150" onKeyDown={this.getInput}></input>
               <div className="group-main-send-btn" onClick={this.getInput}><i className="fa fa-paper-plane"></i></div>
             </div>
           </div>
@@ -298,14 +273,6 @@ class Group extends React.Component {
                   )
                 })
               }
-
-              {/* <div className="group-other-col-add-group-container">
-                <div className="group-other-col-add-group-inner" onClick={() => window.location = "/groups/new"}>
-                  <div className="group-other-col-add-group-btn">
-                    <i className="fa fa-plus"></i>
-                  </div>
-                </div>
-              </div> */}
             </ul>
           </div>
         </div>

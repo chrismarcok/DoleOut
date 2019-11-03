@@ -1,5 +1,7 @@
 import React from 'react'
+import Helper from '../scripts/helper.js';
 const Color = require('color');
+
 
 /* This is the group COMPONENT that is listed in the GroupPage*/
 
@@ -88,15 +90,6 @@ class GroupComp extends React.Component {
     const check = document.querySelector("#group-i-check-" + this.props.id);
     check.style.display = "none";
   }
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  }
 
   render() {
 
@@ -113,7 +106,7 @@ class GroupComp extends React.Component {
           <div style={colorBg} className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.redirect}>
 
             <h1 className="grouppage-title">
-              <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={this.handleInputChange}></input>
+              <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={Helper.handleInputChange.bind(this)}></input>
             </h1>
             <div className="group-div-change-btns">
               <div>

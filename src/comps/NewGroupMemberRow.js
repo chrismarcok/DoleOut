@@ -1,22 +1,16 @@
 import React from 'react'
-import dummy_user_list from '../pages/dummy_user_list.json';
-import dummy_group_list from '../pages/dummy_group_list.json';
+import Fetch from '../scripts/fetch.js';
 
 class NewGroupMemberRow extends React.Component {
-
-  fetchUsers(){
-    //server call here
-    return dummy_user_list;
-  }
 
   checkValid(num){
     let users;
     if (this.props.groupId !== -1){
-      const groupLst = dummy_group_list.filter( g => g.id === this.props.groupId);
+      const groupLst = Fetch.fetchGroups().filter( g => g.id === this.props.groupId);
       const group = groupLst[0];
       users = group.members;
     } else {
-      users = this.fetchUsers();
+      users = Fetch.fetchUsers();
     }
     const val = document.querySelector("#groupMembersInput-" + num).value;
     const valid = users.filter( u => u.username === val).length !== 0;

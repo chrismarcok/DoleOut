@@ -2,14 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import Header from '../comps/Header.js'
 import GroupComp from '../comps/GroupComp.js'
-import dummy_group_list from './dummy_group_list.json'
+import Fetch from '../scripts/fetch.js';
 import { uid } from 'react-uid'
 
 import NewGroupPopup from '../comps/NewGroupPopup.js'
 
 class GroupsPage extends React.Component {
 
-  groups = this.fetchGroups()
+  groups = Fetch.fetchGroups();
 
   constructor(props){
     super(props);
@@ -36,11 +36,6 @@ class GroupsPage extends React.Component {
         showPopup: false
       });
     }
-  }
-
-  fetchGroups() {
-    //here is where we would get stuff from a server
-    return dummy_group_list
   }
 
   createGroup = (group) => {

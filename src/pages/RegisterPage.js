@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from '../comps/Header.js'
 import LoginHeader from '../comps/LoginHeader.js'
-import dummy_user_list from './dummy_user_list.json'
+import Fetch from '../scripts/fetch.js';
+import Helper from '../scripts/helper.js';
 
 class RegisterPage extends React.Component {
 
@@ -9,17 +10,12 @@ class RegisterPage extends React.Component {
     username: "",
     password: "",
     rePassword: "",
-    users: this.fetchUsers()
-  }
-
-  fetchUsers () {
-    //here would be the code to fetch json users from server. instead just use this dummy list.
-    return dummy_user_list
+    users: Fetch.fetchUsers()
   }
 
   checkRegistered(username){
-    const user = this.state.users.filter(user => user.username === username)
-    return user.length > 0
+    const user = this.state.users.filter(user => user.username === username);
+    return user.length > 0;
   }
 
   register(e) {
@@ -37,7 +33,7 @@ class RegisterPage extends React.Component {
         alert(this.state.username + " is already registered")
       }
       else {
-        // alert(this.state.username + " has been registered.")
+        // Should redirect you to the profile you just made. for now just redirect to the default user's profile.
         const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
         this.setState({
           "users": newUsers
@@ -55,17 +51,6 @@ class RegisterPage extends React.Component {
     }
   }
 
-  //Updates the state
-  handleInputChange = (event) => {
-    const target = event.target
-    const value = target.value
-    const name = target.name
-    
-    this.setState({
-      [name]: value
-    })
-  }
-
   render() {
     return (
       <div>
@@ -78,15 +63,15 @@ class RegisterPage extends React.Component {
               <h3>
                 Username
               </h3>
-              <input id="register-username" type="text" name="username" placeholder="Username" onChange={this.handleInputChange} onKeyDown={(e) => this.register(e)}></input>
+              <input id="register-username" type="text" name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Password
               </h3>
-              <input id="register-password" type="password" name="password" placeholder="Password" onChange={this.handleInputChange} onKeyDown={(e) => this.register(e)}></input>
+              <input id="register-password" type="password" name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Confirm Password
               </h3>
-              <input id="register-repassword" type="password" name="rePassword" placeholder="Password" onChange={this.handleInputChange} onKeyDown={(e) => this.register(e)}></input>
+              <input id="register-repassword" type="password" name="rePassword" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
               
             </form>
             <button className="register-btn" onClick={(e) => this.register(e)}>Register <i className="fa fa-user-plus"></i></button>

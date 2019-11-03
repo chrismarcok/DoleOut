@@ -1,8 +1,9 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Header from '../comps/Header'
-import dummy_user_list from './dummy_user_list.json'
+import Fetch from '../scripts/fetch.js';
 import '../style/Profile.css'
+import Helper from '../scripts/helper.js';
 
 class Profile extends React.Component{
     
@@ -44,14 +45,11 @@ class Profile extends React.Component{
         const {user_number} = this.props.match.params
         return user_number
     }
-    fetchUsers(){
-        //Here we would fetch them from a database
-        return dummy_user_list
-    }
+
     getUser(){
-        const userNumber = this.getUserNum()
-        const userList = this.fetchUsers()
-        return userList.filter(user => user.id === parseInt(userNumber))[0]
+        const userNumber = this.getUserNum();
+        const userList = Fetch.fetchUsers();
+        return userList.filter(user => user.id === parseInt(userNumber))[0];
     }
 
     componentDidMount(){
@@ -71,16 +69,6 @@ class Profile extends React.Component{
             pic.style.backgroundImage = "url('" + user.picUrl + "')";
         }
     }
-
-    handleInputChange = (event) => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-    
-        this.setState({
-          [name]: value
-        });
-      }
 
     render() {
         const user = this.getUser();
@@ -120,19 +108,19 @@ class Profile extends React.Component{
                     </div>
                     <div className="profile-edit-container">
                         <p>First Name</p>
-                        <input type="text" name="firstname" onChange={this.handleInputChange} defaultValue={this.state.firstname}></input>
+                        <input type="text" name="firstname" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.firstname}></input>
                         <p>Last Name</p>
-                        <input type="text" name="lastname" onChange={this.handleInputChange} defaultValue={this.state.lastname}></input>
+                        <input type="text" name="lastname" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.lastname}></input>
                         <p>Avatar URL</p>
-                        <input type="text" name="avatar" onChange={this.handleInputChange} defaultValue={this.state.avatar}></input>
+                        <input type="text" name="avatar" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.avatar}></input>
                         <p>Description</p>
-                        <input type="text" name="description" onChange={this.handleInputChange} defaultValue={this.state.description}></input>
+                        <input type="text" name="description" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.description}></input>
                         <p>Preferred Payment Method</p>
-                        <input type="text" name="pref" onChange={this.handleInputChange} defaultValue={this.state.pref}></input>
+                        <input type="text" name="pref" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.pref}></input>
                         <p>Email</p>
-                        <input type="text" name="email" onChange={this.handleInputChange} defaultValue={this.state.email}></input>
+                        <input type="text" name="email" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.email}></input>
                         <p>PayPal URL</p>
-                        <input type="text" name="paypal" onChange={this.handleInputChange} defaultValue={this.state.paypal}></input>
+                        <input type="text" name="paypal" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.paypal}></input>
                     </div>
                 </div>
             </div>
