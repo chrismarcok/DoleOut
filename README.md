@@ -3,6 +3,11 @@ To initally run the app, please run `npm install` to install dependencies, then 
 http://localhost:3000/ should open in your browser.
 
 DoleOut: A web application that allows groups of people to track shared expenses.
+
+Admins are differentiated from users in that they have the ability to rename and delete groups, delete group members, and delete chats and expenses from a group's timeline.
+
+These admin privileges are marked in bold throughout the document.
+
 _____________________
 
 ## REGISTRATION 
@@ -40,7 +45,7 @@ _____________________
 This is accessible through the Groups button in the website header.
 It currently contains various dummy groups, each with a name, icon, member list, and color.
 
-Admins are able to edit the group name, or delete the group entirely (without server calls, any changed information or deleted groups are reset upon reloading the page).
+**Admins are able to edit a group's name, or delete the group entirely** (without server calls, any changed information or deleted groups are reset upon reloading the page).
 
 At the bottom of the page, clicking on the green plus sign will pop up a form to create a new group.
 Clicking on any of the already-created groups brings you to its individual group page, which are all currently hard-coded.
@@ -60,14 +65,14 @@ Each group page consists of three columns:
     Clicking a member brings you to that member's individual (hard-coded) profile page.
     At the bottom of the list is a green plus, which allows you to add new members to the group by inputting their username (without server calls, new members are erased after reload).
     Only existing users (in our hard-coded master user list) can be added to groups.
-    Admins are able to remove members of the group.
+    **Admins are able to remove members of the group.**
     Note that removing members only removes the element from the page without any back-end functionality.
 2. The group messages timeline
     Here you can see a chronological list of sent messages to the group.
     A message can either be a text chat or a created expense, with each message having the user who sent the message and the time it was sent.
     At the top corner of the timeline is a button that allows you to create new expenses.
     Expenses are more thoroughly covered later on.
-    Admins are able to delete chats and expenses entirely.
+    **Admins are able to delete chats and expenses entirely.**
     Without server calls, the page resets to our default hard-coded data on reload.
 3. The current expenses and other groups column
     Here short blocks of information about each of the group's expenses are displayed, namely the creator of the expense and the expense's remaining debt.

@@ -20,7 +20,6 @@ TODO:
 *******************
 GROUP
 Click on user -> Little popup with link to profile, discord style
-Finish new group popup (*)
 
 *******************
 EXPENSES
@@ -30,8 +29,7 @@ REGISTER/LOGIN
 Abstract away methods to another file/module, import required ones
 
 Admin/User dummy functionality (*)
-    Edit, Deleting Users
-    See how much in total is owed by a user/how much is owed to them
+    Different views for admin and user (admin can see remove and edit options)
 *******************
 USER PAGE
 See joined groups
