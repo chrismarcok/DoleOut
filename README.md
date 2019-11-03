@@ -48,7 +48,7 @@ We intend for this page to  be accessible using the "Profile" button in the site
 This page is otherwise accessible by clicking a user within a group (which does bring you to an individual's unique profile page), or upon registration (which is hard-coded to link to the profile page of "user" or "admin", as mentioned previously).
 
 This page displays various user information, including username, full name, description, preferred payment method, and email.
-On the top right of the page is an edit button, which allows you to edit any of these fields.
+For adminns, on the top right of the page is an edit button, which allows an admin to edit any of these fields.
 Without server calls, any changed information is reset to default upon reloading the page.
 _____________________
 
