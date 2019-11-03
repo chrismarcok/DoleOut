@@ -84,6 +84,8 @@ Users can create groups. Scroll to the bottom of the groups page and click the l
     6. Click Create Group.
 The group you just made only exists in this view, so clicking on it will not redirect you to a real group (it will 404 since the group data was not written to anything). During phase 2, clicking "Create Group" should update the groups table in the database with the new group, and then you should be able to view it after creation.
 
+**NOTE:** Currently, users can see all groups even without holding membership in them as permissions are not yet implemented and any group can be accessed via url. In Phase 2, we intend to restrict this so that users may not see or navigate to groups that they are not a member of.
+
 From here, click on the "bad boys" group at the top.
 
 ### `/g/:group_number`
