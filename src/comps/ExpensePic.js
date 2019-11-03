@@ -12,8 +12,14 @@ class ExpensePic extends React.Component{
   /**
    * Redirects you to the user's profile page.
    */
-  redirect(){
-    window.location = "/u/" + this.props.member.id;
+  redirect(){    
+    console.log(this.props.admin);
+    if (this.props.admin){
+      
+      window.location = "/u/" + this.props.member.id + "/admin";
+    } else {
+      window.location = "/u/" + this.props.member.id;
+    }
   }
 
   render() {

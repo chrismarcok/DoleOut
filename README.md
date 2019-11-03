@@ -1,17 +1,23 @@
-# team 53
-To initally run the app, please run `npm install` to install dependencies, then `npm start` to start the server.
+# team 53 - Christopher Marcok, Lance Oribello, David Choi
+To initally run the app, please run `npm install` to install dependencies.
+Then `npm start` to start the server.
+
 http://localhost:3000/ should open in your browser.
 
 DoleOut: A web application that allows groups of people to track shared expenses.
 
-Admins are differentiated from users in that they have the ability to rename and delete groups, delete group members, and delete chats and expenses from a group's timeline.
+Admins are differentiated from users in that they have the ability to rename and delete groups, delete group members, and delete chats and expenses from a group's timeline. 
+The following views differ in admin and user functionality:
+    1. Profile - Admins can edit profile details. Users cannot
+    2. "GroupsPage" - Admins can edit Group names or delete groups. Users cannot
+    3. Group - Admins can delete messages/expenses. Users cannot.
+The admin view can be reached by adding "/admin" to the end of the URL for these views. Without "/admin", the view will be for the default "user" user. You can see this in the routing in App.js.
 
 These admin privileges are marked in bold throughout the document.
 
-Note: it is assumed that no user is logged in on the home page, the registration page, or the login page.
-Consequently, the Register and Login tabs in the site header are only visible on these pages.
+Note: it is assumed that no user is logged in on the home page, the registration page, or the login page. Consequently, the Register and Login tabs in the site header are only visible on these pages.
 
-On other pages it is assumed that you are logged in as "user" or "admin", and the right part of the header is changed to only hold the profile tab, which is a link to your profile page (which currently is hard-coded to link to "user" or "admin", as we do not have a way to determine whether another user is logged in without server calls).
+On other pages it is assumed that you are logged in as "user" or "admin", and the right part of the header is changed to only hold the profile tab, which is a link to your profile page (which currently is hard-coded to link to "user" or "admin", as we do not have a way to determine whether another user is logged in without server calls). 
 
 _____________________
 

@@ -208,7 +208,7 @@ class GroupMessage extends React.Component {
                   {
                     this.props.msg.expense.members.map(m => {
                       return (
-                        <ExpensePic key={uid(m)} member={m} id={this.props.msg.expense.id} />
+                        <ExpensePic key={uid(m)} member={m} id={this.props.msg.expense.id} admin={this.props.admin}/>
                       );
                     })
                   }

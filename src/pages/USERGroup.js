@@ -160,7 +160,7 @@ class Group extends React.Component {
         const newDivClass = String(uid(usersFiltered[0]));
         newDiv.className =  newDivClass;
         document.querySelector(".group-generated-members").appendChild(newDiv);
-        ReactDOM.render(<GroupMember member={usersFiltered[0]}/>, document.querySelector("."+newDivClass));
+        ReactDOM.render(<GroupMember member={usersFiltered[0]} admin={false}/>, document.querySelector("."+newDivClass));
         document.querySelector("#group-add-member-input").value = "";
       }
     }

@@ -20,8 +20,14 @@ class GroupMember extends React.Component {
    * Redirects to a group member's profile page.
    */
   clickEvent(e){
-    if (e.target.className !== "groupmember-delete" && e.target.className !== "fa fa-trash"){
-      window.location.href = "/u/" + this.props.member.id;
+    const classLst = e.target.classList;
+    if (!classLst.contains("groupmember-delete") && e.target.className !== "fa fa-trash"){
+      if (this.props.admin === true){
+        window.location.href = "/u/" + this.props.member.id + "/admin";
+      }
+      else {
+        window.location.href = "/u/" + this.props.member.id;
+      }
     }
   }
 

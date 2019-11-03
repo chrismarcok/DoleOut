@@ -6,6 +6,12 @@
     "colorBg": "#ff8a80",
     "members": [
       {
+        "id": 1,
+        "username": "user",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/1"
+      },
+      {
         "id": 2,
         "username": "billy",
         "password": "123",

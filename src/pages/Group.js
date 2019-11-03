@@ -77,7 +77,7 @@ class Group extends React.Component {
     const newMsg = document.createElement("div")
     newMsg.id = expense.id
     document.querySelector(".group-main-content").appendChild(newMsg)
-    ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense}/>, document.querySelector("#" + expense.id))
+    ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} admin={true}/>, document.querySelector("#" + expense.id))
     this.scrollToBottomOfChat();
 
     // Create the small expense in the sidebar.
@@ -123,7 +123,7 @@ class Group extends React.Component {
       newMsg.id = m.id
       document.querySelector(".group-main-content").appendChild(newMsg)
       
-      ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
+      ReactDOM.render(<GroupMessage msg={m} key={m.id} admin={true}/>, document.querySelector("#" + m.id))
 
       //Reset the state, and make textbox empty
       document.querySelector("#group-input").value = ""
@@ -159,7 +159,7 @@ class Group extends React.Component {
         const newDivClass = String(uid(usersFiltered[0]));
         newDiv.className =  newDivClass;
         document.querySelector(".group-generated-members").appendChild(newDiv);
-        ReactDOM.render(<GroupMember member={usersFiltered[0]}/>, document.querySelector("."+newDivClass));
+        ReactDOM.render(<GroupMember member={usersFiltered[0]} admin={true}/>, document.querySelector("."+newDivClass));
         document.querySelector("#group-add-member-input").value = "";
       }
     }
@@ -229,7 +229,7 @@ class Group extends React.Component {
               {
                 group.members.map(member => {
                   return (
-                    <GroupMember member={member} key={uid(member)} />
+                    <GroupMember member={member} key={uid(member)} admin={true} />
                   )
                 })
               }
@@ -271,7 +271,7 @@ class Group extends React.Component {
               {
                 msgs.filter(m => m.groupId === group.id).map(msg => {
                   return (
-                    <GroupMessage msg={msg} key={uid(msg)} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} />
+                    <GroupMessage msg={msg} key={uid(msg)} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} admin={true}/>
                   )
                 })
               }
