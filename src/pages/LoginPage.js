@@ -17,10 +17,12 @@ class LoginPage extends React.Component {
       if(!this.checkRegistered(this.state.username) || (this.checkRegistered(this.state.username) && !(this.state.password === this.getUserPassword(this.state.username)))){
         alert("Wrong username or password")
       }
-      else{
-        const users = this.state.users
-        const user = users.filter(user => user.username === this.state.username)
-        window.location = "/u/" + user[0].id;
+      else{        
+        if (this.state.username === "admin"){
+          window.location = "/groups/admin";
+        } else {
+          window.location = "/groups";
+        }
       }
     }
     

@@ -48,13 +48,14 @@ class GroupsPage extends React.Component {
                           colorBg={ group.colorBg }
                           id={ uid(group) }
                           members={ group.members }
+                          admin={false}
                       />, document.querySelector(".new-group-" + uid(group)));    
   }
 
   render() {
     return (
       <div>
-        <Header user={"admin"}/>
+        <Header user="user"/>
         <ul className="group-ul">
           {
             this.groups.map( group => {
@@ -65,6 +66,7 @@ class GroupsPage extends React.Component {
                         colorBg={ group.colorBg }
                         id={ group.id }
                         members={ group.members }
+                        admin={false}
                   />
               )
             })

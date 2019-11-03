@@ -32,6 +32,12 @@ class GroupComp extends React.Component {
 
     const check = document.querySelector("#group-i-check-" + this.props.id);
     check.style.display = "none";
+
+    if (this.props.admin === false){
+      //in reality these buttons should be removed. this is ok for now.
+      document.querySelector("#group-i-edit-" + this.props.id).style.display = "none";
+      document.querySelector("#group-i-trash-" + this.props.id).style.display = "none";
+    }
   }
 
   stringifyMembers(membersList) {
@@ -114,7 +120,7 @@ class GroupComp extends React.Component {
                   <i className="fa fa-check" id={"group-i-check-" + this.props.id} onClick={this.confirm}></i>
                 
                 <i className="fa fa-edit" id={"group-i-edit-" + this.props.id} onClick={this.edit}></i>
-                <i className="fa fa-trash" onClick={this.hide}></i>
+                <i className="fa fa-trash" id={"group-i-trash-" + this.props.id} onClick={this.hide}></i>
               </div>
             </div>
             <h3>

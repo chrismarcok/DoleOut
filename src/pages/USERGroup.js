@@ -59,7 +59,7 @@ class Group extends React.Component {
     const newMsg = document.createElement("div")
     newMsg.id = expense.id
     document.querySelector(".group-main-content").appendChild(newMsg)
-    ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense}/>, document.querySelector("#" + expense.id))
+    ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} admin={false} hideExpense={this.hideSmallExpense}/>, document.querySelector("#" + expense.id))
     this.scrollToBottomOfChat();
 
     // Create the small expense in the sidebar.
@@ -87,10 +87,10 @@ class Group extends React.Component {
         "type": "msg",
         "user":
         {
-          "id": 0,
-          "username": "admin",
-          "password": "admin",
-          "picUrl": "https://api.adorable.io/avatars/200/0",
+          "id": 1,
+          "username": "user",
+          "password": "user",
+          "picUrl": "https://api.adorable.io/avatars/200/1",
           "email": "dummy@dummy.com",
           "firstName": "Firstname",
           "lastName": "McLastname"
@@ -102,7 +102,7 @@ class Group extends React.Component {
       newMsg.id = m.id
       document.querySelector(".group-main-content").appendChild(newMsg)
       
-      ReactDOM.render(<GroupMessage msg={m} key={m.id} />, document.querySelector("#" + m.id))
+      ReactDOM.render(<GroupMessage msg={m} key={m.id} admin={false} />, document.querySelector("#" + m.id))
 
       //Reset the state, and make textbox empty
       document.querySelector("#group-input").value = ""
@@ -183,7 +183,7 @@ class Group extends React.Component {
 
     return (
       <div>
-        <Header user="admin"/>
+        <Header user="user"/>
         <div className="group-container">
           <div className="group-col group-members-col">
             <div className="group-members-div">
@@ -191,7 +191,7 @@ class Group extends React.Component {
               {
                 group.members.map(member => {
                   return (
-                    <GroupMember member={member} key={uid(member)} />
+                    <GroupMember member={member} key={uid(member)} admin={false} />
                   )
                 })
               }
@@ -224,7 +224,7 @@ class Group extends React.Component {
               <div className="group-main-add-btn">
                 <button onClick={this.togglePopup.bind(this)}> <i className="fa fa-plus"></i> New Expense</button>
                 {this.state.showPopup ? 
-                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} group={group} admin={true}/>
+                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} group={group}/>
                   : null}
               </div>
               
@@ -233,7 +233,7 @@ class Group extends React.Component {
               {
                 msgs.filter(m => m.groupId === group.id).map(msg => {
                   return (
-                    <GroupMessage msg={msg} key={uid(msg)} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} />
+                    <GroupMessage msg={msg} key={uid(msg)} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} admin={false}/>
                   )
                 })
               }
