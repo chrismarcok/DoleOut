@@ -16,9 +16,6 @@ class GroupsPage extends React.Component {
     this.state = { showPopup: false };
   }
 
-  /**
-   * Toggles whether the new group popup is seen.
-   */
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup
@@ -41,11 +38,6 @@ class GroupsPage extends React.Component {
     }
   }
 
-  /**
-   * Creates an new group and adds it to the groups page.
-   * This method is passed on as a prop to the create new group popup.
-   * Would need a server call to update our database with the new group.
-   */
   createGroup = (group) => {
     const newDiv = document.createElement("div");
     newDiv.className = "new-group-" + uid(group);
@@ -56,13 +48,14 @@ class GroupsPage extends React.Component {
                           colorBg={ group.colorBg }
                           id={ uid(group) }
                           members={ group.members }
+                          admin={false}
                       />, document.querySelector(".new-group-" + uid(group)));    
   }
 
   render() {
     return (
       <div>
-        <Header user={"admin"}/>
+        <Header user="user"/>
         <ul className="group-ul">
           {
             this.groups.map( group => {
@@ -73,6 +66,7 @@ class GroupsPage extends React.Component {
                         colorBg={ group.colorBg }
                         id={ group.id }
                         members={ group.members }
+                        admin={false}
                   />
               )
             })

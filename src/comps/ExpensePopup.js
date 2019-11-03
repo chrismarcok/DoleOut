@@ -56,6 +56,11 @@ class ExpensePopup extends React.Component {
       },
       "content": this.state.expenseContent
     }
+    if (this.props.admin === true){
+      m.user.id = 0;
+      m.user.username = "admin";
+      m.user.picUrl = "https://api.adorable.io/avatars/200/0";
+    }
     m.id = uid(m);
     m.expense.id = uid(m);
 
@@ -86,6 +91,11 @@ class ExpensePopup extends React.Component {
       "description": "send me money please thank u :)",
       "paid": true
     }];
+    if (this.props.admin === true){
+      result[0].id = 0;
+      result[0].username = "admin";
+      result[0].picUrl = "https://api.adorable.io/avatars/200/0";
+    }
     for (let i = 0; i < numMembers; i++){
       const m = memberLst.filter( m => 
         m.username === usernameInputs[i].value

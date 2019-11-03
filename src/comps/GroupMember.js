@@ -11,6 +11,9 @@ class GroupMember extends React.Component {
   componentDidMount(){
     const pic = document.querySelector("#groupmember-pic-" + this.props.member.id)
     pic.style.backgroundImage = "url('" + this.props.member.picUrl + "')"
+    if (this.props.admin === false){
+      document.querySelector(".groupmember-delete-" + this.props.member.id).style.display = "none";
+    }
   }
   
   /**
@@ -39,7 +42,7 @@ class GroupMember extends React.Component {
           <h3 className="groupmember-name">
             {this.props.member.username}
             </h3>
-          <div className="groupmember-delete" onClick={this.delete}><i className="fa fa-trash"></i></div>
+          <div className={"groupmember-delete groupmember-delete-" + this.props.member.id} onClick={this.delete}><i className="fa fa-trash"></i></div>
         </div>
       </div>
     )

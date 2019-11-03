@@ -46,7 +46,6 @@ class NewGroupPopup extends React.Component {
    */
   selectColor(e) {
       e.preventDefault();
-  
       if (!this.state.pickerOpen) {
         document.querySelector(".picker").style.display = "block";
         this.setState({

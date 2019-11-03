@@ -44,6 +44,10 @@ class GroupMessage extends React.Component {
         document.querySelector(".expense-pay-btn" + this.props.msg.id).style.display = "none";
       }
     }
+
+    if (this.props.admin === false){
+      document.querySelector(".expense-delete-container-" + this.props.msg.id).style.display = "none";
+    }
   }
 
   redirect() {
@@ -151,7 +155,7 @@ class GroupMessage extends React.Component {
         <div className="group-main-msg">
           <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
           </div>
-          <div className="expense-delete-container" onClick={this.delete}>
+          <div className={"expense-delete-container expense-delete-container-" + this.props.msg.id} onClick={this.delete}>
             <i className="fa fa-trash"></i>
           </div>
           <div className="group-main-msg-content">
@@ -172,7 +176,7 @@ class GroupMessage extends React.Component {
         <div className="group-expense-msg-container">
           <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
           </div>
-          <div className="expense-delete-container" onClick={this.delete}>
+          <div className={"expense-delete-container expense-delete-container-" + this.props.msg.id} onClick={this.delete}>
             <i className="fa fa-trash"></i>
           </div>
           <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
