@@ -307,7 +307,7 @@ class Group extends React.Component {
                 /* Get all groups but current one*/
                 groups.filter(g => g.id !== group.id).map(g => {
                   return (
-                    <OtherGroupComp group={g} key={uid(g)} />
+                    <OtherGroupComp group={g} key={uid(g)} admin={true} />
                   )
                 })
               }

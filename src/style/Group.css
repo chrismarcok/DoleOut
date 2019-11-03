@@ -256,7 +256,7 @@ Individual Group Page
   padding-left: 10px;
   padding-top: 6px;
   transition: all ease 0.1s;
-  
+  cursor: pointer;
 }
 
 .other-group-container:hover {

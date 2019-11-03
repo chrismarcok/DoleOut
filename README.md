@@ -21,7 +21,93 @@ On other pages it is assumed that you are logged in as "user" or "admin", and th
 
 _____________________
 
-## REGISTRATION 
+# WALKTHROUGH - ADMIN
+
+### `/login`
+From the home page, click login in the header. Enter the credentials:
+    Username: admin, Password: admin
+You will be taken to the groups page where you can view different groups. Note that this is the groups page view from the admin's perspective, not the user's.
+
+### `/groups/admin`
+Click the edit button on the right side of the group component to edit the group's name. Click the checkmark box (again on the right side) to confirm your edits. You can delete the group by clicking on the trash icon on the right side. 
+
+Admins can create new groups just like a user. Scroll to the bottom of the groups page and click the large green button.
+    1. Enter a group title
+    2. Enter usernames (one per row). Click the "New Row" button to add a new row.
+    3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
+    4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
+    5. Select an icon.
+    6. Click Create Group.
+The group you just made only exists in this view, so clicking on it will not redirect you to a real group (it will 404 since the group data was not written to anything). During phase 2, clicking "Create Group" should update the groups table in the database with the new group, and then you should be able to view it after creation.
+
+From here, click on the "bad boys" group at the top. If you deleted it, refresh the page and then click on it.
+
+### `/g/:group_number/admin`
+The left column displays the users in the group. The Right column displays the group's current expenses, and a list of other groups you can navigate to. The middle column is a chat that displays messages and expenses.
+
+1. Try deleting user from the group by clicking the trash icon next to the user's username in the left column.
+2. Scroll to the bottom of the left column. Click the large green plus button. Try adding the user "admin". This will add the user admin to the group. **NOTE**: You cannot add a user to the group that you have previously kicked. Again, this is because no data is written when "deleting" a user. It would be possible to add kicked users if we updated a table in the database when kicking/adding, but for now it merely checks to see if the user is present in the group JSON file.
+3. Try adding a user that already exists. For example, add "jen" or "admin" a second time. Neither should work.
+4. Try typing a message in the middle column chat box. Click enter or the send button to send the message.
+5. Click any of the profile pictures in the middle column, or on the right column. It will redirect you to that user's profile. Return to the `/g/0/admin` page when you are done. 
+6. Click on any of the expenses in the "Current Expenses" section on the right column. The expense in the chat will scroll into view. If your screen is too large and shows the entire chat, try making your window small so you only see one expense in the window at a time to try this.
+7. Click any of the groups on the right to be redirected to that group. Click back when you are done to return to `/g/0/admin`.
+8. Click the "New Expense" button in the top right corner of the middle column to create a new expense. Add an expense title. Add expense content (just add some random message about the expense). Add a cost to the expense. When focus of the cost input is left, it should automatically format itself to two decimal places. Add members to the expense. Here are some members to try: "billy", "joe", "sam", "bob". Click the "New Row" button to create a new row. Invalid/blank members will not be added (they are ignored, and wont prevent you from making the expense). Click the new expense button to make an expense. 
+9. You cannot pay the expense you just made (since you presumably paid for it in full). Instead, scroll to the "Toilet Paper" expense made by george and try paying that. You can view it by clicking the corresponding expense in the rightmost column under "current expenses". Paying $2.50 or more will cause the expense to be closed (since it has been fully paid off).
+10. Try deleting a message (either normal message or expense) from the group chat. You can do this by clicking the trash icon on the right side of any message.
+
+### `/u/:user_number/admin`
+Click the right-most button on the site header labelled "Admin", which brings you to the profile page of "admin".
+Click the edit button at the top right of the page to edit the information displayed.
+Confirm and save any changes you make by clicking the save button, once again at the top right of the page, having replaced the edit button.
+Note that any changes are reset upon reload without server calls updating a database.
+
+Admins have the ability to edit the profile pages of any other user in the same way, through the edit button at the top right of any other user's profile page. You can try this by visiting another user's profile. Try this on the "user" page: `/u/1/admin`
+The profile pages of other users can be accessed by clicking them in the member list column of a group, or by visiting the corresponding URL using this template: `/u/:user_number/admin`.
+
+_____________________
+
+# WALKTHROUGH - USER
+
+### `/login`
+From the home page, click login in the header. Enter the credentials:
+    Username: user, Password: user
+You will be taken to the groups page where you can view different groups. Note that this is the groups page view from the user perspective, not the admin's.
+
+### `/groups`
+Users can create groups. Scroll to the bottom of the groups page and click the large green button.
+    1. Enter a group title
+    2. Enter usernames (one per row). Click the "New Row" button to add a new row.
+    3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
+    4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
+    5. Select an icon.
+    6. Click Create Group.
+The group you just made only exists in this view, so clicking on it will not redirect you to a real group (it will 404 since the group data was not written to anything). During phase 2, clicking "Create Group" should update the groups table in the database with the new group, and then you should be able to view it after creation.
+
+From here, click on the "bad boys" group at the top.
+
+### `/g/:group_number`
+The left column displays the users in the group. The Right column displays the group's current expenses, and a list of other groups you can navigate to. The middle column is a chat that displays messages and expenses.
+
+1. Scroll to the bottom of the left column. Click the large green plus button. Try adding the user "admin". This will add the user admin to the group.
+2. Try adding a user that already exists. For example, add "jen" or "admin" a second time. Neither should work.
+3. Try typing a message in the middle column chat box. Click enter or the send button to send the message.
+4. Click any of the profile pictures in the middle column, or on the right column. It will redirect you to that user's profile. Return to the `/g/0` page when you are done. 
+5. Click on any of the expenses in the "Current Expenses" section on the right column. The expense in the chat will scroll into view. If your screen is too large and shows the entire chat, try making your window small so you only see one expense in the window at a time to try this.
+6. Click any of the groups on the right to be redirected to that group. Click back when you are done to return to `/g/0`.
+7. Click the "New Expense" button in the top right corner of the middle column to create a new expense. Add an expense title. Add expense content (just add some random message about the expense). Add a cost to the expense. When focus of the cost input is left, it should automatically format itself to two decimal places. Add members to the expense. Here are some members to try: "billy", "joe", "sam", "bob". Click the "New Row" button to create a new row. Invalid/blank members will not be added (they are ignored, and wont prevent you from making the expense). Click the new expense button to make an expense. 
+8. You cannot pay the expense you just made (since you presumably paid for it in full). Instead, scroll to the "Toilet Paper" expense made by george and try paying that. You can view it by clicking the corresponding expense in the rightmost column under "current expenses". Paying $2.50 or more will cause the expense to be closed (since it has been fully paid off).
+
+### `/u/:user_number/`
+Click the right-most button on the site header labelled "User", which brings you to the profile page of "user".
+In phase 2, we intend for the user to be able to edit his or her own profile page in the same way an admin can, using an edit button at the top-right.
+However, without server functionality at the moment, we cannot determine which user specifically is logged in to implement this.
+
+_____________________
+
+# PAGE BY PAGE SPECIFICATIONS
+
+### Registration 
 
 The Register tab takes you to a form where you can create a new user.
 It does not allow you to create a user if the given username already exists or is empty, your given password has less than seven characters, or your password confirmation does not match.
@@ -31,17 +117,17 @@ In the future, we intend a successful registration to take you to your own new p
 At the moment, registration does not actually have any back-end functionality without server calls.
 _____________________
 
-## LOGIN
+### Login
 
 The Login tab takes you to a form where you can login to an existing user's account.
 The following credentials are accepted currently:
     Username: user, Password: user
     Username: admin, Password: admin
 
-Upon successful login, you are taken to the groups page, which differs in functionality depending on whether you log in as an admin or not.
+Upon successful login, you are taken to the groups page, which differs in functionality depending on whether you log in as an admin or not. 
 _____________________
 
-## PROFILE 
+### Profile 
 
 We intend for this page to  be accessible using the "Profile" button in the site header, but that is currently hard-coded to link to the profile page of "user" or "admin" depending on which one logged in.
 
@@ -52,7 +138,7 @@ On the top right of the page is an edit button, which allows you to edit any of 
 Without server calls, any changed information is reset to default upon reloading the page.
 _____________________
 
-## GROUPS PAGE
+### Groups Page
 
 This is accessible through the Groups button in the website header.
 It currently contains various dummy groups, each with a name, icon, member list, and color.
@@ -68,7 +154,7 @@ Upon creating the group, the group is added to the Groups Page.
 Without server calls, any newly created groups are erased upon reloading the page.
 _____________________
 
-## GROUP PAGE
+### Group
 
 Each individual group page is accessible through clicking one of the groups in the Groups tab.
 Each group page consists of three columns:
@@ -94,7 +180,7 @@ Each group page consists of three columns:
 
 _____________________
 
-## EXPENSES
+### Expenses
 
 Through the New Expense button in the group timeline, a form will pop up to create a new expense.
 You must input the expense's title, content (a description of the expense or whatever text information you wish to include), the total cost of the expense, and the members of the expense.
@@ -116,4 +202,3 @@ Once the expense has been fully paid, the entire expense message in the timeline
 
 As before, any changes to expenses are reset upon reloading the page without server calls.
 
-_____________________
