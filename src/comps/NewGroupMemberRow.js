@@ -2,7 +2,10 @@ import React from 'react'
 import Fetch from '../scripts/fetch.js';
 
 class NewGroupMemberRow extends React.Component {
-
+  /**
+   * Checks if a given group member row holds a valid member to be added.
+   * @param num the index of the new group member row
+   */
   checkValid(num){
     let users;
     if (this.props.groupId !== -1){
@@ -15,6 +18,7 @@ class NewGroupMemberRow extends React.Component {
     const val = document.querySelector("#groupMembersInput-" + num).value;
     const valid = users.filter( u => u.username === val).length !== 0;
     const validator = document.querySelector(".new-member-confirmation-" + num);
+    //donald easter egg :)
     if (val === "donald"){
       validator.innerText = "bruh...";
       validator.style.color = "green";

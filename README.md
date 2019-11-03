@@ -8,6 +8,8 @@ Admins are differentiated from users in that they have the ability to rename and
 
 These admin privileges are marked in bold throughout the document.
 
+Note: it is assumed that no user is logged in on the home page, the registration page, or the login page.
+
 _____________________
 
 ## REGISTRATION 
@@ -27,13 +29,14 @@ The following credentials are accepted currently:
     Username: user, Password: user
     Username: admin, Password: admin
 
-Upon successful login, you are taken to your own profile page, be it "user" or "admin".
+Upon successful login, you are taken to the groups page, which differs in functionality depending on whether you log in as an admin or not.
 _____________________
 
 ## PROFILE 
 
-As stated, you are linked to your own profile page after login.
-We intend for this page to also be accessible using the "Profile" button in the site header, but that is currently hard-coded to link to the profile page of "user".
+We intend for this page to  be accessible using the "Profile" button in the site header, but that is currently hard-coded to link to the profile page of "user".
+
+This page is otherwise accessible by clicking a user within a group.
 
 This page displays various user information, including username, full name, description, preferred payment method, and email.
 On the top right of the page is an edit button, which allows you to edit any of these fields.
@@ -45,7 +48,7 @@ _____________________
 This is accessible through the Groups button in the website header.
 It currently contains various dummy groups, each with a name, icon, member list, and color.
 
-**Admins are able to edit a group's name, or delete the group entirely** (without server calls, any changed information or deleted groups are reset upon reloading the page).
+**Admins are able to edit a group's name, or delete the group entirely** (without server calls, any changed information or deleted groups are reset upon reloading the page). Users are unable to see these options presented.
 
 At the bottom of the page, clicking on the green plus sign will pop up a form to create a new group.
 Clicking on any of the already-created groups brings you to its individual group page, which are all currently hard-coded.
@@ -63,16 +66,18 @@ Each group page consists of three columns:
 1. The group members column
     Here is a list of all the members of a group.
     Clicking a member brings you to that member's individual (hard-coded) profile page.
-    At the bottom of the list is a green plus, which allows you to add new members to the group by inputting their username (without server calls, new members are erased after reload).
+    At the bottom of the list is a green plus, which allows you to add new members to the group by inputting their username.
+    Note that adding members only adds the element to the page without any back-end functionality.
+    Newly added members cannot be added to new expenses until server functionality is implemented in Phase 2.
     Only existing users (in our hard-coded master user list) can be added to groups.
-    **Admins are able to remove members of the group.**
+    **Admins are able to remove members of the group.** Users are unable to see the remove buttons.
     Note that removing members only removes the element from the page without any back-end functionality.
 2. The group messages timeline
     Here you can see a chronological list of sent messages to the group.
     A message can either be a text chat or a created expense, with each message having the user who sent the message and the time it was sent.
     At the top corner of the timeline is a button that allows you to create new expenses.
     Expenses are more thoroughly covered later on.
-    **Admins are able to delete chats and expenses entirely.**
+    **Admins are able to delete chats and expenses entirely.** Users are unable to see the deletion buttons.
     Without server calls, the page resets to our default hard-coded data on reload.
 3. The current expenses and other groups column
     Here short blocks of information about each of the group's expenses are displayed, namely the creator of the expense and the expense's remaining debt.

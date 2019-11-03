@@ -12,7 +12,8 @@ class GroupMessage extends React.Component {
   super(props)
 
   this.state = {
-    //this should be the id of the current user. set to 1 for demo purposes
+    //code below requires a server call to obtain the currently logged in user
+    //hard-coded to always use "user", the account with user id 1
     currentUserId: 1,
     currentlyPaying: false,
     payAmount: "0.01",
@@ -53,6 +54,9 @@ class GroupMessage extends React.Component {
     window.location = "/u/" + this.props.msg.user.id;
   }
 
+  /**
+   * Toggles whether or not the payment input element of an expense is displayed and editable.
+   */
   toggleExpense(){
     if (!this.state.currentlyPaying){
       this.setState({
@@ -79,6 +83,10 @@ class GroupMessage extends React.Component {
     );
   }
 
+  /**
+   * Reduces the remaining cost of an expense depending on what a user inputs in the expense's payment input field.
+   * Will require a server call to edit an expense's information in our database.
+   */
   deductPayment(){
     if(Number(this.state.payAmount) < 0){
       alert("Cannot pay a negative amount");
@@ -126,15 +134,21 @@ class GroupMessage extends React.Component {
     return time;
   }
 
+  /**
+   * Deletes a message from the group timeline.
+   * Will require a server call to delete the information from our database.
+   */
   delete(){
-    //server call to delete from db goes here.
     document.querySelector(".msg-id-" + this.props.msg.id).style.display = "none";
     if (this.props.msg.type === "expense"){
-      //removes from the sidebar.
+      //removes the expense from the right sidebar
       document.querySelector(".expense-small-id-" + this.props.msg.id).style.display = "none";
     }
   }
 
+  /**
+   * Returns a new message element for the DOM.
+   */
   getMsg() {
     return (
       <div className={"msg-id-" + this.props.msg.id}>
@@ -153,6 +167,9 @@ class GroupMessage extends React.Component {
     )
   }
 
+  /**
+   * Returns a new expense element for the DOM.
+   */
   getExpense() {
     return (
       <div className={"msg-id-" + this.props.msg.id}>

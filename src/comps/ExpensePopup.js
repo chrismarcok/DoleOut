@@ -20,6 +20,9 @@ class ExpensePopup extends React.Component {
     numMembers: 1
   }
 
+  /**
+   * Creates a new expense based on the input fields and adds it to the group timeline.
+   */
   createExpense = () => {
     if (this.state.expenseTitle === "" || this.state.expenseCost === "" || this.state.expenseContent === "" || this.getMembers().length === 1){
       alert("one or more fields is missing!");
@@ -37,6 +40,8 @@ class ExpensePopup extends React.Component {
         "remaining": Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / this.getMembers().length),
         "members": this.getMembers()
       },
+      //code below requires a server call to obtain the currently logged in user
+      //hard-coded to always assume "user" created the expense
       "user": {
         "id": 1,
         "username": "user",
@@ -63,13 +68,16 @@ class ExpensePopup extends React.Component {
     this.props.closePopup();
   }
 
+  /**
+   * Returns an array of all the members of an expense.
+   */
   getMembers(){
     const usernameInputs = document.querySelectorAll(".group-member-input-field");
-    
     const memberLst = this.props.group.members;
     const numMembers = this.state.numMembers;
     const added = [];
-    //default to current user added.
+    //code below requires a server call to obtain the currently logged in user to add the new expense's member list
+    //hard-coded to always add "user" to the member list
     const result = [{
       "id": 1,
       "username": "user",
@@ -103,6 +111,9 @@ class ExpensePopup extends React.Component {
     return result;
   }
 
+  /**
+   * Formats the cost input of the expense to include decimals.
+   */
   formatCost(){
     const costInputField = document.querySelector("#expenseCostInput");
     const val = document.querySelector("#expenseCostInput").value;
@@ -112,12 +123,18 @@ class ExpensePopup extends React.Component {
     }
   }
 
+  /**
+   * Closes the expense popup.
+   */
   close(e, closeFunction){
     if (e.target.className === "popup" || e.target.className === "popup-close-btn"){
       closeFunction();
     }
   }
 
+  /**
+   * Adds a new member row to the expense popup.
+   */
   createNewMemberRow(){
     const newDiv = document.createElement("div");
     newDiv.className = "new-member-expense-popup-id-" + this.state.numMembers;

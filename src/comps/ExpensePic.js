@@ -1,8 +1,7 @@
 import React from 'react'
 
 class ExpensePic extends React.Component{
-
-
+  
   componentDidMount(){
     const pic = document.querySelector(".expense-pic-id-" + this.props.member.id + "-" + this.props.id);
     pic.style.backgroundImage = "url('" + this.props.member.picUrl + "')";
