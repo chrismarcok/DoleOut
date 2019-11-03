@@ -9,6 +9,9 @@ Admins are differentiated from users in that they have the ability to rename and
 These admin privileges are marked in bold throughout the document.
 
 Note: it is assumed that no user is logged in on the home page, the registration page, or the login page.
+Consequently, the Register and Login tabs in the site header are only visible on these pages.
+
+On other pages it is assumed that you are logged in as "user" or "admin", and the right part of the header is changed to only hold the profile tab, which is a link to your profile page (which currently is hard-coded to link to "user" or "admin", as we do not have a way to determine whether another user is logged in without server calls).
 
 _____________________
 
@@ -34,9 +37,9 @@ _____________________
 
 ## PROFILE 
 
-We intend for this page to  be accessible using the "Profile" button in the site header, but that is currently hard-coded to link to the profile page of "user".
+We intend for this page to  be accessible using the "Profile" button in the site header, but that is currently hard-coded to link to the profile page of "user" or "admin" depending on which one logged in.
 
-This page is otherwise accessible by clicking a user within a group.
+This page is otherwise accessible by clicking a user within a group (which does bring you to an individual's unique profile page), or upon registration (which is hard-coded to link to the profile page of "user" or "admin", as mentioned previously).
 
 This page displays various user information, including username, full name, description, preferred payment method, and email.
 On the top right of the page is an edit button, which allows you to edit any of these fields.
@@ -48,7 +51,7 @@ _____________________
 This is accessible through the Groups button in the website header.
 It currently contains various dummy groups, each with a name, icon, member list, and color.
 
-**Admins are able to edit a group's name, or delete the group entirely** (without server calls, any changed information or deleted groups are reset upon reloading the page). Users are unable to see these options presented.
+**Admins are able to edit a group's name, or delete the group entirely using buttons on the right hand side of each group** (without server calls, any changed information or deleted groups are reset upon reloading the page). Users are unable to see these options presented.
 
 At the bottom of the page, clicking on the green plus sign will pop up a form to create a new group.
 Clicking on any of the already-created groups brings you to its individual group page, which are all currently hard-coded.
