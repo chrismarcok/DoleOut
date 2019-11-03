@@ -41,8 +41,9 @@ class NewGroupPopup extends React.Component {
       );
   }
 
-
-
+  /**
+   * Picks a color from the color picker.
+   */
   selectColor(e) {
       e.preventDefault();
   
@@ -62,6 +63,9 @@ class NewGroupPopup extends React.Component {
   
   }
 
+  /**
+   * Returns a list the members of a new group.
+   */
   getMembers(){
       const usernameInputs = document.querySelectorAll(".group-member-input-field");
       const memberLst = this.state.users;
@@ -82,6 +86,9 @@ class NewGroupPopup extends React.Component {
       return result;
   }
 
+  /**
+   * Selects the icon of a new group.
+   */
   selectIcon(name) {
       if (this.state.groupIcon !== "") {
         const curIcon = this.state.groupIcon;
@@ -94,6 +101,9 @@ class NewGroupPopup extends React.Component {
   
   }
   
+  /**
+   * Closes the new group popup.
+   */
   close(e, closeFunction){
       console.log(e.target);
       if (e.target.className === "popup-close-btn"){
@@ -101,13 +111,15 @@ class NewGroupPopup extends React.Component {
       }
   }
 
+  /**
+   * Creates a new group based on the input fields and adds it to the groups page.
+   */
   createGroup() {
     if (this.state.title === "" || this.state.groupIcon === "") {
       alert("Please fill out all fields!");
       return;
     }
     const allGroups = Fetch.fetchGroups();
-    //TODO: Get the list of users from the user list based on what is in this.state.groupMembers
     const newId = allGroups[allGroups.length - 1].id + 1;
     const newGroup = {
       id: newId,
@@ -122,6 +134,9 @@ class NewGroupPopup extends React.Component {
     return;
   }
   
+  /**
+   * Creates a new group member row to add members to the new group.
+   */
   newRow(){
       const newDiv = document.createElement("div")
       newDiv.className = "new-group-member-row-" + this.state.numMembers;

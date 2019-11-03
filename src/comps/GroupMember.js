@@ -13,16 +13,20 @@ class GroupMember extends React.Component {
     pic.style.backgroundImage = "url('" + this.props.member.picUrl + "')"
   }
   
+  /**
+   * Redirects to a group member's profile page.
+   */
   clickEvent(e){
-    //make this make a popup here. also need to hide all other popups if they are open.
-    //for now just redirect to the group member page
     if (e.target.className !== "groupmember-delete" && e.target.className !== "fa fa-trash"){
       window.location.href = "/u/" + this.props.member.id;
     }
   }
 
+  /**
+   * Hides a group member, called when a member is deleted.
+   * Will require a server call to remove the member from a database
+   */
   delete(){
-    //here make a call to delete from database.
     document.querySelector(".groupmember-id-" + this.props.member.id).style.display = "none";
   }
 

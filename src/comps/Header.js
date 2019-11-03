@@ -26,7 +26,7 @@ class Header extends React.Component {
             </a>
           </ul>
           {/* register and login buttons should be removed from header when a user logs in.
-            Will implement in phase 2 once we have server functionality that knows when a user is logged in*/}
+            Will implement in phase 2 once we have server functionality that knows whether a user is logged in*/}
           <ul className="header-right-ul">
             <a href="/register">
               <li className="header-li">

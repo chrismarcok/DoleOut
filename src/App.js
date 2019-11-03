@@ -25,11 +25,8 @@ Click on user -> Little popup with link to profile, discord style
 EXPENSES
 Variable/uneven debts
 *******************
-REGISTER/LOGIN
-Abstract away methods to another file/module, import required ones
-
-Admin/User dummy functionality (*)
-    Different views for admin and user (admin can see remove and edit options)
+ADMIN FUNCTIONALITY (*)
+Different views for admin and user (admin can see remove and edit options)
 *******************
 USER PAGE
 See joined groups

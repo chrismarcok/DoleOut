@@ -23,7 +23,6 @@ class GroupComp extends React.Component {
     this.redirect = this.redirect.bind(this);
   }
 
-
   componentDidMount() {
     const icon = document.querySelector("#icon" + this.props.id);
     icon.className = "group-icon fa fa-" + this.props.icon;
@@ -34,6 +33,9 @@ class GroupComp extends React.Component {
     check.style.display = "none";
   }
 
+  /**
+   * Returns the member list as a string with each member separated by commas.
+   */
   stringifyMembers(membersList) {
     if (membersList.length === 0) {
       return "No members."
@@ -54,18 +56,22 @@ class GroupComp extends React.Component {
   }
 
   redirect(e){
-    
     if (!e.target.classList.contains("fa") && !e.target.classList.contains("group-comp-input")){
-      
       window.location = "/g/" + this.props.id;
     }
   }
 
+  /**
+   * Hides a group in the groups page, called when a group is deleted.
+   * Will require a server call to remove the group from a database
+   */
   hide(){
     document.querySelector(".group-div-id-" + this.props.id).style.display = "none";
-    //Here we would have to remove the group from a database or something.
   }
 
+  /**
+   * Allows the name of a group to be edited using an input field.
+   */
   edit(){
     const elem = document.querySelector("#group-name-id-" + this.props.id);
     elem.style.display = "none";
@@ -77,6 +83,10 @@ class GroupComp extends React.Component {
     check.style.display = "inline-block";
   }
 
+  /**
+   * Confirms whatever is in the group name input field to become the group's name.
+   * Will require a server call to actually change the group's name in our database.
+   */
   confirm(){
     const elem = document.querySelector("#group-name-id-" + this.props.id);
     elem.style.display = "inline-block";
@@ -92,7 +102,6 @@ class GroupComp extends React.Component {
   }
 
   render() {
-
     let colorBg
     if (this.state.hover) {
       colorBg = { backgroundColor: Color(this.props.colorBg).darken(0.1).hsl().string() }
@@ -102,7 +111,6 @@ class GroupComp extends React.Component {
 
     return (
       <div>
-        
           <div style={colorBg} className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.redirect}>
 
             <h1 className="grouppage-title">
