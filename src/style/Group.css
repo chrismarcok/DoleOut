@@ -5,7 +5,7 @@
 .group-div{
   max-width: 100%;
   height: 150px;
-  background-color: #eee;
+  background-color: white;
   font-family: 'Poppins', sans-serif;
   transition: all ease 0.25s;
   padding: 16px;
@@ -35,7 +35,7 @@
   max-width: 100%;
   height: 150px;
   margin: 0px;
-  background-color: #eee;
+  background-color: white;
   border-radius: 10px;
   border-style: dashed;
   border-color: #00C853;
