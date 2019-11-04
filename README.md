@@ -8,10 +8,10 @@ DoleOut: A web application that allows groups of people to track shared expenses
 
 Admins are differentiated from users in that they have the ability to rename and delete groups, delete group members, and delete chats and expenses from a group's timeline. 
 The following views differ in admin and user functionality:
-    1. Profile - Admins can edit profile details. Users cannot
-    2. "GroupsPage" - Admins can edit Group names or delete groups. Users cannot
-    3. Group - Admins can delete messages/expenses. Users cannot.
-The admin view can be reached by adding "/admin" to the end of the URL for these views. Without "/admin", the view will be for the default "user" user. You can see this in the routing in App.js.
+1. Profile - Admins can edit profile details. Users cannot do this.
+2. "GroupsPage" - Admins can edit Group names or delete groups. Users cannot
+3. Group - Admins can delete messages/expenses. Users cannot.
+The admin view can be reached by adding `/admin` to the end of the URL for these views. Without `/admin`, the view will be for the default "user" user. You can see this in the routing in App.js.
 
 These admin privileges are marked in bold throughout the document.
 
@@ -25,14 +25,15 @@ _____________________
 
 ### `/login`
 From the home page, click login in the header. Enter the credentials:
-    Username: admin, Password: admin
+* Username: admin, Password: admin
+
 You will be taken to the groups page where you can view different groups. Note that this is the groups page view from the admin's perspective, not the user's.
 
 ### `/groups/admin`
 Click the edit button on the right side of the group component to edit the group's name. Click the checkmark box (again on the right side) to confirm your edits. You can delete the group by clicking on the trash icon on the right side. 
 
 Admins can create new groups just like a user. Scroll to the bottom of the groups page and click the large green button.
-    1. Enter a group title
+    1. Enter a group title.
     2. Enter usernames (one per row). Click the "New Row" button to add a new row.
     3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
     4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
@@ -45,16 +46,16 @@ From here, click on the "bad boys" group at the top. If you deleted it, refresh 
 ### `/g/:group_number/admin`
 The left column displays the users in the group. The Right column displays the group's current expenses, and a list of other groups you can navigate to. The middle column is a chat that displays messages and expenses.
 
-1. Try deleting user from the group by clicking the trash icon next to the user's username in the left column.
+1. Try deleting a user from the group by clicking the trash icon next to the user's username in the left column.
 2. Scroll to the bottom of the left column. Click the large green plus button. Try adding the user "admin". This will add the user admin to the group. **NOTE**: You cannot add a user to the group that you have previously kicked. Again, this is because no data is written when "deleting" a user. It would be possible to add kicked users if we updated a table in the database when kicking/adding, but for now it merely checks to see if the user is present in the group JSON file.
 3. Try adding a user that already exists. For example, add "jen" or "admin" a second time. Neither should work.
 4. Try typing a message in the middle column chat box. Click enter or the send button to send the message.
 5. Click any of the profile pictures in the middle column, or on the left column. It will redirect you to that user's profile. Return to the `/g/0/admin` page when you are done. 
 6. Click on any of the expenses in the "Current Expenses" section on the right column. The expense in the chat will scroll into view. If your screen is too large and shows the entire chat, try making your window small so you only see one expense in the window at a time to try this.
 7. Click any of the groups on the right to be redirected to that group. Click back when you are done to return to `/g/0/admin`.
-8. Click the "New Expense" button in the top right corner of the middle column to create a new expense. Add an expense title. Add expense content (just add some random message about the expense). Add a cost to the expense. When focus of the cost input is left, it should automatically format itself to two decimal places. Add members to the expense. Here are some members to try: "billy", "joe", "sam", "bob". Click the "New Row" button to create a new row. Invalid/blank members will not be added (they are ignored, and wont prevent you from making the expense). Click the new expense button to make an expense. 
+8. Click the "New Expense" button in the top right corner of the middle column to create a new expense. Add an expense title. Add expense content (just add some random message about the expense). Add a cost to the expense. When focus of the cost input is left, it should automatically format itself to two decimal places. Add members to the expense. Here are some members to try: "billy", "joe", "sam", "bob". Click the "New Row" button to create a new row. Invalid/blank members will not be added .(they are ignored, and wont prevent you from making the expense). Click the new expense button to make an expense. 
 9. You cannot pay the expense you just made (since your equal share of the expense's total cost is automatically deducted upon creating the expense). Instead, scroll to the "Toilet Paper" expense made by george and try paying that. You can view it by clicking the corresponding expense in the rightmost column under "current expenses". Paying $2.50 or more will cause the expense to be closed (since it has been fully paid off). **NOTE**: the cost of an expense is assumed to be divided evenly among all the expense members.
-10. Try deleting a message (either normal message or expense) from the group chat. You can do this by clicking the trash icon on the right side of any message.
+10. Try deleting a message (either a chat message or an expense) from the group chat. You can do this by clicking the trash icon on the right side of any message.
 
 ### `/u/:user_number/admin`
 Click the right-most button on the site header labelled "Admin", which brings you to the profile page of "admin".
@@ -71,17 +72,18 @@ _____________________
 
 ### `/login`
 From the home page, click login in the header. Enter the credentials:
-    Username: user, Password: user
+* Username: user, Password: user
+
 You will be taken to the groups page where you can view different groups. Note that this is the groups page view from the user perspective, not the admin's.
 
 ### `/groups`
 Users can create groups. Scroll to the bottom of the groups page and click the large green button.
-    1. Enter a group title
-    2. Enter usernames (one per row). Click the "New Row" button to add a new row.
-    3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
-    4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
-    5. Select an icon.
-    6. Click Create Group.
+1. Enter a group title.
+2. Enter usernames (one per row). Click the "New Row" button to add a new row.
+3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
+4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
+5. Select an icon.
+6. Click Create Group.
 The group you just made only exists in this view, so clicking on it will not redirect you to a real group (it will 404 since the group data was not written to anything). During phase 2, clicking "Create Group" should update the groups table in the database with the new group, and then you should be able to view it after creation.
 
 **NOTE:** Currently, users can see all groups even without holding membership in them as permissions are not yet implemented and any group can be accessed via url. In Phase 2, we intend to restrict this so that users may not see or navigate to groups that they are not a member of.
