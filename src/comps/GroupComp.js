@@ -54,11 +54,17 @@ class GroupComp extends React.Component {
   }
 
   toggleHover() {
+    const div = document.querySelector(".group-div-id-" + this.props.id);
+    if (!this.state.hover){
+      div.style.backgroundColor = Color(this.props.colorBg).darken(0.1).hsl().string();
+    } else {
+      div.style.backgroundColor = this.props.colorBg;
+    }
     this.setState(
       {
         hover: !this.state.hover
       }
-    )
+    );
   }
 
   redirect(e){
@@ -67,8 +73,7 @@ class GroupComp extends React.Component {
         window.location = "/g/" + this.props.id + "/admin";
       } else {
         window.location = "/g/" + this.props.id;
-      }
-      
+      } 
     }
   }
 
@@ -113,35 +118,26 @@ class GroupComp extends React.Component {
   }
 
   render() {
-    let colorBg
-    if (this.state.hover) {
-      colorBg = { backgroundColor: Color(this.props.colorBg).darken(0.1).hsl().string() }
-    } else {
-      colorBg = { backgroundColor: this.props.colorBg }
-    }
 
     return (
-      <div>
-          <div style={colorBg} className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.redirect}>
+        <div className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.redirect}>
 
-            <h1 className="grouppage-title">
-              <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={Helper.handleInputChange.bind(this)}></input>
-            </h1>
-            <div className="group-div-change-btns">
-              <div>
-                
-                  <i className="fa fa-check" id={"group-i-check-" + this.props.id} onClick={this.confirm}></i>
-                
-                <i className="fa fa-edit" id={"group-i-edit-" + this.props.id} onClick={this.edit}></i>
-                <i className="fa fa-trash" id={"group-i-trash-" + this.props.id} onClick={this.hide}></i>
-              </div>
+          <h1 className="grouppage-title">
+            <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={Helper.handleInputChange.bind(this)}></input>
+          </h1>
+          <div className="group-div-change-btns">
+            <div>
+              
+                <i className="fa fa-check" id={"group-i-check-" + this.props.id} onClick={this.confirm}></i>
+              
+              <i className="fa fa-edit" id={"group-i-edit-" + this.props.id} onClick={this.edit}></i>
+              <i className="fa fa-trash" id={"group-i-trash-" + this.props.id} onClick={this.hide}></i>
             </div>
-            <h3>
-              Members: {this.stringifyMembers(this.props.members)}
-            </h3>
           </div>
-        
-      </div>
+          <h3>
+            Members: {this.stringifyMembers(this.props.members)}
+          </h3>
+        </div>
     )
   }
 
