@@ -33,12 +33,12 @@ You will be taken to the groups page where you can view different groups. Note t
 Click the edit button on the right side of the group component to edit the group's name. Click the checkmark box (again on the right side) to confirm your edits. You can delete the group by clicking on the trash icon on the right side. 
 
 Admins can create new groups just like a user. Scroll to the bottom of the groups page and click the large green button.
-    1. Enter a group title.
-    2. Enter usernames (one per row). Click the "New Row" button to add a new row.
-    3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
-    4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
-    5. Select an icon.
-    6. Click Create Group.
+1. Enter a group title.
+2. Enter usernames (one per row). Click the "New Row" button to add a new row.
+3. Here are some usernames to choose: "bob", "joe", "sam". More can be found in "/src/data/dummy_user_list.json". Invalid/blank members will be ignored.
+4. Select a color using the color picker, which will become the group's color in the groups page. Otherwise the default grey is used.
+5. Select an icon.
+6. Click Create Group.
 The group you just made only exists in this view, so clicking on it will not redirect you to a real group (it will 404 since the group data was not written to anything). During phase 2, clicking "Create Group" should update the groups table in the database with the new group, and then you should be able to view it after creation.
 
 From here, click on the "bad boys" group at the top. If you deleted it, refresh the page and then click on it.
