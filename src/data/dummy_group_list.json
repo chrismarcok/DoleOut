@@ -166,14 +166,46 @@
     "name": "Family",
     "icon": "file",
     "colorBg": "#b388ff",
-    "members": []
+    "members": [
+      {
+        "id": 14,
+        "username": "jen",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/14"
+      },
+      {
+        "id": 15,
+        "username": "paul",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/15"
+      },
+      {
+        "id": 16,
+        "username": "rick",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/16"
+      }
+    ]
   },
   {
     "id": 4,
     "name": "My Group",
     "icon": "file",
     "colorBg": "#8c9eff",
-    "members": []
+    "members": [
+      {
+        "id": 4,
+        "username": "alfred",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/4"
+      },
+      {
+        "id": 5,
+        "username": "sam",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/5"
+      }
+    ]
   },
   {
     "id": 5,
@@ -187,6 +219,19 @@
     "name": "School Council",
     "icon": "file",
     "colorBg": "#100c45",
-    "members": []
+    "members": [
+      {
+        "id": 19,
+        "username": "grace",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/19"
+      },
+      {
+        "id": 17,
+        "username": "donald",
+        "password": "123",
+        "picUrl": "https://api.adorable.io/avatars/200/17"
+      }
+    ]
   }
 ]
