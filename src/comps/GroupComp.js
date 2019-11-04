@@ -37,6 +37,12 @@ class GroupComp extends React.Component {
       document.querySelector("#group-i-edit-" + this.props.id).style.display = "none";
       document.querySelector("#group-i-trash-" + this.props.id).style.display = "none";
     }
+
+    if (Color(this.props.colorBg).isDark()){
+      document.querySelector(".group-div-id-" + this.props.id).style.color = "white";
+    } else {
+      document.querySelector(".group-div-id-" + this.props.id).style.color = "black";
+    }
   }
 
   /**
@@ -56,7 +62,11 @@ class GroupComp extends React.Component {
   toggleHover() {
     const div = document.querySelector(".group-div-id-" + this.props.id);
     if (!this.state.hover){
-      div.style.backgroundColor = Color(this.props.colorBg).darken(0.1).hsl().string();
+      if (Color(this.props.colorBg).isDark()){
+        div.style.backgroundColor = Color(this.props.colorBg).lighten(1).hsl().string();
+      } else {
+        div.style.backgroundColor = Color(this.props.colorBg).darken(0.1).hsl().string();
+      }
     } else {
       div.style.backgroundColor = this.props.colorBg;
     }
@@ -118,7 +128,6 @@ class GroupComp extends React.Component {
   }
 
   render() {
-
     return (
         <div className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.redirect}>
 

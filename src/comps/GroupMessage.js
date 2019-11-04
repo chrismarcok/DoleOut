@@ -51,7 +51,12 @@ class GroupMessage extends React.Component {
   }
 
   redirect() {
-    window.location = "/u/" + this.props.msg.user.id;
+    if (this.props.admin){
+      window.location = "/u/" + this.props.msg.user.id + "/admin";
+    } else {
+      window.location = "/u/" + this.props.msg.user.id;
+    }
+    
   }
 
   /**
