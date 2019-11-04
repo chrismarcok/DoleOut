@@ -49,7 +49,14 @@
   background-color: #00C853;
   transition: all ease 0.5s;
   color: white;
+}
 
+.grouppage-title{
+  width: fit-content;
+}
+
+.group-div h3{
+  width: fit-content;
 }
 
 .group-add-icon-container{

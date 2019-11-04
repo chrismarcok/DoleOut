@@ -16,7 +16,8 @@ class GroupComp extends React.Component {
       editHover: false,
       deleteHover: false
     };
-    this.toggleHover = this.toggleHover.bind(this);
+    this.hoverOn = this.hoverOn.bind(this);
+    this.hoverOff = this.hoverOff.bind(this);
     this.hide = this.hide.bind(this);
     this.edit = this.edit.bind(this);
     this.confirm = this.confirm.bind(this);
@@ -59,20 +60,26 @@ class GroupComp extends React.Component {
     return r.substring(0, r.length - 2)
   }
 
-  toggleHover() {
+  hoverOn(){
     const div = document.querySelector(".group-div-id-" + this.props.id);
-    if (!this.state.hover){
-      if (Color(this.props.colorBg).isDark()){
-        div.style.backgroundColor = Color(this.props.colorBg).lighten(1).hsl().string();
-      } else {
-        div.style.backgroundColor = Color(this.props.colorBg).darken(0.1).hsl().string();
-      }
+    if (Color(this.props.colorBg).isDark()){
+      div.style.backgroundColor = Color(this.props.colorBg).lighten(1).hsl().string();
     } else {
-      div.style.backgroundColor = this.props.colorBg;
+      div.style.backgroundColor = Color(this.props.colorBg).darken(0.1).hsl().string();
     }
     this.setState(
       {
-        hover: !this.state.hover
+        hover: true
+      }
+    );
+  }
+
+  hoverOff(){
+    const div = document.querySelector(".group-div-id-" + this.props.id);
+    div.style.backgroundColor = this.props.colorBg;
+    this.setState(
+      {
+        hover: false
       }
     );
   }
@@ -129,7 +136,7 @@ class GroupComp extends React.Component {
 
   render() {
     return (
-        <div className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.redirect}>
+        <div className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} onClick={this.redirect}>
 
           <h1 className="grouppage-title">
             <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={Helper.handleInputChange.bind(this)}></input>
