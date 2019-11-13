@@ -14,21 +14,8 @@ class LoginPage extends React.Component {
 
   login(e) {
     if (e.keyCode === 13 || e.target.className === "login-btn"){
-      // if(!this.checkRegistered(this.state.username) || (this.checkRegistered(this.state.username) && !(this.state.password === this.getUserPassword(this.state.username)))){
-      //   alert("Wrong username or password")
-      //   e.preventDefault();
-      // }
-      // else{        
-      //   if (this.state.username === "admin"){
-      //     window.location = "/groups/admin";
-      //   } else {
-      //     window.location = "/groups";
-      //   }
-        
-      // }
       console.log("attempting to post...")
-    }
-    
+    } 
   }
 
   getUserPassword(username){

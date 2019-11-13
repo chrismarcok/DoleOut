@@ -2,30 +2,20 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const passport = require('passport');
 
 //Load User Model
 require('../models/User');
 const User = mongoose.model('users');
 
-router.post('/login', (req, res) => {
-  User.findOne({displayName: req.body.username})
-  .then(user => {
-    if (user){
-      bcrypt.compare(req.body.password, user.password, (err, result) => {
-        if (err) throw errl
-        if (result) {
-          console.log("good")
-          res.redirect('/u/0');
-        } else {
-          console.log("fail")
-          res.redirect('/login');
-        }
-      })
-    } else {
-      console.log(`User ${req.body.username} does not exist`);
-    }
-  }).catch(err => console.log(err));
-});
+//Auth
+const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
+
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/u/0',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
 
 router.post('/register', (req, res) => {
   const newUser = new User({
@@ -61,5 +51,12 @@ router.post('/register', (req, res) => {
     })
     .catch(err => console.log(err));
 });
+
+router.get('/logout', checkAuthenticated, (req, res) => {
+  console.log(`${req.user.displayName} has been logged out.`);
+  req.logout();
+  res.redirect("/");
+});
+
 
 module.exports = router;
