@@ -27,6 +27,10 @@ const UserSchema = new Schema({
   },
   description:{
     type:String
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 })
 
