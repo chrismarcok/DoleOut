@@ -14,16 +14,19 @@ class LoginPage extends React.Component {
 
   login(e) {
     if (e.keyCode === 13 || e.target.className === "login-btn"){
-      if(!this.checkRegistered(this.state.username) || (this.checkRegistered(this.state.username) && !(this.state.password === this.getUserPassword(this.state.username)))){
-        alert("Wrong username or password")
-      }
-      else{        
-        if (this.state.username === "admin"){
-          window.location = "/groups/admin";
-        } else {
-          window.location = "/groups";
-        }
-      }
+      // if(!this.checkRegistered(this.state.username) || (this.checkRegistered(this.state.username) && !(this.state.password === this.getUserPassword(this.state.username)))){
+      //   alert("Wrong username or password")
+      //   e.preventDefault();
+      // }
+      // else{        
+      //   if (this.state.username === "admin"){
+      //     window.location = "/groups/admin";
+      //   } else {
+      //     window.location = "/groups";
+      //   }
+        
+      // }
+      console.log("attempting to post...")
     }
     
   }
@@ -47,7 +50,7 @@ class LoginPage extends React.Component {
           <div className="login-container">
             <div className="login-inner">
             <LoginHeader title="Login"/>
-              <form className="login-form">
+              <form className="login-form" action="/login" method="post">
                 <h3>
                   Username
                 </h3>
@@ -56,9 +59,8 @@ class LoginPage extends React.Component {
                   Password
                 </h3>
                 <input id="login-password" type="password" name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
-                
+                <button className="login-btn" type="submit" onClick={(e) => this.login(e)}>Login <i className="fa fa-sign-in"></i></button>  
               </form>
-              <button className="login-btn" onClick={(e) => this.login(e)}>Login <i className="fa fa-sign-in"></i></button>
             </div>
           </div>
       </div>

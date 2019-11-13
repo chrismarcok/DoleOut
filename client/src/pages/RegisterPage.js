@@ -4,6 +4,8 @@ import LoginHeader from '../comps/LoginHeader.js'
 import Fetch from '../scripts/fetch.js';
 import Helper from '../scripts/helper.js';
 
+const regex = RegExp('^([a-zA-Z0-9 _-]+)$');
+
 class RegisterPage extends React.Component {
 
   state = {
@@ -30,23 +32,32 @@ class RegisterPage extends React.Component {
     if (e.keyCode === 13 || e.target.className === "register-btn"){
       if (this.state.username === ""){
         alert("your username should have at least one character")
+        e.preventDefault();
+      } 
+      else if (!regex.test(this.state.username)) {
+        alert("your username should match /^([a-zA-Z0-9 _-]+)$/")
+        e.preventDefault();
       }
       else if (this.state.password.length <= 6){
         alert("your password should have more than 6 characters")
+        e.preventDefault();
       }
       else if (this.state.password !== this.state.rePassword){
         alert("the passwords don't match")
+        e.preventDefault();
       }
       else if (this.checkRegistered(this.state.username)){
         alert(this.state.username + " is already registered")
+        e.preventDefault();
       }
       else {
         // Should redirect you to the profile you just made. for now just redirect to the default user's profile.
-        const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
-        this.setState({
-          "users": newUsers
-        });
-        window.location = "/u/1";
+        // const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
+        // this.setState({
+        //   "users": newUsers
+        // });
+        // window.location = "/u/1";
+        console.log("success");
       }
     }
   }
@@ -66,23 +77,22 @@ class RegisterPage extends React.Component {
         <div className="login-container">
           <div className="login-inner">
             <LoginHeader title="Register"/>
-            <form className="login-form">
-              
+            <form className="login-form" action="/register" method="post">
               <h3>
                 Username
               </h3>
-              <input id="register-username" type="text" name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+              <input id="register-username" type="text" required name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Password
               </h3>
-              <input id="register-password" type="password" name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+              <input id="register-password" type="password" required name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Confirm Password
               </h3>
-              <input id="register-repassword" type="password" name="rePassword" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
-              
+              <input id="register-repassword" type="password" required name="rePassword" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+              <button className="register-btn" type="submit" onClick={(e) => {this.register(e)}}>Register <i className="fa fa-user-plus"></i></button>  
             </form>
-            <button className="register-btn" onClick={(e) => this.register(e)}>Register <i className="fa fa-user-plus"></i></button>
+            
           </div>
         </div>
       </div>
