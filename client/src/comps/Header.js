@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class Header extends React.Component {
   componentDidMount(){
     if (this.props.user === "admin"){
@@ -67,6 +66,13 @@ class Header extends React.Component {
               <li className="header-li">
                   <div className="li-content">
                     <span className="header-username">Profile</span> <i className="fa fa-user"></i>
+                  </div>
+              </li>
+            </a>
+            <a href="/logout" id="header-logout"> 
+              <li className="header-li">
+                  <div className="li-content">
+                    <span className="header-username">Logout</span> <i className="fa fa-sign-out"></i>
                   </div>
               </li>
             </a>

@@ -126,7 +126,16 @@ class NewGroupPopup extends React.Component {
       members: this.getMembers()
     }
     this.props.addGroup(newGroup);
+
+    /* HTTP Request */
+    console.log("Making POST req");
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", '/groups');
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(newGroup));
+    //Close
     this.props.closePopup();
+
 
     return;
   }
@@ -176,12 +185,13 @@ class NewGroupPopup extends React.Component {
                   );
                 })
               }
-            </form>
 
+            </form>
             <div className="popup-btn-container">
                 <button className="popup-create-btn" onClick={() => this.createGroup()}> Create Group <i className="fa fa-users"></i></button>
                 <button className="popup-close-btn" onClick={(e) => this.close(e, this.props.closePopup)}> Close</button>
-            </div>
+              </div>
+            
             
           </div>
         </div>

@@ -6,6 +6,14 @@ function checkAuthenticated(req, res, next){
   }
 }
 
+function checkAdmin(req, res, next){
+  if (req.user.isAdmin){
+    return next();
+  } else {
+    res.redirect("/");
+  }
+}
+
 function checkGuest(req, res, next){
   if (!req.isAuthenticated()){
     return next();
@@ -16,5 +24,6 @@ function checkGuest(req, res, next){
 
 module.exports =  {
   checkAuthenticated,
-  checkGuest
+  checkGuest,
+  checkAdmin
 }

@@ -6,9 +6,12 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
 const flash = require('express-flash');
+const cors = require("cors");
 
 //Require our routes
 const login_register = require('./routes/login-register');
+const groups = require('./routes/groups');
+const api = require('./routes/api');
 
 //Authentication checks
 const { checkAuthenticated, checkGuest } = require('./auth/authCheck');
@@ -26,7 +29,7 @@ const initializePassport = require('./auth/passport-config');
 initializePassport(passport);
 
 const app = express();
-
+app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -39,8 +42,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+app.use('/api', api);
 app.use('/', login_register);
+app.use('/', groups);
 app.get('/forbidden', checkAuthenticated, (req, res) => {
   res.send(`you are authenticated, ${req.user.displayName}`);
   console.log(req.user);

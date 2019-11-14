@@ -55,7 +55,7 @@ class GroupComp extends React.Component {
     }
     let r = ""
     for (let i = 0; i < membersList.length; i++) {
-      r += membersList[i].username + ", "
+      r += membersList[i] + ", "
     }
     return r.substring(0, r.length - 2)
   }
@@ -63,7 +63,7 @@ class GroupComp extends React.Component {
   hoverOn(){
     const div = document.querySelector(".group-div-id-" + this.props.id);
     if (Color(this.props.colorBg).isDark()){
-      div.style.backgroundColor = Color(this.props.colorBg).lighten(1).hsl().string();
+      div.style.backgroundColor = Color(this.props.colorBg).lighten(0.1).hsl().string();
     } else {
       div.style.backgroundColor = Color(this.props.colorBg).darken(0.1).hsl().string();
     }

@@ -4,21 +4,40 @@
  * The admin can rename and delete groups. The user cannot.
  */
 
-import React from 'react'
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from '../comps/Header.js'
-import GroupComp from '../comps/GroupComp.js'
-import Fetch from '../scripts/fetch.js';
-import { uid } from 'react-uid'
-import NewGroupPopup from '../comps/NewGroupPopup.js'
+import Header from '../comps/Header.js';
+import GroupComp from '../comps/GroupComp.js';
+import { uid } from 'react-uid';
+import NewGroupPopup from '../comps/NewGroupPopup.js';
+import axios from 'axios';
 
 class GroupsPage extends React.Component {
-
-  groups = Fetch.fetchGroups();
-
+  
   constructor(props){
     super(props);
-    this.state = { showPopup: false };
+    this.state = { 
+      groups: [],
+      showPopup: false,
+      axiosError: "",
+     };
+  }
+
+  componentDidMount(){
+    axios.get('/api/groups')
+    .then(response => {
+      this.setState({
+        groups: response.data
+      });
+      console.log(response.data)
+    })
+    .catch( 
+      err => {
+        this.setState(
+          {
+            axiosError: "Could not retreive data."
+          }
+      )});
   }
 
   /**
@@ -63,23 +82,29 @@ class GroupsPage extends React.Component {
   }
 
   render() {
+    const { groups, axiosError } = this.state;
+    
     return (
-      <div>
+      <React.Fragment>
         <Header user="user"/>
         <ul className="group-ul">
           {
-            this.groups.map( group => {
+            (typeof(groups) === "object" && groups.length > 0) ?
+            groups.map( group => {
               return (
                   <GroupComp key={ uid(group) }
                         name={ group.name }
                         icon={ group.icon }
-                        colorBg={ group.colorBg }
-                        id={ group.id }
-                        members={ group.members }
+                        colorBg={ group.color }
+                        id={ group._id }
+                        members={ group.memberIDs }
                         admin={false}
                   />
               )
-            })
+            }) : null
+          }
+          {
+            axiosError ? <div>{axiosError}</div> : null
           }
           <div className="new-groups-div"> </div>
           <div className="group-div">
@@ -94,7 +119,7 @@ class GroupsPage extends React.Component {
             </div>
           </div>
         </ul>
-      </div>
+      </React.Fragment>
     )
   }
 }

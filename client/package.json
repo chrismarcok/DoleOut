@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "a-color-picker": "^1.2.1",
+    "axios": "^0.19.0",
     "color": "^3.1.2",
     "font-awesome": "^4.7.0",
     "react": "^16.10.2",
@@ -14,7 +15,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build ../public",
+    "build": "react-scripts build && cd ../public && rm -rf * && cd ../client && mv build ../public && cd ../public/build && mv * ..",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
