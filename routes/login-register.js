@@ -12,7 +12,7 @@ const User = mongoose.model('users');
 const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
 
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/u/0',
+  successRedirect: '/groups',
   failureRedirect: '/login',
   failureFlash: true
 }));

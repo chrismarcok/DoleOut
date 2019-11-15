@@ -11,7 +11,7 @@ require('../models/Message');
 const Messages = mongoose.model('messages');
 
 //Auth
-const { checkAuthenticated, checkGuest, checkAdmin } = require('../auth/authCheck');
+const { checkAuthenticated, checkAuthenticated403, checkGuest, checkAdmin } = require('../auth/authCheck');
 
 router.get('/groups', checkAuthenticated, (req, res) => {
   Group.find()
@@ -24,7 +24,7 @@ router.get('/groups', checkAuthenticated, (req, res) => {
   });
 });
 
-router.get('/me', checkAuthenticated, (req, res) => {
+router.get('/me', checkAuthenticated403, (req, res) => {
   req.user.password = undefined
   res.send(req.user)
 })
@@ -50,10 +50,10 @@ router.get('/exists/:name', checkAuthenticated, (req, res) => {
   .then( user => {
     user = user[0]
     if (user){
-      res.sendStatus(200)
+      res.sendStatus(200);
     } else {
-      //Kind of a strage workaround...
-      res.sendStatus(299)
+      
+      res.sendStatus(400);
     }
   })
   .catch(err => {

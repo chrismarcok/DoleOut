@@ -37,15 +37,14 @@ class NewGroupMemberRow extends React.Component {
           indicator: "valid"
         });
         validator.style.color = "green";
-      } else {
-        this.setState({
-          indicator: "invalid"
-        })
-        validator.style.color = "red";
-      }
+      } 
     })
     .catch( err => {
       console.log(err)
+      this.setState({
+        indicator: "invalid"
+      })
+      validator.style.color = "red";
     })
     .finally( () => {
       this.setState({

@@ -3,7 +3,6 @@ import '../style/NewGroupPopup.css';
 import ReactDOM from 'react-dom';
 import NewGroupMemberRow from '../comps/NewGroupMemberRow';
 import GroupIcon from '../comps/GroupIcon';
-import Fetch from '../scripts/fetch.js';
 import { uid } from 'react-uid';
 import Helper from '../scripts/helper.js';
 import Axios from 'axios';
@@ -19,7 +18,7 @@ class NewGroupPopup extends React.Component {
   }
 
   state = {
-      users: Fetch.fetchUsers(),
+      users: undefined,
       title: "",
       groupIcon: "",
       groupMembers: "",
@@ -32,14 +31,21 @@ class NewGroupPopup extends React.Component {
   }
 
   componentDidMount() {
-      AColorPicker.from('.picker').on('change', (picker, color) => {
-        const colorPrev = document.querySelector(".color-preview");
-        colorPrev.style.backgroundColor = color;
-        this.setState({
-          groupColor: String(color)
-        });
-      }
-      );
+    Axios.get('/api/users')
+    .then(response => {
+      this.setState({
+        users: response.data
+      })
+    })
+    .catch(err => console.log(err));
+
+    AColorPicker.from('.picker').on('change', (picker, color) => {
+      const colorPrev = document.querySelector(".color-preview");
+      colorPrev.style.backgroundColor = color;
+      this.setState({
+        groupColor: String(color)
+      });
+    });
   }
 
   /**
@@ -66,23 +72,21 @@ class NewGroupPopup extends React.Component {
   /**
    * Returns a list the members of a new group.
    */
-  getMembers(){
+  getMembers(id){
       const usernameInputs = document.querySelectorAll(".group-member-input-field");
       const memberLst = this.state.users;
       const numMembers = this.state.numMembers;
-      const added = [];
-      const result = [];
+      const added = [id];
       for (let i = 0; i < numMembers; i++){
         const m = memberLst.filter( m => 
-          m.username === usernameInputs[i].value
+          m.displayName === usernameInputs[i].value
         );
-        if (m.length === 0 || added.includes(m[0].id)){
+        if (m.length === 0 || added.includes(m[0]._id)){
           continue;
         }
-        result.push(m[0]);
-        added.push(m[0].id);
+        added.push(m[0]._id);
       }
-      return result;
+      return added;
   }
 
   /**
@@ -119,22 +123,30 @@ class NewGroupPopup extends React.Component {
     }
     Axios.get('/api/me')
     .then( response => {
-      const newGroup = {
-        name: this.state.title,
-        icon: this.state.groupIcon,
-        colorBg: this.state.groupColor,
-        members: [response.data._id]//this.getMembers()
+      if (response.status === 200){
+        const newGroup = {
+          name: this.state.title,
+          icon: this.state.groupIcon,
+          colorBg: this.state.groupColor,
+          members: this.getMembers(response.data._id),
+        }
+        console.log(newGroup.members);
+        this.props.addGroup(newGroup);
+    
+        /* HTTP Request */
+        console.log("Making POST req");
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", '/groups');
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify(newGroup));
+        //Close
+        this.props.closePopup();  
+      } else {
+        //This should never happen...
+        console.log("there is nobody logged in. nothing happened");
+        alert("Can't make a group if there is nobody logged in...");
       }
-      this.props.addGroup(newGroup);
-  
-      /* HTTP Request */
-      console.log("Making POST req");
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", '/groups');
-      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xhr.send(JSON.stringify(newGroup));
-      //Close
-      this.props.closePopup();  
+      
     })
     .catch(err => console.log(err))
     

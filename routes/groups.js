@@ -44,12 +44,11 @@ router.post('/groups', checkAuthenticated, (req, res) => {
     res.sendStatus(400);
     return;
   }
-  const members = [req.user._id]
   const newGroup = new Group({
     name: body.name,
     icon: body.icon,
     color: body.colorBg,
-    memberIDs: members
+    memberIDs: body.members,
   });
   newGroup.save()
   .then(group => {

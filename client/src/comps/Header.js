@@ -2,23 +2,25 @@ import React from 'react';
 import Axios from 'axios';
 
 class Header extends React.Component {
-  componentDidMount(){
-    if (this.props.user === "admin"){
-      document.querySelector("#header-login").style.display = "none";
-      document.querySelector("#header-register").style.display = "none";
-      document.querySelector("#header-profile").href = "/u/0/admin";
-      document.querySelector(".header-username").innerText = "Admin";
-      document.querySelector("#header-group-link").href = "/groups/admin";
-    } else if (this.props.user === "user"){
-      document.querySelector("#header-login").style.display = "none";
-      document.querySelector("#header-register").style.display = "none";
-      document.querySelector("#header-profile").href = "/u/1";
-      document.querySelector(".header-username").innerText = "User";
-    } else {
-      //Else, nobody logged in.
-      document.querySelector("#header-profile").style.display = "none";
+  constructor(props){
+    super(props)
+    this.state = {
+      user: undefined,
+      loggedIn: false,
     }
-
+  }
+  componentDidMount(){
+    Axios.get('/api/me')
+    .then( response => {
+      console.log(`${response.data.displayName} is logged in`);
+      this.setState({
+        user: response.data,
+        loggedIn: true
+      })
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 
   render() {
@@ -45,39 +47,44 @@ class Header extends React.Component {
               </li>
             </a>
           </ul>
-          {/* register and login buttons should be removed from header when a user logs in.
-            Will implement in phase 2 once we have server functionality that knows when a user is logged in*/}
           <ul className="header-right-ul" >
-            <a href="/register" id="header-register">
-              <li className="header-li">
-                <div className="li-content" >
-                  Register <i className="fa fa-user-plus"></i>
-                </div>
-              </li>
-            </a>
-            <a href="/login" id="header-login">
-              <li className="header-li">
-                <div className="li-content" >
-                  Login <i className="fa fa-sign-in"></i>
-                </div>
-              </li>
-            </a>
-            <a href="/u/1" id="header-profile"> 
-            {/* currently hard-coded to go to the profile page of user id 1.
-            Will later have server call to link to the profile of a currently logged in user. */}
-              <li className="header-li">
-                  <div className="li-content">
-                    <span className="header-username">Profile</span> <i className="fa fa-user"></i>
-                  </div>
-              </li>
-            </a>
-            <a href="/logout" id="header-logout"> 
-              <li className="header-li">
-                  <div className="li-content">
-                    <span className="header-username">Logout</span> <i className="fa fa-sign-out"></i>
-                  </div>
-              </li>
-            </a>
+            {
+              this.state.loggedIn ? 
+              <React.Fragment>
+                <a href={"/u/" + this.state.user._id} id="header-profile"> 
+                  <li className="header-li">
+                      <div className="li-content">
+                        <span className="header-username">Profile</span> <i className="fa fa-user"></i>
+                      </div>
+                  </li>
+                </a>
+                <a href="/logout" id="header-logout"> 
+                <li className="header-li">
+                    <div className="li-content">
+                      <span className="header-username">Logout</span> <i className="fa fa-sign-out"></i>
+                    </div>
+                </li>
+                </a> 
+              </React.Fragment>
+              : 
+              <React.Fragment>
+                <a href="/register" id="header-register">
+                  <li className="header-li">
+                    <div className="li-content" >
+                      Register <i className="fa fa-user-plus"></i>
+                    </div>
+                  </li>
+                </a>
+                <a href="/login" id="header-login">
+                  <li className="header-li">
+                    <div className="li-content" >
+                      Login <i className="fa fa-sign-in"></i>
+                    </div>
+                  </li>
+                </a>
+              </React.Fragment>
+            }
+
           </ul>
         </div>
       </div>

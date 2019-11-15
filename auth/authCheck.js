@@ -6,6 +6,14 @@ function checkAuthenticated(req, res, next){
   }
 }
 
+function checkAuthenticated403(req, res, next){
+  if (req.isAuthenticated()){
+    return next();
+  } else {
+    res.sendStatus(403);
+  }
+}
+
 function checkAdmin(req, res, next){
   if (req.user.isAdmin){
     return next();
@@ -24,6 +32,7 @@ function checkGuest(req, res, next){
 
 module.exports =  {
   checkAuthenticated,
+  checkAuthenticated403,
   checkGuest,
   checkAdmin
 }

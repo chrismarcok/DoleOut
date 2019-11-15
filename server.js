@@ -1,3 +1,13 @@
+/*
+TODO
+
+When a user makes their first group, the "ur not in any groups" message still shows up.
+
+When you fail to register or login, it should tell you why after redirected.
+
+New user should be sent to their profile to be edited
+*/
+
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');

@@ -28,8 +28,13 @@ class GroupsPage extends React.Component {
     let user;
     axios.get('/api/me')
     .then( response => {
-      user = response.data;
-      return axios.get('/api/groups')
+      if (response.status === 200){
+        user = response.data;
+        return axios.get('/api/groups')
+      } else {
+        throw new Error("No user is logged in");
+      }
+      
     })
     .then(response => {
       const data = response.data
@@ -42,6 +47,7 @@ class GroupsPage extends React.Component {
     })
     .catch( 
       err => {
+        console.log(err);
         this.setState(
           {
             axiosError: "Could not retreive data.",
