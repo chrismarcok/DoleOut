@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../comps/Header.js'
 import LoginHeader from '../comps/LoginHeader.js'
-import Fetch from '../scripts/fetch.js';
 import Helper from '../scripts/helper.js';
 
 const regex = RegExp('^([a-zA-Z0-9 _-]+)$');
@@ -12,15 +11,14 @@ class RegisterPage extends React.Component {
     username: "",
     password: "",
     rePassword: "",
-    users: Fetch.fetchUsers()
+    users: []
   }
 
   /**
    * Checks if the username is in the master user list.
    */
   checkRegistered(username){
-    const user = this.state.users.filter(user => user.username === username);
-    return user.length > 0;
+    return false;
   }
 
   /**
@@ -38,8 +36,8 @@ class RegisterPage extends React.Component {
         alert("your username should match /^([a-zA-Z0-9 _-]+)$/")
         e.preventDefault();
       }
-      else if (this.state.password.length <= 6){
-        alert("your password should have more than 6 characters")
+      else if (this.state.password.length <= 3){
+        alert("your password should have more than 3 characters")
         e.preventDefault();
       }
       else if (this.state.password !== this.state.rePassword){
@@ -51,22 +49,8 @@ class RegisterPage extends React.Component {
         e.preventDefault();
       }
       else {
-        // Should redirect you to the profile you just made. for now just redirect to the default user's profile.
-        // const newUsers = this.state.users.push(this.makeNewUser(this.state.username, this.state.password))
-        // this.setState({
-        //   "users": newUsers
-        // });
-        // window.location = "/u/1";
-        console.log("success");
+        console.log("Posting...");
       }
-    }
-  }
-
-  makeNewUser(username, password){
-    return {
-      id: 123,
-      username: username,
-      password: password
     }
   }
 

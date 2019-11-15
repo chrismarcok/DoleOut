@@ -1,6 +1,8 @@
 import React from 'react'
 import Helper from '../scripts/helper.js';
+import axios from 'axios';
 const Color = require('color');
+
 
 
 /* This is the group COMPONENT that is listed in the GroupPage*/
@@ -14,7 +16,9 @@ class GroupComp extends React.Component {
       name: this.props.name,
       hover: false,
       editHover: false,
-      deleteHover: false
+      deleteHover: false,
+      members: [],
+      loading: true,
     };
     this.hoverOn = this.hoverOn.bind(this);
     this.hoverOff = this.hoverOff.bind(this);
@@ -44,6 +48,22 @@ class GroupComp extends React.Component {
     } else {
       document.querySelector(".group-div-id-" + this.props.id).style.color = "black";
     }
+    const promises = []
+    for (let i = 0; i < this.props.members.length; i++){
+      promises.push(axios.get('/api/u/' + this.props.members[i]))
+    }
+    Promise.all(promises)
+    .then(values => {
+      const members = []
+      values.forEach( v => {
+        members.push(v.data.displayName)
+      })
+      this.setState({
+        members: members,
+        loading: false,
+      })
+    })
+    .catch( err => console.log(err))
   }
 
   /**
@@ -151,7 +171,11 @@ class GroupComp extends React.Component {
             </div>
           </div>
           <h3>
-            Members: {this.stringifyMembers(this.props.members)}
+            Members: {
+            this.state.loading ? 
+            <span>Loading...</span>
+            : this.stringifyMembers(this.state.members)
+            }
           </h3>
         </div>
     )

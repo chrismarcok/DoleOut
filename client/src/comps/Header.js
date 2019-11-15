@@ -1,4 +1,5 @@
 import React from 'react';
+import Axios from 'axios';
 
 class Header extends React.Component {
   componentDidMount(){
@@ -17,6 +18,7 @@ class Header extends React.Component {
       //Else, nobody logged in.
       document.querySelector("#header-profile").style.display = "none";
     }
+
   }
 
   render() {

@@ -37,3 +37,13 @@ transition: all ease 10s;
 ::-webkit-scrollbar-thumb:hover {
   background: #ddd; 
 }
+
+/* Errors n stuff */
+.loading-txt{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+}

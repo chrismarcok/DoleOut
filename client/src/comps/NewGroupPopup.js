@@ -6,6 +6,7 @@ import GroupIcon from '../comps/GroupIcon';
 import Fetch from '../scripts/fetch.js';
 import { uid } from 'react-uid';
 import Helper from '../scripts/helper.js';
+import Axios from 'axios';
 const AColorPicker = require('a-color-picker');
 
 class NewGroupPopup extends React.Component {
@@ -116,28 +117,27 @@ class NewGroupPopup extends React.Component {
       alert("Please fill out all fields!");
       return;
     }
-    const allGroups = Fetch.fetchGroups();
-    const newId = allGroups[allGroups.length - 1].id + 1;
-    const newGroup = {
-      id: newId,
-      name: this.state.title,
-      icon: this.state.groupIcon,
-      colorBg: this.state.groupColor,
-      members: this.getMembers()
-    }
-    this.props.addGroup(newGroup);
-
-    /* HTTP Request */
-    console.log("Making POST req");
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", '/groups');
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.send(JSON.stringify(newGroup));
-    //Close
-    this.props.closePopup();
-
-
-    return;
+    Axios.get('/api/me')
+    .then( response => {
+      const newGroup = {
+        name: this.state.title,
+        icon: this.state.groupIcon,
+        colorBg: this.state.groupColor,
+        members: [response.data._id]//this.getMembers()
+      }
+      this.props.addGroup(newGroup);
+  
+      /* HTTP Request */
+      console.log("Making POST req");
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", '/groups');
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.send(JSON.stringify(newGroup));
+      //Close
+      this.props.closePopup();  
+    })
+    .catch(err => console.log(err))
+    
   }
   
   /**

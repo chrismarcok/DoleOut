@@ -20,22 +20,32 @@ class GroupsPage extends React.Component {
       groups: [],
       showPopup: false,
       axiosError: "",
+      loading: true,
      };
   }
 
   componentDidMount(){
-    axios.get('/api/groups')
+    let user;
+    axios.get('/api/me')
+    .then( response => {
+      user = response.data;
+      return axios.get('/api/groups')
+    })
     .then(response => {
+      const data = response.data
       this.setState({
-        groups: response.data
+        groups: data.filter( g => {
+          return g.memberIDs.includes(user._id)
+        }),
+        loading: false
       });
-      console.log(response.data)
     })
     .catch( 
       err => {
         this.setState(
           {
-            axiosError: "Could not retreive data."
+            axiosError: "Could not retreive data.",
+            loading: false
           }
       )});
   }
@@ -82,14 +92,17 @@ class GroupsPage extends React.Component {
   }
 
   render() {
-    const { groups, axiosError } = this.state;
+    const { groups, axiosError, loading } = this.state;
     
     return (
       <React.Fragment>
         <Header user="user"/>
         <ul className="group-ul">
           {
-            (typeof(groups) === "object" && groups.length > 0) ?
+            loading ?
+            <div className="loading-txt"> Loading... </div> : null
+          }{
+            (typeof(groups) === "object" && groups.length > 0 && !axiosError) ?
             groups.map( group => {
               return (
                   <GroupComp key={ uid(group) }
@@ -102,9 +115,12 @@ class GroupsPage extends React.Component {
                   />
               )
             }) : null
-          }
-          {
-            axiosError ? <div>{axiosError}</div> : null
+          }{
+            (typeof(groups) === "object" && groups.length === 0 && !axiosError && !loading) ?
+            <div className="loading-txt">You are not in any groups!</div>
+            : null
+          }{
+            axiosError ? <div className="loading-txt">{axiosError}</div> : null
           }
           <div className="new-groups-div"> </div>
           <div className="group-div">
