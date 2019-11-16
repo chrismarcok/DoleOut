@@ -2,43 +2,53 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  displayName:{
-    type:String,
-    required: true
-  },
-  password:{
-    type:String,
-    required: true
-  },
-  email:{
+  displayName: {
     type: String,
+    required: true
   },
-  firstName:{
-    type:String,
+  password: {
+    type: String,
+    required: true
   },
-  lastName:{
-    type:String,
+  email: {
+    type: String,
+    default: ""
   },
-  avatarURL:{
-    type:String,
+  firstName: {
+    type: String,
+    default: ""
   },
-  paypalURL:{
-    type:String
+  lastName: {
+    type: String,
+    default: ""
   },
-  description:{
-    type:String
+  avatarURL: {
+    type: String,
+    default: ""
+  },
+  paypalURL: {
+    type: String,
+    default: ""
+  },
+  description: {
+    type: String,
+    default: ""
+  },
+  preference: {
+    type: String,
+    default: ""
   },
   date: {
     type: Date,
     default: Date.now
   },
   deleted: {
-    type:Boolean,
+    type: Boolean,
     default: false
   },
-  isAdmin:{
-    type:Boolean,
-    default:false
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 })
 

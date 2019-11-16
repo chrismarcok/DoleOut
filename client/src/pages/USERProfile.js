@@ -9,78 +9,84 @@ import { Redirect } from 'react-router-dom'
 import Header from '../comps/Header'
 import Fetch from '../scripts/fetch.js';
 import '../style/Profile.css'
+import Axios from 'axios';
 
-class Profile extends React.Component{
-    
-    state = {
-        user: undefined,
-        firstname: "",
-        lastname: "",
-        avatar: "",
-        description: "",
-        email: "", 
-        pref: "",
-        paypal: "",
-        editing: false
+class Profile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: undefined,
+            id: this.getUserNum(),
+            displayName: "",
+            firstname: "",
+            lastname: "",
+            avatar: "",
+            description: "",
+            email: "",
+            pref: "",
+            paypal: "",
+            editing: false
+        }
     }
 
-    componentDidMount(){
-        const user = this.getUser()
-        if (user){
-            this.setState({
-                firstname: user.firstName,
-                lastname: user.lastName,
-                avatar: user.picUrl,
-                description: user.description,  
-                email: user.email, 
-                pref: user.preference,
-                paypal: user.paypal,
-                user: user
+    componentDidMount() {
+        const id = this.getUserNum();
+        Axios.get("/api/u/" + id)
+            .then(response => {
+                if (response.status === 200) {
+                    console.log(response.data);
+                    const data = response.data;
+                    this.setState({
+                        firstname: data.firstName,
+                        lastname: data.lastName,
+                        avatar: data.avatarURL,
+                        description: data.description,
+                        email: data.email,
+                        pref: data.preference,
+                        paypal: data.paypalURL,
+                        displayName: data.displayName,
+                    });
+                    const pic = document.querySelector("#profile-pic-" + this.state.id);
+                    pic.style.backgroundImage = "url('" + this.state.avatar + "')";
+                } else {
+                    this.props.history.push('/404');
+                }
+            })
+            .catch(err => {
+                this.props.history.push('/404');
             });
-            const pic = document.querySelector("#profile-pic-" + user.id);
-            pic.style.backgroundImage = "url('" + user.picUrl + "')";
-        }
     }
 
     /**
      * Get the id number of this user.
      */
-    getUserNum(){
-        const {user_number} = this.props.match.params
+    getUserNum() {
+        const { user_number } = this.props.match.params
         return user_number
     }
 
-    /**
-     * Get the object representing this user
-     */
-    getUser(){
-        const userNumber = this.getUserNum();
-        const userList = Fetch.fetchUsers();
-        return userList.filter(user => user.id === parseInt(userNumber))[0];
-    }
-
     render() {
-        const user = this.getUser();
-        if (user === undefined){
-            return <Redirect to='/404'/>
-        }
-        
+        // const user = this.getUser();
+        // if (user === undefined){
+        //     return <Redirect to='/404'/>
+        // }
+
         return (
             <div>
-                <Header user="user"/>
-                
+                <Header />
+
                 <div className="profile-container">
                     <div className="profile-pic-and-name">
-                        <div className="profile-pic" id={"profile-pic-" + user.id}>
+                        <div className="profile-pic" id={"profile-pic-" + this.state.id}>
                         </div>
                         <div className="profile-name-container">
-                            <h1>{user.username} <a href={this.state.paypal} target="_blank" rel="noopener noreferrer"><i className="fa fa-cc-paypal"></i></a></h1> 
+                            <h1>{this.state.displayName} <a href={this.state.paypal} target="_blank" rel="noopener noreferrer"><i className="fa fa-cc-paypal"></i></a></h1>
                             {this.state.firstname} {this.state.lastname}
                         </div>
                         <div className="profile-desc">
-                            <b>Description</b> 
+                            <b>Description</b>
                             <p>{this.state.description}</p>
-                            <br/>
+                            <br />
                             <b>Preferred Payment Method</b>
                             <p>{this.state.pref}</p>
                         </div>
