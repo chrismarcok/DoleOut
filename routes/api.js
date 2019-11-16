@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const {checkHexSanity} = require("./group");
 
 //Load  Models
 require('../models/Group');
@@ -11,7 +12,7 @@ require('../models/Message');
 const Messages = mongoose.model('messages');
 
 //Auth
-const { checkAuthenticated, checkAuthenticated403, checkGuest, checkAdmin } = require('../auth/authCheck');
+const { checkAuthenticated, checkAuthenticated403 } = require('../auth/authCheck');
 
 router.get('/groups', checkAuthenticated, (req, res) => {
   Group.find()
@@ -76,6 +77,7 @@ router.get('/users', (req, res) => {
     });
 });
 
+//returns all messages. should not actually be used.
 router.get('/messages', checkAuthenticated, (req, res) => {
   Messages.find()
     .then(messages => {
@@ -87,8 +89,34 @@ router.get('/messages', checkAuthenticated, (req, res) => {
     });
 });
 
-router.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
-  res.send("you are an admin");
+//return the messages for group with groupid :group.
+router.get('/gm/:group', checkAuthenticated, (req, res) => {
+  if (!checkHexSanity(req.params.group)){
+    res.sendStatus(400);
+    return;
+  }
+  Group.findById(req.params.group)
+  .then(group => {
+    if (group){
+      if (group.memberIDs.includes(req.user._id)){
+        console.log("user is in that group.")
+        return Messages.find({groupID: group._id})
+      } else {
+        console.log("current user is not in that group");
+        res.sendStatus(403);
+      }
+    } else {
+      console.log("null group");
+      res.sendStatus(400);
+    }
+  })
+  .then( messages => {
+    res.send(messages);
+  })
+  .catch( err => {
+    console.log(err);
+    res.sendStatus(400);
+  })
 })
 
 module.exports = router;

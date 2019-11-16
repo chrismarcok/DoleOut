@@ -21,6 +21,8 @@ const cors = require("cors");
 //Require our routes
 const login_register = require('./routes/login-register');
 const groups = require('./routes/groups');
+const { group } = require('./routes/group');
+const users = require('./routes/users');
 const api = require('./routes/api');
 
 //Authentication checks
@@ -33,6 +35,8 @@ mongoose.connect(keys.mongoURI, {
 })
 .then(() => console.log("MongoDB Connected"))
 .catch( err => console.log(`Error: ${err}`));
+require('./models/User');
+const User = mongoose.model('users');
 
 
 const initializePassport = require('./auth/passport-config');
@@ -52,13 +56,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api', api);
 app.use('/', login_register);
 app.use('/', groups);
-app.get('/forbidden', checkAuthenticated, (req, res) => {
-  res.send(`you are authenticated, ${req.user.displayName}`);
-  console.log(req.user);
-});
+app.use('/u', users);
+app.use('/g', group);
+app.use('/api', api);
+app.get('/go/:name', (req, res) => {
+  User.findOne({displayName: req.params.name})
+  .then( user => {
+    res.redirect(`/u/${user._id}`);
+  })
+  .catch( err => {
+    console.log(`Error: Trying to FIND via GO user. ${err}`)
+  })
+})
 
 
 // If we do not hit any of the above paths, then go to index in the public folder (react app)

@@ -67,7 +67,7 @@
 }
 
 .profile-edit-btn{
-  display: block;
+  display: none;
 }
 
 .profile-edit-container input{
@@ -78,8 +78,4 @@
 
 .profile-edit-container p{
   font-size: 24px;
-}
-
-.profile-edit-container{
-  display: none;
 }

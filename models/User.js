@@ -12,15 +12,15 @@ const UserSchema = new Schema({
   },
   email: {
     type: String,
-    default: ""
+    default: "This user has not set an email!"
   },
   firstName: {
     type: String,
-    default: ""
+    default: "N/A"
   },
   lastName: {
     type: String,
-    default: ""
+    default: "N/A"
   },
   avatarURL: {
     type: String,
@@ -32,11 +32,11 @@ const UserSchema = new Schema({
   },
   description: {
     type: String,
-    default: ""
+    default: "This user has not set a description!"
   },
   preference: {
     type: String,
-    default: ""
+    default: "This user has not set a preference!"
   },
   date: {
     type: Date,

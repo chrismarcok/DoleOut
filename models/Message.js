@@ -21,19 +21,23 @@ const MsgSchema = new Schema({
   expense: {
     title: {
       type: String,
-      required: true
+      default: ""
     },
     cost: {
       type: Number,
-      required: true
+      default: 0
     },
     remaining: {
       type: Number,
-      require: true
+      default: 0
     },
     memberIDs: {
       type: [String],
-      require: true
+      default: []
+    },
+    paid: {
+      type: Boolean,
+      default: false
     }
   },
   date: {

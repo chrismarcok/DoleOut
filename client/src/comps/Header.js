@@ -54,7 +54,7 @@ class Header extends React.Component {
                 <a href={"/u/" + this.state.user._id} id="header-profile"> 
                   <li className="header-li">
                       <div className="li-content">
-                        <span className="header-username">Profile</span> <i className="fa fa-user"></i>
+                        <span className="header-username">My Profile</span> <i className="fa fa-user"></i>
                       </div>
                   </li>
                 </a>

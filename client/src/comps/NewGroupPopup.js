@@ -135,10 +135,13 @@ class NewGroupPopup extends React.Component {
     
         /* HTTP Request */
         console.log("Making POST req");
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", '/groups');
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.send(JSON.stringify(newGroup));
+        Axios.post('/groups', JSON.stringify(newGroup), { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+        .then( response => {
+          console.log("posted group!")
+        })
+        .catch( err => {
+          console.log("err posting group");
+        });
         //Close
         this.props.closePopup();  
       } else {
