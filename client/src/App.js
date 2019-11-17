@@ -17,9 +17,6 @@ import Profile from './pages/Profile';
 import NoMatch from './pages/NoMatch';
 
 
-//Dummy components specifically for user, instead of admin.
-import USERGroup from './pages/USERGroup';
-
 /*
 TODO:
 *******************
@@ -48,10 +45,8 @@ class App extends React.Component {
             <Route exact path='/groups' component={GroupsPage} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/register' component={RegisterPage} />
-            <Route exact path='/g/:group_number' component={USERGroup} />
+            <Route exact path='/g/:group_number' component={Group} />
             <Route exact path='/u/:user_number' component={Profile} />
-
-            <Route exact path='/g/:group_number/admin' component={Group} />
 
             <Route component={NoMatch} />
           </Switch>

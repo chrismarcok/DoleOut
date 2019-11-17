@@ -14,6 +14,9 @@ const Messages = mongoose.model('messages');
 //Auth
 const { checkAuthenticated, checkAuthenticated403, checkAdmin } = require('../auth/authCheck');
 
+/**
+ * Get all groups
+ */
 router.get('/groups', checkAuthenticated, (req, res) => {
   Group.find()
     .then(groups => {
@@ -25,11 +28,55 @@ router.get('/groups', checkAuthenticated, (req, res) => {
     });
 });
 
+/**
+ * Get all groups but the one in :group, that the user is in
+ */
+router.get('/groupsExcept/:group', checkAuthenticated, (req, res) => {
+  Group.find()
+    .then(groups => {
+      const filtered = groups.filter( g => !g.deleted && String(g._id) !== req.params.group && g.memberIDs.includes(req.user._id));
+      console.log(filtered);
+      res.send(filtered);
+    })
+    .catch(err => {
+      console.log(err);
+      res.redirect('./..');
+    });
+});
+
+
+/**
+ * Get all members of a group :group
+ */
+router.get('/membersOf/:group', checkAuthenticated, (req, res) => {
+  Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
+  .then( group => {
+    const membersList = group.memberIDs;
+    promises = [];
+    membersList.forEach(memberID => promises.push(User.findOne({'_id': mongoose.Types.ObjectId(memberID)})));
+    return Promise.all(promises);
+  })
+  .then(values => {
+    values.forEach( v => v.password = undefined);
+    res.send(values);
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(400);
+  })
+});
+
+/**
+ * Return logged in user
+ */
 router.get('/me', checkAuthenticated403, (req, res) => {
   req.user.password = undefined
   res.send(req.user)
 });
 
+/**
+ * Get the user with given ID
+ */
 router.get('/u/:id', (req, res) => {
   User.findById(req.params.id)
     .then(user => {
@@ -46,6 +93,27 @@ router.get('/u/:id', (req, res) => {
     });
 })
 
+/**
+ * Get the group with given ID
+ */
+router.get('/g/:id', (req, res) => {
+  Group.findById(req.params.id)
+    .then(group => {
+      if (group) {
+        res.send(group)
+      } else {
+        res.sendStatus(400)
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+})
+
+/**
+ * Check if a user exists. Send 200 if it does, 400 otherwise.
+ */
 router.get('/exists/:name', checkAuthenticated, (req, res) => {
   User.find({ displayName: req.params.name })
     .then(user => {
@@ -63,6 +131,9 @@ router.get('/exists/:name', checkAuthenticated, (req, res) => {
     });
 })
 
+/**
+ * Return ALL users
+ */
 router.get('/users', (req, res) => {
   User.find()
     .then(users => {
@@ -77,7 +148,9 @@ router.get('/users', (req, res) => {
     });
 });
 
-//returns all messages. should not actually be used, just for debugging
+/**
+ * Returns all messages. should not actually be used, just for debugging
+ */
 router.get('/messages', checkAuthenticated, checkAdmin, (req, res) => {
   Messages.find()
     .then(messages => {
@@ -89,7 +162,9 @@ router.get('/messages', checkAuthenticated, checkAdmin, (req, res) => {
     });
 });
 
-//return the messages for group with groupid :group.
+/**
+ * Return the messages for group with groupid :group.
+ */
 router.get('/gm/:group', checkAuthenticated, (req, res) => {
   if (!checkHexSanity(req.params.group)){
     res.sendStatus(400);

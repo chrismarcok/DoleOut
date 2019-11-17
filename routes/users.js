@@ -7,7 +7,9 @@ const User = mongoose.model('users');
 
 const { checkAuthenticated } = require('../auth/authCheck');
 
-
+/**
+ * Editing a user.
+ */
 router.patch('/:id', checkAuthenticated, (req, res) => {
   if (req.user.isAdmin || req.user._id == req.params.id){
     console.log(req.body);

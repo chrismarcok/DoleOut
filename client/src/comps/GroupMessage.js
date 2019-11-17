@@ -27,9 +27,9 @@ class GroupMessage extends React.Component {
   }
 
   componentDidMount() {
-    const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg.id);
-    pic.style.backgroundImage = "url('" + this.props.msg.user.picUrl + "')";
-    if (this.props.msg.type === "expense"){
+    const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg._id);
+    pic.style.backgroundImage = "url('" + this.props.user.avatarURL + "')";
+    if (!this.props.msg.isMsg){
       this.setState({
         youOwe: Number(Number(this.props.msg.expense.cost) / this.props.msg.expense.members.length).toFixed(2)
       });
@@ -46,17 +46,12 @@ class GroupMessage extends React.Component {
     }
 
     if (this.props.admin === false){
-      document.querySelector(".expense-delete-container-" + this.props.msg.id).style.display = "none";
+      document.querySelector(".expense-delete-container-" + this.props.msg._id).style.display = "none";
     }
   }
 
   redirect() {
-    if (this.props.admin){
-      window.location = "/u/" + this.props.msg.user.id + "/admin";
-    } else {
-      window.location = "/u/" + this.props.msg.user.id;
-    }
-    
+      window.location = "/u/" + this.props.user._id;
   }
 
   /**
@@ -127,7 +122,7 @@ class GroupMessage extends React.Component {
 
   // taken from https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
   timeConverter(UNIX_timestamp){
-    const a = new Date(UNIX_timestamp * 1000);
+    const a = new Date(UNIX_timestamp);
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const year = a.getFullYear();
     const month = months[a.getMonth()];
@@ -145,7 +140,7 @@ class GroupMessage extends React.Component {
    */
   delete(){
     document.querySelector(".msg-id-" + this.props.msg.id).style.display = "none";
-    if (this.props.msg.type === "expense"){
+    if (!this.props.msg.isMsg){
       //removes the expense from the right sidebar
       document.querySelector(".expense-small-id-" + this.props.msg.id).style.display = "none";
     }
@@ -156,15 +151,15 @@ class GroupMessage extends React.Component {
    */
   getMsg() {
     return (
-      <div className={"msg-id-" + this.props.msg.id}>
+      <div className={"msg-id-" + this.props.msg._id}>
         <div className="group-main-msg">
-          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
+          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect()}>
           </div>
-          <div className={"expense-delete-container expense-delete-container-" + this.props.msg.id} onClick={this.delete}>
+          <div className={"expense-delete-container expense-delete-container-" + this.props.msg._id} onClick={this.delete}>
             <i className="fa fa-trash"></i>
           </div>
           <div className="group-main-msg-content">
-            <strong>{this.props.msg.user.username}</strong> <span className="date-span">{this.timeConverter(this.props.msg.date)}</span> <br />
+            <strong>{this.props.user.displayName}</strong> <span className="date-span">{this.timeConverter(this.props.msg.date)}</span> <br />
             {this.props.msg.content}
           </div>
         </div>
@@ -240,9 +235,9 @@ class GroupMessage extends React.Component {
   }
 
   render() {
-    if (this.props.msg.type === "msg") {
+    if (this.props.msg.isMsg) {
       return this.getMsg();
-    } else if (this.props.msg.type === "expense") {
+    } else  {
       return this.getExpense();
     }
   }

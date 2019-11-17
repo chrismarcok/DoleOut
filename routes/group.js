@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const path = require("path");
 
 require('../models/User');
 const User = mongoose.model('users');
@@ -14,9 +15,9 @@ const { checkAuthenticated } = require('../auth/authCheck');
 /**
  * Getting a group with id :group.
  */
-// router.get('/:group', checkAuthenticated, (req, res) => {
-//   res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
-// });
+router.get('/:group', checkAuthenticated, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
+});
 
 function checkHexSanity(id){
   const re = /[0-9a-f]{24}/g;
@@ -109,16 +110,16 @@ router.post('/:group', (req, res) => {
         const newMsg = new Message({
           //This needs to be filled out properly
           groupID: req.body.groupID,
-          isMsg: true,
-          creatorID: '5dce58b655cd6a2804e199df',
-          content: 'Message text',
-          expense: null
+          isMsg: req.body.isMsg,
+          creatorID: req.body.creatorID,
+          content: req.body.content,
+          expense: req.body.expense,
         })
         newMsg.save()
         .then( result => {
           console.log("Saved new message");
           console.log(result);
-          res.sendStatus(200);
+          res.send(result);
         })
         .catch( err => {
           console.log("Could not save new message");

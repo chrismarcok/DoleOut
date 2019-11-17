@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 class OtherGroupComp extends React.Component {
 
@@ -8,11 +8,7 @@ class OtherGroupComp extends React.Component {
   }
 
   redirect(){
-    if (this.props.admin === true){
-      window.location = "/g/" +  this.props.group.id + "/admin";
-    } else {
-      window.location = "/g/" +  this.props.group.id;
-    }
+    window.location = "/g/" +  this.props.group._id;
   }
 
   render() {
@@ -20,8 +16,8 @@ class OtherGroupComp extends React.Component {
       <div className="other-group-container" onClick={this.redirect}>
         {this.props.group.name}
       </div>
-    )
+    );
   }
 }
 
-export default OtherGroupComp
+export default OtherGroupComp;
