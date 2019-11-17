@@ -77,6 +77,7 @@ router.delete('/:group', checkAuthenticated, (req, res) => {
         .catch( err => {
           console.log("could not delete group:");
           console.log(err);
+          res.sendStatus(500);
         })
       } else {
         console.log("not authorized");
@@ -91,6 +92,126 @@ router.delete('/:group', checkAuthenticated, (req, res) => {
     console.log(err);
     res.sendStatus(400);
   });
+});
+
+/**
+ * Hiding (DELETE) a message in a group. User must be an admin, be a superuser of the group, or be the creator of the msg
+ */
+router.delete('/:group/msg/:msg', checkAuthenticated, (req, res) => {
+  let foundGroup = undefined;
+  Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
+  .then( group => {
+    if (group){
+      foundGroup = group;
+      return Message.findOne({'_id': mongoose.Types.ObjectId(req.params.msg), 'groupID': mongoose.Types.ObjectId(req.params.group)});
+    } else {
+      console.log("that group DNE.");
+      res.sendStatus(400);
+    }
+  })
+  .then( msg => {
+    if (msg){
+      if (req.user.isAdmin || String(msg.creatorID) === String(req.user._id) || foundGroup.superusers.includes(req.user._id)){
+        Message.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.msg), 'groupID': mongoose.Types.ObjectId(req.params.group)},
+        {
+          deleted: true
+        })
+        .then( response => {
+          console.log(`deleted ${req.params.msg}`)
+          res.sendStatus(200);
+        })
+        .catch( err => {
+          console.log("could not delete msg");
+          console.log(err);
+          res.sendStatus(500);
+        })
+      } else {
+        console.log("not authorized");
+        res.sendStatus(403);
+      }
+    } else {
+      console.log("that msg DNE.")
+      res.sendStatus(400);
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(400);
+  })
+})
+
+/**
+ * Removing a user from a group
+ */
+router.delete('/:group/user/:user', checkAuthenticated, (req, res) => {
+  let sentErr = false;
+  Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
+  .then( group => {
+    if (group){
+      if (req.user.isAdmin || group.superusers.includes(req.user._id)){
+        return Group.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.group)}, 
+        {
+          memberIDs: group.memberIDs.filter(id => id !== req.params.user),
+          superusers: group.superusers.filter(id => id !== req.params.user),
+        });
+      } else {
+        res.sendStatus(403);
+        sentErr = true;
+        throw new Error("forbidden 403");
+      }
+    } else {
+      res.sendStatus(400);
+      sentErr = true;
+      throw new Error("that group DNE.");
+    }
+  })
+  .then( response => {
+    console.log(`Response: ${response}`);
+    res.sendStatus(200);
+  })
+  .catch(err => {
+    console.log(err);
+    if (!sentErr){
+      res.sendStatus(400);
+    }
+  })
+});
+
+
+/**
+ * Adding a user to a group
+ */
+router.post('/:group/user/:user', checkAuthenticated, (req, res) => {
+  //User is a name, not a id
+  let userID = undefined;
+  User.findOne({displayName: req.params.user})
+  .then( user => {
+    if (user){
+      userID = user._id;
+      return Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)});
+    } else {
+      throw new Error("no user with that ID");
+    }
+  })
+  .then( group => {
+    if (group){
+      return Group.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.group)}, 
+      {
+        memberIDs: [...new Set(group.memberIDs.concat(userID))],
+      });
+    } else {
+      console.log("that group DNE.");
+      res.sendStatus(400);
+    }
+  })
+  .then( response => {
+    console.log(`Response: ${response}`);
+    res.sendStatus(200);
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(400);
+  })
 });
 
 /**
@@ -139,5 +260,5 @@ router.post('/:group', (req, res) => {
 
 module.exports = { 
   group: router, 
-  checkHexSanity: checkHexSanity 
-};
+  checkHexSanity: checkHexSanity ,
+}

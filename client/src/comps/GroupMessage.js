@@ -1,6 +1,7 @@
 import React from 'react'
 import ExpensePic from '../comps/ExpensePic'
 import { uid } from 'react-uid'
+import Axios from 'axios'
 
 class GroupMessage extends React.Component {
 
@@ -28,7 +29,7 @@ class GroupMessage extends React.Component {
 
   componentDidMount() {
     const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg._id);
-    pic.style.backgroundImage = "url('" + this.props.user.avatarURL + "')";
+    pic.style.backgroundImage = "url('" + this.props.creator.avatarURL + "')";
     if (!this.props.msg.isMsg){
       this.setState({
         youOwe: Number(Number(this.props.msg.expense.cost) / this.props.msg.expense.members.length).toFixed(2)
@@ -139,11 +140,16 @@ class GroupMessage extends React.Component {
    * Will require a server call to delete the information from our database.
    */
   delete(){
-    document.querySelector(".msg-id-" + this.props.msg.id).style.display = "none";
+    document.querySelector(".msg-id-" + this.props.msg._id).style.display = "none";
     if (!this.props.msg.isMsg){
       //removes the expense from the right sidebar
-      document.querySelector(".expense-small-id-" + this.props.msg.id).style.display = "none";
+      document.querySelector(".expense-small-id-" + this.props.msg._id).style.display = "none";
     }
+    Axios.delete(`/g/${this.props.msg.groupID}/msg/${this.props.msg._id}`)
+    .then( response => {
+      console.log(response)
+    })
+    .then(err => console.log(err));
   }
 
   /**
@@ -159,7 +165,7 @@ class GroupMessage extends React.Component {
             <i className="fa fa-trash"></i>
           </div>
           <div className="group-main-msg-content">
-            <strong>{this.props.user.displayName}</strong> <span className="date-span">{this.timeConverter(this.props.msg.date)}</span> <br />
+            <strong>{this.props.creator.displayName}</strong> <span className="date-span">{this.timeConverter(this.props.msg.date)}</span> <br />
             {this.props.msg.content}
           </div>
         </div>

@@ -35,6 +35,7 @@ class Group extends React.Component {
 
 
       //Stuff to load
+      usersOfMessages: undefined,
       loadingMe: true,
       groupMembers: [],
       loadingMembers: true,
@@ -66,18 +67,25 @@ class Group extends React.Component {
         groupMembers: response.data,
         loadingMembers: false,
       });
-      console.log(response.data);
     })
     .catch(err => console.log(err));
 
     //Load Messages
     Axios.get(`/api/gm/${this.state.id}`)
     .then(response => {
+      const values = Object.values(response.data);
+      const messages = values.filter( val => val.hasOwnProperty('creatorID'));
       this.setState({
-        groupMessages: response.data,
+        groupMessages: messages,
+        usersOfMessages: response.data,
         loadingMessages: false,
+      },
+      () => {
+        setTimeout(() => {
+        //Scroll to the bottom after state has changed. Doesnt work with slow connections
+        this.scrollToBottomOfChat();
+      }, 500)
       });
-      this.scrollToBottomOfChat();
     })
     .catch( err => console.log(err));
 
@@ -190,20 +198,23 @@ class Group extends React.Component {
       { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
       .then( response => {
         console.log("Posted message to group");
-        m.id = response.data._id;
+        //console.log(response.data);
+        m._id = response.data._id;
         m.date = response.data.date;
         const newMsg = document.createElement("div")
-        newMsg.className = "newmsg-" + m.id
-        document.querySelector(".group-main-content").appendChild(newMsg)
+        newMsg.className = "newmsg-" + m._id
+        document.querySelector(".group-main-content").appendChild(newMsg);
         ReactDOM.render(<GroupMessage 
-                                      admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id)}
+                                      admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === m.creatorID }
                                       user={ this.state.user } 
+                                      creator={this.state.user}
                                       msg={ m } 
-                                      key={ m.id } />, 
-                                      document.querySelector(".newmsg-" + m.id))
+                                      key={ m._id } />, 
+                                      document.querySelector(".newmsg-" + m._id));
+        this.scrollToBottomOfChat();
       })
       .catch( err => console.log(err));
-      this.scrollToBottomOfChat();
+      
     }
   }
 
@@ -212,29 +223,40 @@ class Group extends React.Component {
    * Would need a server call to update the group's new member in our database.
    */
   addMember(e){
-    //button or enter key
+    //if click button or hit enter key
+    let addedUser = undefined;
     if (e.target.id === "group-add-member-accept-btn" || e.keyCode === 13){
-      const users = Fetch.fetchUsers();
-      const usersFiltered = users.filter( u => u.username === this.state.groupMemberAddInput);
-      if (usersFiltered.length === 0){
-        alert("no user by that username")
-        return;
-      }
-      const groupMembers = this.getGroup().members;
-      const usersInGroupWithSameUsername = groupMembers.filter( m => m.username === this.state.groupMemberAddInput);
-      if (usersInGroupWithSameUsername.length !== 0){
-        alert("that user is already in this group!");
-        return;
-      }
-      else {
-        // here we would make the server call to update our database
+      //Must re-get current group data, incase member list has changed.
+      Axios.get(`/api/g/${this.state.id}`)
+      .then( response => {
+        this.setState({
+          thisGroup: response.data,
+        });
+        return Axios.get(`/api/username/${this.state.groupMemberAddInput}`);
+      })
+      .then( response => {
+        addedUser = response.data;
+        if (!this.state.thisGroup.memberIDs.includes(addedUser._id)){
+          return Axios.post(`/g/${this.state.thisGroup._id}/user/${this.state.groupMemberAddInput}`);
+        } else {
+          throw new Error("That user is already in this group");
+        }
+      })
+      .then( response => {
         const newDiv = document.createElement("div");
-        const newDivClass = String(uid(usersFiltered[0]));
-        newDiv.className =  newDivClass;
+        newDiv.className = `group-member-${addedUser._id}`;
         document.querySelector(".group-generated-members").appendChild(newDiv);
-        ReactDOM.render(<GroupMember member={usersFiltered[0]} admin={true}/>, document.querySelector("."+newDivClass));
+        ReactDOM.render(<GroupMember 
+          member={addedUser} 
+          group={this.state.thisGroup} 
+          admin={this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id)}
+          isSuper={ false }/>,   
+          document.querySelector(`.group-member-${addedUser._id}`));
+      })
+      .catch( err => console.log(err))
+      .finally( () => {
         document.querySelector("#group-add-member-input").value = "";
-      }
+      });
     }
   }
 
@@ -298,10 +320,15 @@ class Group extends React.Component {
             <div className="group-members-div">
               <div className="group-generated-members">
               {
-                this.state.loadingMembers ? "Loading Members..."  :
+                (this.state.loadingMembers || this.state.loadingMe) ? "Loading Members..."  :
                 groupMembers.map(member => {
                   return (
-                    <GroupMember member={ member } key={ member._id } />
+                    <GroupMember 
+                      member={ member } 
+                      key={ member._id } 
+                      isSuper = { this.state.thisGroup.superusers.includes(member._id) } 
+                      group={ this.state.thisGroup }
+                      admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) }/>
                   )
                 })
               }
@@ -334,7 +361,11 @@ class Group extends React.Component {
               <div className="group-main-add-btn">
                 <button onClick={this.togglePopup.bind(this)}> <i className="fa fa-plus"></i> New Expense</button>
                 {this.state.showPopup ? 
-                  <ExpensePopup addExpense = {this.createExpense} closePopup={this.togglePopup.bind(this)} group={group} admin={true}/>
+                  <ExpensePopup 
+                    addExpense={ this.createExpense } 
+                    closePopup={ this.togglePopup.bind(this) } 
+                    group={ group } 
+                    admin={  this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) }/>
                   : null}
               </div>
               
@@ -345,12 +376,13 @@ class Group extends React.Component {
                 groupMessages.map(msg => {
                   return (
                     <GroupMessage 
-                    msg={msg} 
+                    msg={ msg } 
                     key={ msg._id } 
-                    user={this.state.user}
-                    update={this.updateSmallExpense} 
-                    hideExpense={this.hideSmallExpense} 
-                    admin={this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id)} />
+                    user={ this.state.user }
+                    creator={ this.state.usersOfMessages[msg.creatorID] }
+                    update={ this.updateSmallExpense } 
+                    hideExpense={ this.hideSmallExpense } 
+                    admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === msg.creatorID} />
                   )
                 })
               }
@@ -388,7 +420,7 @@ class Group extends React.Component {
                 /* Get all groups but current one*/
                 otherGroups.map(g => {
                   return (
-                    <OtherGroupComp group={g} key={g._id} />
+                    <OtherGroupComp group={ g } key={ g._id } />
                   )
                 })
               }

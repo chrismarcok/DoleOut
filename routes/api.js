@@ -35,7 +35,6 @@ router.get('/groupsExcept/:group', checkAuthenticated, (req, res) => {
   Group.find()
     .then(groups => {
       const filtered = groups.filter( g => !g.deleted && String(g._id) !== req.params.group && g.memberIDs.includes(req.user._id));
-      console.log(filtered);
       res.send(filtered);
     })
     .catch(err => {
@@ -79,6 +78,25 @@ router.get('/me', checkAuthenticated403, (req, res) => {
  */
 router.get('/u/:id', (req, res) => {
   User.findById(req.params.id)
+    .then(user => {
+      if (user) {
+        user.password = undefined
+        res.send(user)
+      } else {
+        res.sendStatus(400)
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+})
+
+/**
+ * Get the user with given username
+ */
+router.get('/username/:name', (req, res) => {
+  User.findOne({displayName: req.params.name})
     .then(user => {
       if (user) {
         user.password = undefined
@@ -166,6 +184,7 @@ router.get('/messages', checkAuthenticated, checkAdmin, (req, res) => {
  * Return the messages for group with groupid :group.
  */
 router.get('/gm/:group', checkAuthenticated, (req, res) => {
+  let filtered = undefined;
   if (!checkHexSanity(req.params.group)){
     res.sendStatus(400);
     return;
@@ -186,7 +205,17 @@ router.get('/gm/:group', checkAuthenticated, (req, res) => {
     }
   })
   .then( messages => {
-    res.send(messages);
+    filtered = messages.filter( m => !m.deleted);
+    const promises = []
+    filtered.forEach( message => promises.push(User.findOne({'_id': mongoose.Types.ObjectId(message.creatorID)})))
+    return Promise.all(promises);
+  })
+  .then(values => {
+    values.forEach(val => {
+      val.password = undefined;
+      filtered = {[val._id]: val, ...filtered};
+    });
+    res.send(filtered);
   })
   .catch( err => {
     console.log(err);
