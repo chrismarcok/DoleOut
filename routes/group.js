@@ -24,7 +24,76 @@ function checkHexSanity(id){
 }
 
 /**
- * Making a new post to a group with id :group.
+ * Updating (PATCH) a group (its name, could be color + icon too)
+ */
+router.patch('/:group', checkAuthenticated, (req, res) => {
+  console.log(`Patching group with following body: ${req.body}`);
+  Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
+  .then( group => {
+    if (group){
+      if (req.user.isAdmin || group.superusers.includes(req.user._id)){
+        Group.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.group)}, 
+        {
+          name: req.body.name,
+          memberIDs: req.body.memberIDs,
+        })
+        .then( response => res.sendStatus(200))
+        .catch(err => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+      } else {
+        console.log("not authorized");
+        res.sendStatus(403);
+      }
+    } else {
+      console.log("that group DNE");
+      res.sendStatus(400);
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(400);
+  });
+});
+
+/**
+ * Hiding (DELETE) a group
+ */
+router.delete('/:group', checkAuthenticated, (req, res) => {
+  Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
+  .then( group => {
+    if (group){
+      if (req.user.isAdmin || group.superusers.includes(req.user._id)){
+        Group.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.group)}, 
+        {
+          deleted: true
+        })
+        .then( response => {
+          console.log(`deleted ${req.params.group}`)
+          res.sendStatus(200);
+        })
+        .catch( err => {
+          console.log("could not delete group:");
+          console.log(err);
+        })
+      } else {
+        console.log("not authorized");
+        res.sendStatus(403);
+      }
+    } else {
+      console.log("that group DNE.")
+      res.sendStatus(400);
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(400);
+  });
+});
+
+/**
+ * Making a new MESSAGE to a group with id :group.
  */
 router.post('/:group', (req, res) => {
   //sanity check

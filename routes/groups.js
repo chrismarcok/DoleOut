@@ -36,8 +36,10 @@ router.get('/groups', checkAuthenticated, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
 })
 
+/**
+ * Making a new group
+ */
 router.post('/groups', checkAuthenticated, (req, res) => {
-  console.log(`User ${req.user}`);
   const body = req.body;
   if (!sanityCheck(body)){
     console.log("bad request");
@@ -49,15 +51,19 @@ router.post('/groups', checkAuthenticated, (req, res) => {
     icon: body.icon,
     color: body.colorBg,
     memberIDs: body.members,
+    superusers: body.superusers,
+    creatorID: req.user._id,
   });
   newGroup.save()
   .then(group => {
-    console.log(`Group ${body.name} created by ${req.user.displayName} on ${new Date()}`);
+    console.log(`Group ${group} created by ${req.user.displayName} on ${new Date()}`);
+    res.send(group._id);
   })
   .catch(err => {
-    console.log(err)
+    console.log(err);
+    res.sendStatus(500);
   });
-  res.sendStatus(200);
+  
 });
 
 module.exports = router;

@@ -129,19 +129,20 @@ class NewGroupPopup extends React.Component {
           icon: this.state.groupIcon,
           colorBg: this.state.groupColor,
           members: this.getMembers(response.data._id),
-        }
-        console.log(newGroup.members);
-        this.props.addGroup(newGroup);
-    
+          superusers: [response.data._id],
+        }      
         /* HTTP Request */
         console.log("Making POST req");
         Axios.post('/groups', JSON.stringify(newGroup), { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
         .then( response => {
           console.log("posted group!")
+          newGroup._id = response.data;
+          this.props.addGroup(newGroup);
         })
         .catch( err => {
           console.log("err posting group");
         });
+        
         //Close
         this.props.closePopup();  
       } else {

@@ -12,7 +12,7 @@ require('../models/Message');
 const Messages = mongoose.model('messages');
 
 //Auth
-const { checkAuthenticated, checkAuthenticated403 } = require('../auth/authCheck');
+const { checkAuthenticated, checkAuthenticated403, checkAdmin } = require('../auth/authCheck');
 
 router.get('/groups', checkAuthenticated, (req, res) => {
   Group.find()
@@ -77,8 +77,8 @@ router.get('/users', (req, res) => {
     });
 });
 
-//returns all messages. should not actually be used.
-router.get('/messages', checkAuthenticated, (req, res) => {
+//returns all messages. should not actually be used, just for debugging
+router.get('/messages', checkAuthenticated, checkAdmin, (req, res) => {
   Messages.find()
     .then(messages => {
       res.send(messages)

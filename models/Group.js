@@ -25,6 +25,14 @@ const GroupSchema = new Schema({
   deleted: {
     type:Boolean,
     default: false
+  },
+  superusers: {
+    type: [String],
+    default: []
+  },
+  creatorID: {
+    type: String,
+    required: true
   }
 })
 

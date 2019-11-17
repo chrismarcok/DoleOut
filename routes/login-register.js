@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const path = require("path");
 const passport = require('passport');
 
 //Load User Model
@@ -10,6 +11,14 @@ const User = mongoose.model('users');
 
 //Auth
 const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
+
+router.get('/login', checkGuest, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
+});
+
+router.get('/register', checkGuest, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
+});
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/groups',

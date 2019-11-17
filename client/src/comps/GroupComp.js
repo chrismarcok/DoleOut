@@ -1,6 +1,6 @@
 import React from 'react'
 import Helper from '../scripts/helper.js';
-import axios from 'axios';
+import Axios from 'axios';
 const Color = require('color');
 
 
@@ -19,6 +19,7 @@ class GroupComp extends React.Component {
       deleteHover: false,
       members: [],
       loading: true,
+      canEdit: false
     };
     this.hoverOn = this.hoverOn.bind(this);
     this.hoverOff = this.hoverOff.bind(this);
@@ -34,15 +35,6 @@ class GroupComp extends React.Component {
     const group = document.querySelector(".group-div-id-" + this.props.id);
     group.style.backgroundColor = this.props.colorBg;
 
-    const check = document.querySelector("#group-i-check-" + this.props.id);
-    check.style.display = "none";
-
-    if (this.props.admin === false){
-      //in reality these buttons should be removed. this is ok for now.
-      document.querySelector("#group-i-edit-" + this.props.id).style.display = "none";
-      document.querySelector("#group-i-trash-" + this.props.id).style.display = "none";
-    }
-
     if (Color(this.props.colorBg).isDark()){
       document.querySelector(".group-div-id-" + this.props.id).style.color = "white";
     } else {
@@ -50,7 +42,7 @@ class GroupComp extends React.Component {
     }
     const promises = []
     for (let i = 0; i < this.props.members.length; i++){
-      promises.push(axios.get('/api/u/' + this.props.members[i]))
+      promises.push(Axios.get('/api/u/' + this.props.members[i]))
     }
     Promise.all(promises)
     .then(values => {
@@ -64,6 +56,21 @@ class GroupComp extends React.Component {
       })
     })
     .catch( err => console.log(err))
+
+    Axios.get('/api/me')
+    .then( response => {
+      const data = response.data;
+      console.log(data);
+      console.log(this.props.superusers);
+      if (this.props.superusers.includes(data._id) || data.isAdmin){
+        this.setState({
+          canEdit: true
+        });
+      } 
+    })
+    .catch( err => {
+      console.log(err)
+    })
   }
 
   /**
@@ -120,10 +127,18 @@ class GroupComp extends React.Component {
    */
   hide(){
     document.querySelector(".group-div-id-" + this.props.id).style.display = "none";
+    Axios.delete(`/g/${this.props.id}`)
+    .then( response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   /**
    * Allows the name of a group to be edited using an input field.
+   * This stuff is better done in the render function, but who knows when I will change that
    */
   edit(){
     const elem = document.querySelector("#group-name-id-" + this.props.id);
@@ -152,6 +167,14 @@ class GroupComp extends React.Component {
     icon.style.display = "inline-block";
     const check = document.querySelector("#group-i-check-" + this.props.id);
     check.style.display = "none";
+    Axios.patch(`/g/${this.props.id}`, JSON.stringify({name: input.value, memberIDs: this.props.members}),
+      { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+    .then( response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 
   render() {
@@ -161,15 +184,15 @@ class GroupComp extends React.Component {
           <h1 className="grouppage-title">
             <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={Helper.handleInputChange.bind(this)}></input>
           </h1>
+          {
+            this.state.canEdit ? 
           <div className="group-div-change-btns">
-            <div>
-              
-                <i className="fa fa-check" id={"group-i-check-" + this.props.id} onClick={this.confirm}></i>
-              
+              <i className="fa fa-check" id={"group-i-check-" + this.props.id} style={{display: 'none'}} onClick={this.confirm}></i>
               <i className="fa fa-edit" id={"group-i-edit-" + this.props.id} onClick={this.edit}></i>
               <i className="fa fa-trash" id={"group-i-trash-" + this.props.id} onClick={this.hide}></i>
-            </div>
           </div>
+          : null
+          }
           <h3>
             Members: {
             this.state.loading ? 

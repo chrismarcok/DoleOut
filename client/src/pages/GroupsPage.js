@@ -1,24 +1,58 @@
 /**
  * This is the Group Page, where you select which group you want to open.
- * This is the view from the admin's perspective (as opposed to the user's)
+ * This is the view from the user's prospective (as opposed tot he admin's)
  * The admin can rename and delete groups. The user cannot.
  */
 
-import React from 'react'
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from '../comps/Header.js'
-import GroupComp from '../comps/GroupComp.js'
-import Fetch from '../scripts/fetch.js';
-import { uid } from 'react-uid'
-import NewGroupPopup from '../comps/NewGroupPopup.js'
+import Header from '../comps/Header.js';
+import GroupComp from '../comps/GroupComp.js';
+import NewGroupPopup from '../comps/NewGroupPopup.js';
+import axios from 'axios';
 
 class GroupsPage extends React.Component {
-
-  groups = Fetch.fetchGroups();
-
+  
   constructor(props){
     super(props);
-    this.state = { showPopup: false };
+    this.state = { 
+      groups: [],
+      showPopup: false,
+      axiosError: "",
+      loading: true,
+     };
+  }
+
+  componentDidMount(){
+    let user;
+    axios.get('/api/me')
+    .then( response => {
+      if (response.status === 200){
+        user = response.data;
+        return axios.get('/api/groups')
+      } else {
+        throw new Error("No user is logged in");
+      }
+      
+    })
+    .then(response => {
+      const data = response.data
+      this.setState({
+        groups: data.filter( g => {
+          return g.memberIDs.includes(user._id)
+        }),
+        loading: false
+      });
+    })
+    .catch( 
+      err => {
+        console.log(err);
+        this.setState(
+          {
+            axiosError: "Could not retreive data.",
+            loading: false
+          }
+      )});
   }
 
   /**
@@ -42,7 +76,7 @@ class GroupsPage extends React.Component {
       });
     }
   }
-
+  
   /**
    * Creates an new group and adds it to the groups page.
    * This method is passed on as a prop to the create new group popup.
@@ -50,36 +84,51 @@ class GroupsPage extends React.Component {
    */
   createGroup = (group) => {
     const newDiv = document.createElement("div");
-    newDiv.className = "new-group-" + uid(group);
+    newDiv.className = "new-group-" + group._id;
     document.querySelector(".new-groups-div").appendChild(newDiv);
-    ReactDOM.render(<GroupComp key={ uid(group) }
+    ReactDOM.render(<GroupComp key={ group._id }
                           name={ group.name }
                           icon={ group.icon }
                           colorBg={ group.colorBg }
-                          id={ uid(group) }
+                          id={ group._id }
                           members={ group.members }
-                          admin={true}
-                      />, document.querySelector(".new-group-" + uid(group)));    
+                          superusers={ group.superusers }
+                          
+                      />, document.querySelector(".new-group-" + group._id));    
   }
 
   render() {
+    let { groups, axiosError, loading } = this.state;
+    groups = groups.filter( g => g.deleted === false);
+    
     return (
-      <div>
-        <Header user={"admin"}/>
+      <React.Fragment>
+        <Header user="user"/>
         <ul className="group-ul">
           {
-            this.groups.map( group => {
+            loading ?
+            <div className="loading-txt"> Loading... </div> : null
+          }{
+            (typeof(groups) === "object" && groups.length > 0 && !axiosError) ?
+            groups.map( group => {
               return (
-                  <GroupComp key={ uid(group) }
+                  <GroupComp key={ group._id }
                         name={ group.name }
                         icon={ group.icon }
-                        colorBg={ group.colorBg }
-                        id={ group.id }
-                        members={ group.members }
-                        admin={true}
+                        colorBg={ group.color }
+                        id={ group._id }
+                        members={ group.memberIDs }
+                        superusers={ group.superusers }
+                        
                   />
               )
-            })
+            }) : null
+          }{
+            (typeof(groups) === "object" && groups.length === 0 && !axiosError && !loading) ?
+            <div className="loading-txt">You are not in any groups!</div>
+            : null
+          }{
+            axiosError ? <div className="loading-txt">{axiosError}</div> : null
           }
           <div className="new-groups-div"> </div>
           <div className="group-div">
@@ -94,7 +143,7 @@ class GroupsPage extends React.Component {
             </div>
           </div>
         </ul>
-      </div>
+      </React.Fragment>
     )
   }
 }

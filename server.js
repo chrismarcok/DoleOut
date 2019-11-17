@@ -8,6 +8,7 @@ When you fail to register or login, it should tell you why after redirected.
 New user should be sent to their profile to be edited
 */
 
+//Bring in our dependencies
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -25,9 +26,7 @@ const { group } = require('./routes/group');
 const users = require('./routes/users');
 const api = require('./routes/api');
 
-//Authentication checks
-const { checkAuthenticated, checkGuest } = require('./auth/authCheck');
-
+//Mongoose connection
 mongoose.promise = global.Promise;
 mongoose.connect(keys.mongoURI, {
   useNewUrlParser: true,
@@ -38,13 +37,19 @@ mongoose.connect(keys.mongoURI, {
 require('./models/User');
 const User = mongoose.model('users');
 
-
+//Passport Authentication
 const initializePassport = require('./auth/passport-config');
 initializePassport(passport);
 
 const app = express();
+
+//To allow posting to express server (port 5000) via react server (port 3000)
 app.use(cors());
+
+//To allow us to use the react app
 app.use(express.static('public'));
+
+//Body parser to parse request bodies
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(flash());
@@ -53,9 +58,12 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+
+//Passport for authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Use our routes
 app.use('/', login_register);
 app.use('/', groups);
 app.use('/u', users);
@@ -71,7 +79,6 @@ app.get('/go/:name', (req, res) => {
   })
 })
 
-
 // If we do not hit any of the above paths, then go to index in the public folder (react app)
 app.get('*', (req, res) =>{
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
@@ -79,4 +86,5 @@ app.get('*', (req, res) =>{
 
 const PORT = process.env.PORT || 5000;
 
+//Run the server
 app.listen(PORT, () => console.log(`Express Server started on port ${PORT}`));
