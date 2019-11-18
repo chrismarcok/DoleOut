@@ -8,13 +8,13 @@ import ReactDOM from 'react-dom';
 import Header from '../comps/Header';
 import OtherExpense from '../comps/OtherExpense';
 import GroupMessage from '../comps/GroupMessage';
-import Fetch from '../scripts/fetch.js';
 import GroupMember from '../comps/GroupMember';
 import OtherGroupComp from '../comps/OtherGroupComp';
 import { uid } from 'react-uid';
 import Helper from '../scripts/helper.js';
 import ExpensePopup from '../comps/ExpensePopup.js'
 import Axios from 'axios';
+import '../style/Loader.css';
 
 /* This is the actual group page. the group page that has 3 columns*/
 
@@ -56,9 +56,12 @@ class Group extends React.Component {
       this.setState({
         thisGroup: response.data,
         groupTitle: response.data.name,
-      })
+      });
     })
-    .catch( err => console.log(err));
+    .catch( err => {
+      console.log(err);
+      window.location = '/403';
+    });
 
     //Load Members
     Axios.get(`/api/membersOf/${this.state.id}`)
@@ -66,9 +69,12 @@ class Group extends React.Component {
       this.setState({
         groupMembers: response.data,
         loadingMembers: false,
-      });
+      });  
     })
-    .catch(err => console.log(err));
+    .catch( err => {
+      console.log(err);
+      window.location = '/403';
+    });
 
     //Load Messages
     Axios.get(`/api/gm/${this.state.id}`)
@@ -87,17 +93,25 @@ class Group extends React.Component {
       }, 500)
       });
     })
-    .catch( err => console.log(err));
+    .catch( err => {
+      console.log(err);
+      window.location = '/403';
+    });
 
     //Load OtherGroups
     Axios.get(`/api/groupsExcept/${this.state.id}`)
     .then( response => {
-      this.setState({
-        otherGroups: response.data,
-        loadingOtherGroups: false,
-      });
+
+        this.setState({
+          otherGroups: response.data,
+          loadingOtherGroups: false,
+        });
+
     })
-    .catch( err => console.log(err));
+    .catch( err => {
+      console.log(err);
+      window.location = '/403';
+    });
 
     //Get logged in user
     Axios.get(`/api/me`)
@@ -107,7 +121,10 @@ class Group extends React.Component {
         loadingMe: false,
       });
     })
-    .catch( err => console.log(err));
+    .catch( err => {
+      console.log(err);
+      window.location = '/403';
+    });
   }
 
   /**
@@ -128,16 +145,6 @@ class Group extends React.Component {
   }
 
   /**
-   * Return the group object that has this group number.
-   */
-  getGroup() {
-    const { group_number } = this.props.match.params;
-    const groups = Fetch.fetchGroups()
-    const thisGroupLst = groups.filter(g => g.id === parseInt(group_number))
-    return thisGroupLst[0]
-  }
-
-  /**
    * Return this group's 24 Hex ID.
    */
   getGroupID(){
@@ -151,6 +158,27 @@ class Group extends React.Component {
    * Would need a server call to update our database with the new expense.
    */
   createExpense = (expense) => {
+    const e = {
+        groupID: this.state.id,
+        isMsg: false,
+        creatorID: this.state.user._id,
+        content: "",
+        expense: 
+        {
+          title: "title",
+          cost: 9.99,
+          totalRemaining: 9.99,
+          totalPaid: 0,
+          members: [{
+            _id: '5dce590a55cd6a2804e199e0',
+            displayName: 'user',
+            amountPaid: 0,
+            totalToPay: 9.99,
+            avatarURL: 'https://i.imgur.com/L58c7ZD.jpg',
+            complete: false,
+          }],
+        },
+    };
     const newMsg = document.createElement("div")
     newMsg.id = expense.id
     document.querySelector(".group-main-content").appendChild(newMsg)
@@ -172,7 +200,6 @@ class Group extends React.Component {
 
   /**
    * Creates a new chat message and adds it to the group timeline based on the chat input field.
-   * Would need a server call to update our database with the new chat, as well as obtain the current logged in user.
    */
   getInput(e) {
     const val = this.state.groupInput;
@@ -183,7 +210,7 @@ class Group extends React.Component {
         isMsg: true,
         creatorID: this.state.user._id,
         content: val,
-        expense: {},
+        expense: undefined,
       }
       
       //Reset the state, and make textbox empty
@@ -220,7 +247,6 @@ class Group extends React.Component {
 
   /**
    * Adds a new user to the group's member list.
-   * Would need a server call to update the group's new member in our database.
    */
   addMember(e){
     //if click button or hit enter key
@@ -305,16 +331,20 @@ class Group extends React.Component {
   }
 
   render() {
-    const group = this.getGroup()
-
     //No group exists with this id. redirect to 404 page.
     // if (group === undefined) {
     //   return <Redirect to='/404' />
     // }
     const {groupMembers, groupMessages, otherGroups} = this.state;
+    const {loadingMe, loadingMembers, loadingMessages, loadingOtherGroups} = this.state;
+
+    const loaderStyle = (loadingMe || loadingMembers || loadingMessages || loadingOtherGroups) ? {display: 'block'} : {display: 'none'};
     return (
       <div>
         <Header user="admin"/>
+        <div className="loader-container" style={loaderStyle}>
+          <div class="lds-ripple"><div></div><div></div></div>
+        </div>
         <div className="group-container">
           <div className="group-col group-members-col">
             <div className="group-members-div">
@@ -364,7 +394,7 @@ class Group extends React.Component {
                   <ExpensePopup 
                     addExpense={ this.createExpense } 
                     closePopup={ this.togglePopup.bind(this) } 
-                    group={ group } 
+                    group={ this.state.thisGroup } 
                     admin={  this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) }/>
                   : null}
               </div>
@@ -417,7 +447,6 @@ class Group extends React.Component {
             <ul className="group-col-other-ul">
               {
                 this.state.loadingOtherGroups ? "Loading Other Groups..." : 
-                /* Get all groups but current one*/
                 otherGroups.map(g => {
                   return (
                     <OtherGroupComp group={ g } key={ g._id } />

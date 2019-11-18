@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import Group from './pages/Group';
 import Profile from './pages/Profile';
 import NoMatch from './pages/NoMatch';
+import Forbidden from './pages/Forbidden';
 
 
 /*
@@ -48,6 +49,7 @@ class App extends React.Component {
             <Route exact path='/g/:group_number' component={Group} />
             <Route exact path='/u/:user_number' component={Profile} />
 
+            <Route exact path='/403' component={Forbidden}/>
             <Route component={NoMatch} />
           </Switch>
         </BrowserRouter>

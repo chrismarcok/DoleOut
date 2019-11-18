@@ -17,7 +17,7 @@ const { checkAuthenticated, checkAuthenticated403, checkAdmin } = require('../au
 /**
  * Get all groups
  */
-router.get('/groups', checkAuthenticated, (req, res) => {
+router.get('/groups', checkAuthenticated403, (req, res) => {
   Group.find()
     .then(groups => {
       res.send(groups)
@@ -31,7 +31,11 @@ router.get('/groups', checkAuthenticated, (req, res) => {
 /**
  * Get all groups but the one in :group, that the user is in
  */
-router.get('/groupsExcept/:group', checkAuthenticated, (req, res) => {
+router.get('/groupsExcept/:group', checkAuthenticated403, (req, res) => {
+  if (!checkHexSanity(req.params.group)){
+    res.sendStatus(400);
+    return;
+  }
   Group.find()
     .then(groups => {
       const filtered = groups.filter( g => !g.deleted && String(g._id) !== req.params.group && g.memberIDs.includes(req.user._id));
@@ -47,7 +51,11 @@ router.get('/groupsExcept/:group', checkAuthenticated, (req, res) => {
 /**
  * Get all members of a group :group
  */
-router.get('/membersOf/:group', checkAuthenticated, (req, res) => {
+router.get('/membersOf/:group', checkAuthenticated403, (req, res) => {
+  if (!checkHexSanity(req.params.group)){
+    res.sendStatus(400);
+    return;
+  }
   Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
   .then( group => {
     const membersList = group.memberIDs;
@@ -132,7 +140,7 @@ router.get('/g/:id', (req, res) => {
 /**
  * Check if a user exists. Send 200 if it does, 400 otherwise.
  */
-router.get('/exists/:name', checkAuthenticated, (req, res) => {
+router.get('/exists/:name', checkAuthenticated403, (req, res) => {
   User.find({ displayName: req.params.name })
     .then(user => {
       user = user[0]
@@ -169,7 +177,7 @@ router.get('/users', (req, res) => {
 /**
  * Returns all messages. should not actually be used, just for debugging
  */
-router.get('/messages', checkAuthenticated, checkAdmin, (req, res) => {
+router.get('/messages', checkAuthenticated403, checkAdmin, (req, res) => {
   Messages.find()
     .then(messages => {
       res.send(messages)
@@ -183,7 +191,7 @@ router.get('/messages', checkAuthenticated, checkAdmin, (req, res) => {
 /**
  * Return the messages for group with groupid :group.
  */
-router.get('/gm/:group', checkAuthenticated, (req, res) => {
+router.get('/gm/:group', checkAuthenticated403, (req, res) => {
   let filtered = undefined;
   if (!checkHexSanity(req.params.group)){
     res.sendStatus(400);

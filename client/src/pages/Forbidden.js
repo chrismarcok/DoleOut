@@ -1,10 +1,10 @@
 import React from 'react'
 
-class NoMatch extends React.Component {
+class Forbidden extends React.Component{
   render() {
     return (
       <div className="no-match">
-        <h3>Error 404</h3>
+        <h3>Error 403</h3>
         <a href="/">
         <span role="img" aria-label="clap">click to return to home</span>
         </a>
@@ -13,4 +13,4 @@ class NoMatch extends React.Component {
   }
 }
 
-export default NoMatch
+export default Forbidden;
