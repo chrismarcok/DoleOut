@@ -11,8 +11,9 @@ import GroupMessage from '../comps/GroupMessage';
 import GroupMember from '../comps/GroupMember';
 import OtherGroupComp from '../comps/OtherGroupComp';
 import { uid } from 'react-uid';
-import Helper from '../scripts/helper.js';
-import ExpensePopup from '../comps/ExpensePopup.js'
+import Helper from '../scripts/helper';
+import ExpensePopup from '../comps/ExpensePopup'
+import Loader from '../comps/Loader'
 import Axios from 'axios';
 import '../style/Loader.css';
 
@@ -95,7 +96,7 @@ class Group extends React.Component {
     })
     .catch( err => {
       console.log(err);
-      window.location = '/403';
+      //window.location = '/403';
     });
 
     //Load OtherGroups
@@ -158,27 +159,27 @@ class Group extends React.Component {
    * Would need a server call to update our database with the new expense.
    */
   createExpense = (expense) => {
-    const e = {
-        groupID: this.state.id,
-        isMsg: false,
-        creatorID: this.state.user._id,
-        content: "",
-        expense: 
-        {
-          title: "title",
-          cost: 9.99,
-          totalRemaining: 9.99,
-          totalPaid: 0,
-          members: [{
-            _id: '5dce590a55cd6a2804e199e0',
-            displayName: 'user',
-            amountPaid: 0,
-            totalToPay: 9.99,
-            avatarURL: 'https://i.imgur.com/L58c7ZD.jpg',
-            complete: false,
-          }],
-        },
-    };
+    // const e = {
+    //     groupID: this.state.id,
+    //     isMsg: false,
+    //     creatorID: this.state.user._id,
+    //     content: "",
+    //     expense: 
+    //     {
+    //       title: "title",
+    //       cost: 9.99,
+    //       totalRemaining: 9.99,
+    //       totalPaid: 0,
+    //       members: [{
+    //         _id: '5dce590a55cd6a2804e199e0',
+    //         displayName: 'user',
+    //         amountPaid: 0,
+    //         totalToPay: 9.99,
+    //         avatarURL: 'https://i.imgur.com/L58c7ZD.jpg',
+    //         complete: false,
+    //       }],
+    //     },
+    // };
     const newMsg = document.createElement("div")
     newMsg.id = expense.id
     document.querySelector(".group-main-content").appendChild(newMsg)
@@ -331,20 +332,15 @@ class Group extends React.Component {
   }
 
   render() {
-    //No group exists with this id. redirect to 404 page.
-    // if (group === undefined) {
-    //   return <Redirect to='/404' />
-    // }
     const {groupMembers, groupMessages, otherGroups} = this.state;
     const {loadingMe, loadingMembers, loadingMessages, loadingOtherGroups} = this.state;
-
-    const loaderStyle = (loadingMe || loadingMembers || loadingMessages || loadingOtherGroups) ? {display: 'block'} : {display: 'none'};
     return (
       <div>
         <Header user="admin"/>
-        <div className="loader-container" style={loaderStyle}>
-          <div class="lds-ripple"><div></div><div></div></div>
-        </div>
+        {
+        (loadingMe || loadingMembers || loadingMessages || loadingOtherGroups) ?
+          <Loader /> : null
+        }
         <div className="group-container">
           <div className="group-col group-members-col">
             <div className="group-members-div">
@@ -433,8 +429,8 @@ class Group extends React.Component {
                   this.state.loadingMessages ? "Loading Expenses..." :
                   groupMessages.filter(msg => !msg.isMsg).map(msg => {
                     return (
-                      <div key={uid(msg)} onClick={(e) => this.scrollToExpense(e, msg)}>
-                        <OtherExpense msg={msg} />
+                      <div key={ msg._id } onClick={(e) => this.scrollToExpense(e, msg)}>
+                        <OtherExpense msg={ msg } avatarURL={ this.state.usersOfMessages[msg.creatorID].avatarURL } />
                       </div>
                     );
                   })

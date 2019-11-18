@@ -9,7 +9,9 @@ import ReactDOM from 'react-dom';
 import Header from '../comps/Header.js';
 import GroupComp from '../comps/GroupComp.js';
 import NewGroupPopup from '../comps/NewGroupPopup.js';
+import Loader from '../comps/Loader.js'
 import axios from 'axios';
+
 
 class GroupsPage extends React.Component {
   
@@ -104,10 +106,11 @@ class GroupsPage extends React.Component {
     return (
       <React.Fragment>
         <Header user="user"/>
+
         <ul className="group-ul">
           {
             loading ?
-            <div className="loading-txt"> Loading... </div> : null
+            <Loader/> : null
           }{
             (typeof(groups) === "object" && groups.length > 0 && !axiosError) ?
             groups.map( group => {

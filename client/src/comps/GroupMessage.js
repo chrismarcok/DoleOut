@@ -18,7 +18,7 @@ class GroupMessage extends React.Component {
     currentUserId: 1,
     currentlyPaying: false,
     payAmount: "0.01",
-    expenseRemaining: (this.props.msg.type === "expense") ? Number(this.props.msg.expense.remaining).toFixed(2) : undefined,
+    expenseRemaining: (!this.props.msg.isMsg) ? Number(this.props.msg.expense.totalRemaining).toFixed(2) : undefined,
     youOwe: undefined
   }
   this.toggleExpense = this.toggleExpense.bind(this);
@@ -32,18 +32,18 @@ class GroupMessage extends React.Component {
     pic.style.backgroundImage = "url('" + this.props.creator.avatarURL + "')";
     if (!this.props.msg.isMsg){
       this.setState({
-        youOwe: Number(Number(this.props.msg.expense.cost) / this.props.msg.expense.members.length).toFixed(2)
+        youOwe: 0//Number(Number(this.props.msg.expense.cost) / this.props.msg.expense.members.length).toFixed(2)
       });
-      const members = this.props.msg.expense.members;
-      const filtered = members.filter( m => m.id === this.state.currentUserId);
-      if (filtered.length === 0 || this.props.msg.user.id === this.state.currentUserId){
-        //user shouldnt be able to pay this expense.
-        this.setState({
-          youOwe: Number(0).toFixed(2)
-        });
-        document.querySelector(".you-owe-container-id-" + this.props.msg.id).style.display = "none";
-        document.querySelector(".expense-pay-btn" + this.props.msg.id).style.display = "none";
-      }
+      // const members = this.props.msg.expense.members;
+      // const filtered = members.filter( m => m.id === this.state.currentUserId);
+      // if (filtered.length === 0 || this.props.msg.user.id === this.state.currentUserId){
+      //   //user shouldnt be able to pay this expense.
+      //   this.setState({
+      //     youOwe: Number(0).toFixed(2)
+      //   });
+      //   document.querySelector(".you-owe-container-id-" + this.props.msg.id).style.display = "none";
+      //   document.querySelector(".expense-pay-btn" + this.props.msg.id).style.display = "none";
+      // }
     }
 
     if (this.props.admin === false){
@@ -178,32 +178,32 @@ class GroupMessage extends React.Component {
    */
   getExpense() {
     return (
-      <div className={"msg-id-" + this.props.msg.id}>
+      <div className={"msg-id-" + this.props.msg._id}>
         <div className="group-expense-msg-container">
-          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg.id} onClick={() => this.redirect()}>
+          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect()}>
           </div>
-          <div className={"expense-delete-container expense-delete-container-" + this.props.msg.id} onClick={this.delete}>
+          <div className={"expense-delete-container expense-delete-container-" + this.props.msg._id} onClick={this.delete}>
             <i className="fa fa-trash"></i>
           </div>
-          <b>{this.props.msg.user.username}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
+          <b>{this.props.creator.displayName}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
           <div className="group-main-msg-content">
             <div className="expense-container">
-              <div className={"expense-cover expense-cover-" + this.props.msg.id}>
+              <div className={"expense-cover expense-cover-" + this.props.msg._id}>
               </div>
               <div className="expense-upper">
                 <div className="expense-upper-left">
                   <h3>{this.props.msg.expense.title}</h3>
                   <p><i>"{this.props.msg.content}"</i></p>
-                  <div className={"you-owe-container-id-" + this.props.msg.id}>
+                  <div className={"you-owe-container-id-" + this.props.msg._id}>
                     <p className="you-owe-title">You Owe:</p>
-                    <p className={"you-owe-txt you-owe-txt-" + this.props.msg.id}>${this.state.youOwe}</p>
+                    <p className={"you-owe-txt you-owe-txt-" + this.props.msg._id}>${this.state.youOwe}</p>
                   </div>
                 </div>
                 <div className="expense-upper-right">
                   <div className="expense-total-remaining-title">
                     Total Remaining:
                   </div>
-                  <div className={"expense-remaining expense-remaining-" + this.props.msg.id}>
+                  <div className={"expense-remaining expense-remaining-" + this.props.msg._id}>
                     ${this.state.expenseRemaining}
                   </div>
 
@@ -214,24 +214,24 @@ class GroupMessage extends React.Component {
                   {
                     this.props.msg.expense.members.map(m => {
                       return (
-                        <ExpensePic key={uid(m)} member={m} id={this.props.msg.expense.id} admin={this.props.admin}/>
+                        <ExpensePic key={uid(m)} member={m} id={this.props.msg.expense._id} admin={this.props.admin}/>
                       );
                     })
                   }
                 </div>
                 <div className="expense-pay">
-                <div className={"expense-pay-btn expense-pay-btn" + this.props.msg.id} onClick={this.toggleExpense}>
+                <div className={"expense-pay-btn expense-pay-btn" + this.props.msg._id} onClick={this.toggleExpense}>
                     PAY
                   </div>
-                  <div className={"expense-close-btn expense-close-btn" + this.props.msg.id} onClick={this.toggleExpense}>
+                  <div className={"expense-close-btn expense-close-btn" + this.props.msg._id} onClick={this.toggleExpense}>
                     CLOSE
                     </div>
                 </div>
               </div>
             </div>
-            <div className={"expense-payment-container expense-payment-container" + this.props.msg.id }>
+            <div className={"expense-payment-container expense-payment-container" + this.props.msg._id }>
               <h3>How much would you like to pay?</h3>
-              <input id={"paymentInput"+this.props.msg.id} type="number" min="0.01" max={String(this.props.msg.expense.remaining)} step="0.01" defaultValue="0.01" onChange={this.handleInput} />
+              <input id={"paymentInput"+this.props.msg._id} type="number" min="0.01" max={String(this.props.msg.expense.totalRemaining)} step="0.01" defaultValue="0.01" onChange={this.handleInput} />
               <i className="fa fa-check" id="expense-make-payment-btn" onClick={this.deductPayment}></i>
               </div>
           </div>
