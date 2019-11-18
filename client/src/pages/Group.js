@@ -159,6 +159,7 @@ class Group extends React.Component {
    * Would need a server call to update our database with the new expense.
    */
   createExpense = (expense) => {
+    /* FORMAT */
     // const e = {
     //     groupID: this.state.id,
     //     isMsg: false,
@@ -169,7 +170,7 @@ class Group extends React.Component {
     //       title: "title",
     //       cost: 9.99,
     //       totalRemaining: 9.99,
-    //       totalPaid: 0,
+    //       totalPaid: false,
     //       members: [{
     //         _id: '5dce590a55cd6a2804e199e0',
     //         displayName: 'user',
@@ -180,22 +181,42 @@ class Group extends React.Component {
     //       }],
     //     },
     // };
-    const newMsg = document.createElement("div")
-    newMsg.id = expense.id
-    document.querySelector(".group-main-content").appendChild(newMsg)
-    ReactDOM.render(<GroupMessage msg={expense} key={expense.id} update={this.updateSmallExpense} hideExpense={this.hideSmallExpense} admin={true}/>, document.querySelector("#" + expense.id))
-    this.scrollToBottomOfChat();
+    Axios.post(`/g/${this.state.id}`,
+    JSON.stringify(expense),
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+    .then( response => {
+      expense._id = response.data._id;
+      expense.date = response.data.date;
 
-    // Create the small expense in the sidebar.
-    const newSmallExpense = (
-      <div key={uid(expense)} onClick={(e) => this.scrollToExpense(e, expense)}>
-        <OtherExpense msg={expense} />
-      </div>
-    )
-    const newDiv = document.createElement("div");
-    newDiv.className = uid(expense);
-    document.querySelector(".group-col-other-ul").appendChild(newDiv);
-    ReactDOM.render(newSmallExpense, document.querySelector("." + uid(expense)));
+      const newMsg = document.createElement("div");
+      newMsg.id = `expense-id-${expense._id}`;
+      document.querySelector(".group-main-content").appendChild(newMsg);
+      ReactDOM.render(<GroupMessage 
+        msg={expense} 
+        key={expense._id}
+        user={ this.state.user } 
+        creator={this.state.user}
+        update={this.updateSmallExpense} 
+        hideExpense={this.hideSmallExpense} 
+        admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === expense.creatorID }/>, 
+        document.querySelector(`#expense-id-${expense._id}`))
+
+      this.scrollToBottomOfChat();
+
+      // Create the small expense in the sidebar.
+      const newSmallExpense = (
+        <div key={uid(expense)} onClick={(e) => this.scrollToExpense(e, expense)}>
+          <OtherExpense 
+          msg={expense} 
+          avatarURL={ this.state.usersOfMessages[expense.creatorID].avatarURL }/>
+        </div>
+      )
+      const newDiv = document.createElement("div");
+      newDiv.className = uid(expense);
+      document.querySelector(".group-col-other-ul").appendChild(newDiv);
+      ReactDOM.render(newSmallExpense, document.querySelector("." + uid(expense)));
+    })
+    .catch( err => console.log(err));
     
   }
 
@@ -312,7 +333,7 @@ class Group extends React.Component {
    * sidebar.
    */
   scrollToExpense(event, msg){
-    const elem = document.querySelector("#group-main-profile-pic-id-" + msg.id);
+    const elem = document.querySelector("#group-main-profile-pic-id-" + msg._id);
     elem.scrollIntoView();
   }
 
@@ -391,6 +412,7 @@ class Group extends React.Component {
                     addExpense={ this.createExpense } 
                     closePopup={ this.togglePopup.bind(this) } 
                     group={ this.state.thisGroup } 
+                    user={ this.state.user }
                     admin={  this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) }/>
                   : null}
               </div>

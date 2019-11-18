@@ -1,23 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import NewGroupMemberRow from '../comps/NewGroupMemberRow';
-import '../style/ExpensePopup.css';
-import { uid } from 'react-uid';
 import Helper from  '../scripts/helper.js';
+import '../style/ExpensePopup.css';
 
 class ExpensePopup extends React.Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      expenseTitle: "",
+      expenseContent: "",
+      expenseCost: "",
+      expenseMembers: "",
+      numMembers: 1,
+      thisGroup: this.props.group,
+      user: this.props.user,
+    }
     this.createNewMemberRow = this.createNewMemberRow.bind(this)
-  }
-
-  state = {
-    expenseTitle: "",
-    expenseContent: "",
-    expenseCost: "",
-    expenseMembers: "",
-    numMembers: 1
   }
 
   /**
@@ -34,40 +34,20 @@ class ExpensePopup extends React.Component {
       return;
     }
     const m = {
-      "id": 8,
-      "groupId": 0,
-      "date": (new Date()).getTime() / 1000,
-      "type": "expense",
-      "expense": {
-        "id": 0,
-        "title": this.state.expenseTitle,
-        "cost": Number(this.state.expenseCost).toFixed(2),
-        "remaining": Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / this.getMembers().length),
-        "members": this.getMembers()
+      groupID: this.state.thisGroup._id,
+      isMsg: false,
+      creatorID: this.state.user._id,
+      content: this.state.expenseContent,
+      expense: {
+        title: this.state.expenseTitle,
+        cost: Number(this.state.expenseCost).toFixed(2),
+        //TODO: Fix total remaining
+        totalRemaining: 0,//Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / this.getMembers().length),
+        totalPaid: false,
+        //TODO: fix get members
+        members: this.getMembers() //just be empty for now
       },
-      //code below requires a server call to obtain the currently logged in user
-      //hard-coded to always assume "user" created the expense
-      "user": {
-        "id": 1,
-        "username": "user",
-        "password": "123",
-        "picUrl": "https://api.adorable.io/avatars/200/1",
-        "email": "dummy@dummy.com",
-        "firstName": "Firstname",
-        "lastName": "McLastname",
-        "paypal": "https://www.paypal.me/chrismarcok",
-        "preference": "paypal",
-        "description": "send me money please thank u :)"
-      },
-      "content": this.state.expenseContent
     }
-    if (this.props.admin === true){
-      m.user.id = 0;
-      m.user.username = "admin";
-      m.user.picUrl = "https://api.adorable.io/avatars/200/0";
-    }
-    m.id = uid(m);
-    m.expense.id = uid(m);
 
     this.props.addExpense(m);
     this.props.closePopup();
@@ -77,6 +57,7 @@ class ExpensePopup extends React.Component {
    * Returns an array of all the members of an expense.
    */
   getMembers(){
+    return [];
     const usernameInputs = document.querySelectorAll(".group-member-input-field");
     const memberLst = this.props.group.members;
     const numMembers = this.state.numMembers;

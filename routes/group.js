@@ -235,7 +235,7 @@ router.post('/:group', (req, res) => {
           creatorID: req.body.creatorID,
           content: req.body.content,
           expense: req.body.expense,
-        })
+        });
         newMsg.save()
         .then( result => {
           console.log("Saved new message");
