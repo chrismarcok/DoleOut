@@ -15,12 +15,16 @@ const Messages = mongoose.model('messages');
 const { checkAuthenticated, checkAuthenticated403, checkAdmin } = require('../auth/authCheck');
 
 /**
- * Get all groups
+ * Get all groups the user is in. Admins get all groups.
  */
 router.get('/groups', checkAuthenticated403, (req, res) => {
   Group.find()
     .then(groups => {
-      res.send(groups)
+      if (req.user.isAdmin){
+        res.send(groups);
+      }
+      const filtered = groups.filter( g => g.memberIDs.includes(req.user._id));
+      res.send(filtered)
     })
     .catch(err => {
       console.log(err);

@@ -26,24 +26,19 @@ class GroupsPage extends React.Component {
   }
 
   componentDidMount(){
-    let user;
     axios.get('/api/me')
     .then( response => {
       if (response.status === 200){
-        user = response.data;
         return axios.get('/api/groups')
       } else {
         throw new Error("No user is logged in");
       }
-      
     })
     .then(response => {
       const data = response.data
       this.setState({
-        groups: data.filter( g => {
-          return g.memberIDs.includes(user._id)
-        }),
-        loading: false
+        groups: data,
+        loading: false,
       });
     })
     .catch( 
