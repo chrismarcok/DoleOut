@@ -54,6 +54,9 @@ class Group extends React.Component {
     //Find this group
     Axios.get(`/api/g/${this.state.id}`)
     .then( response => {
+      if (response.data.deleted){
+        throw new Error("Cannot enter a deleted group.");
+      }
       this.setState({
         thisGroup: response.data,
         groupTitle: response.data.name,
@@ -411,6 +414,7 @@ class Group extends React.Component {
                   <ExpensePopup 
                     addExpense={ this.createExpense } 
                     closePopup={ this.togglePopup.bind(this) } 
+                    groupMembers={ this.state.groupMembers }
                     group={ this.state.thisGroup } 
                     user={ this.state.user }
                     admin={  this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) }/>
@@ -449,7 +453,7 @@ class Group extends React.Component {
               <ul className="group-col-other-ul">
                 {
                   this.state.loadingMessages ? "Loading Expenses..." :
-                  groupMessages.filter(msg => !msg.isMsg).map(msg => {
+                  groupMessages.filter(msg => !msg.isMsg && !msg.expense.totalPaid).map(msg => {
                     return (
                       <div key={ msg._id } onClick={(e) => this.scrollToExpense(e, msg)}>
                         <OtherExpense msg={ msg } avatarURL={ this.state.usersOfMessages[msg.creatorID].avatarURL } />

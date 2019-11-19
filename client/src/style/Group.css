@@ -150,7 +150,7 @@ Individual Group Page
 .groupmember-pic{
   width: 50px;
   height: 50px;
-  background-size: contain;
+  background-size: cover;
   display: inline-block;
   border-radius: 50%;
 }
@@ -409,7 +409,7 @@ Messages
   width: 500px;
   height: 100%;
   z-index: 1;
-  display: none;
+  display: block;
 }
 
 .expense-lower{
@@ -502,8 +502,7 @@ Messages
 .expense-pic-small {
   height: 36px;
   width: 36px;
-  background-size: contain;
-  
+  background-size: cover;
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 5px;
@@ -529,6 +528,7 @@ Messages
   margin-left: 5px;
   margin-top: 10px;
   background-color: rgba(0,0,0,0.5);
+  cursor: pointer;
 }
 
 .expense-payment-container{

@@ -17,7 +17,6 @@ class OtherExpense extends React.Component{
           </div>
           <p>${Number(this.props.msg.expense.totalRemaining).toFixed(2)} remaining</p>
         </div>
-      
     )
   }
 }

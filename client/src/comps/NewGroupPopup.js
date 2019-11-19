@@ -148,7 +148,6 @@ class NewGroupPopup extends React.Component {
       } else {
         //This should never happen...
         console.log("there is nobody logged in. nothing happened");
-        alert("Can't make a group if there is nobody logged in...");
       }
       
     })
@@ -163,7 +162,7 @@ class NewGroupPopup extends React.Component {
       const newDiv = document.createElement("div")
       newDiv.className = "new-group-member-row-" + this.state.numMembers;
       document.querySelector(".new-group-members-container").appendChild(newDiv)
-      ReactDOM.render(<NewGroupMemberRow newRow={this.newRow} num={this.state.numMembers + 1} groupId={-1}/>, document.querySelector(".new-group-member-row-" + this.state.numMembers))
+      ReactDOM.render(<NewGroupMemberRow newRow={this.newRow} num={this.state.numMembers + 1} type={"group"}/>, document.querySelector(".new-group-member-row-" + this.state.numMembers))
       this.setState({
         numMembers: this.state.numMembers + 1
       });
@@ -179,7 +178,7 @@ class NewGroupPopup extends React.Component {
               <input id="groupTitleInput" type="text" name="title" placeholder="Title" onChange={Helper.handleInputChange.bind(this)}></input>
               <h3> Members </h3>
               <div className="new-group-members-container">
-                <NewGroupMemberRow newRow={this.newRow} num={1} groupId={-1}/>
+                <NewGroupMemberRow newRow={this.newRow} num={1} type={"group"}/>
               </div>
               <h3> Color <div className="color-preview"></div> </h3>
               <button onClick={this.selectColor}>

@@ -59,6 +59,9 @@ router.get('/membersOf/:group', checkAuthenticated403, (req, res) => {
   Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
   .then( group => {
     const membersList = group.memberIDs;
+    if (!membersList.includes(req.user._id)){
+      throw new Error(`${req.user._id} is not a part of group members ${membersList}`);
+    }
     promises = [];
     membersList.forEach(memberID => promises.push(User.findOne({'_id': mongoose.Types.ObjectId(memberID)})));
     return Promise.all(promises);

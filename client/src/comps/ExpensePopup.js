@@ -24,7 +24,8 @@ class ExpensePopup extends React.Component {
    * Creates a new expense based on the input fields and adds it to the group timeline.
    */
   createExpense = () => {
-    if (this.state.expenseTitle === "" || this.state.expenseCost === "" || this.state.expenseContent === "" || this.getMembers().length === 1){
+    const expenseMembers = this.getMembers();
+    if (this.state.expenseTitle === "" || this.state.expenseCost === "" || this.state.expenseContent === "" || expenseMembers.length === 1){
       alert("one or more fields is missing!");
       return;
     }
@@ -33,6 +34,7 @@ class ExpensePopup extends React.Component {
       alert("please enter a positive cost");
       return;
     }
+    
     const m = {
       groupID: this.state.thisGroup._id,
       isMsg: false,
@@ -41,11 +43,9 @@ class ExpensePopup extends React.Component {
       expense: {
         title: this.state.expenseTitle,
         cost: Number(this.state.expenseCost).toFixed(2),
-        //TODO: Fix total remaining
-        totalRemaining: 0,//Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / this.getMembers().length),
+        totalRemaining: Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / expenseMembers.length),
         totalPaid: false,
-        //TODO: fix get members
-        members: this.getMembers() //just be empty for now
+        members: expenseMembers,
       },
     }
 
@@ -57,43 +57,44 @@ class ExpensePopup extends React.Component {
    * Returns an array of all the members of an expense.
    */
   getMembers(){
-    return [];
     const usernameInputs = document.querySelectorAll(".group-member-input-field");
-    const memberLst = this.props.group.members;
+    const memberLst = this.props.groupMembers;
     const numMembers = this.state.numMembers;
-    const added = [];
-    //code below requires a server call to obtain the currently logged in user to add the new expense's member list
-    //hard-coded to always add "user" to the member list
-    const result = [{
-      "id": 1,
-      "username": "user",
-      "password": "123",
-      "picUrl": "https://api.adorable.io/avatars/200/1",
-      "email": "dummy@dummy.com",
-      "firstName": "Firstname",
-      "lastName": "McLastname",
-      "paypal": "https://www.paypal.me/chrismarcok",
-      "preference": "paypal",
-      "description": "send me money please thank u :)",
-      "paid": true
-    }];
-    if (this.props.admin === true){
-      result[0].id = 0;
-      result[0].username = "admin";
-      result[0].picUrl = "https://api.adorable.io/avatars/200/0";
-    }
+    const thisUser = {
+      ...this.state.user,
+      amountPaid: 0,
+      totalToPay: 0,
+      complete: true
+    };
+    const added = [thisUser];
+    const addedIDs = [this.props.user._id]
+    
     for (let i = 0; i < numMembers; i++){
       const m = memberLst.filter( m => 
-        m.username === usernameInputs[i].value
+        m.displayName === usernameInputs[i].value
       );
 
-      if (m.length === 0 || added.includes(m[0].id)){
+      if (m.length === 0 || addedIDs.includes(m[0]._id)){
         continue;
       }
-      result.push(m[0]);
-      added.push(m[0].id);
+      const personToAdd = m[0];
+      const person = {
+        ...personToAdd,
+        amountPaid: 0,
+        totalToPay: 0,
+        complete: false,
+      }
+      
+      added.push(person);
+      addedIDs.push(person._id);
     }
-    return result;
+    added.forEach( member => {
+      member.totalToPay = Number(Number(this.state.expenseCost) / added.length).toFixed(2);
+    });
+    //THe creator has already paid:
+    added[0].totalToPay = 0;
+    added[0].amountPaid = Number(Number(this.state.expenseCost) / added.length).toFixed(2);
+    return added;
   }
 
   /**
@@ -124,7 +125,13 @@ class ExpensePopup extends React.Component {
     const newDiv = document.createElement("div");
     newDiv.className = "new-member-expense-popup-id-" + this.state.numMembers;
     document.querySelector(".newGroupMemberRow-spawn-here").appendChild(newDiv);
-    ReactDOM.render(<NewGroupMemberRow newRow={this.createNewMemberRow} num={( this.state.numMembers + 1)} groupId={this.props.group.id}/>, document.querySelector(".new-member-expense-popup-id-" + this.state.numMembers));
+    ReactDOM.render(<NewGroupMemberRow 
+      newRow={this.createNewMemberRow} 
+      num={( this.state.numMembers + 1)} 
+      type={"expense"}
+      groupID={this.state.thisGroup._id}/>, 
+      document.querySelector(".new-member-expense-popup-id-" + this.state.numMembers));
+
     this.setState({
       numMembers: this.state.numMembers + 1
     });
@@ -152,7 +159,11 @@ class ExpensePopup extends React.Component {
               <h3>
                 Members
               </h3>
-              <NewGroupMemberRow num={1} newRow={this.createNewMemberRow} groupId={this.props.group.id}/>
+              <NewGroupMemberRow 
+                num={1} 
+                newRow={this.createNewMemberRow} 
+                type={"expense"} 
+                groupID={this.state.thisGroup._id}/>
               <div className="newGroupMemberRow-spawn-here">
               </div>
             </form>

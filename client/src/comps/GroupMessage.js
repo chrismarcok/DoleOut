@@ -1,25 +1,23 @@
+/**
+  * A group message represents either a chat message, or an expense in the chat.
+  */
+
 import React from 'react'
 import ExpensePic from '../comps/ExpensePic'
-import { uid } from 'react-uid'
 import Axios from 'axios'
 
 class GroupMessage extends React.Component {
-
-  /* 
-  A group message represents either a chat message, or an expense in the chat.
-  */
-
  constructor(props) {
   super(props)
 
   this.state = {
-    //code below requires a server call to obtain the currently logged in user
-    //hard-coded to always use "user", the account with user id 1
+    totalPaid: (!this.props.msg.isMsg) ? this.props.msg.expense.totalPaid : undefined,
+    user: this.props.user,
     currentUserId: 1,
     currentlyPaying: false,
     payAmount: "0.01",
     expenseRemaining: (!this.props.msg.isMsg) ? Number(this.props.msg.expense.totalRemaining).toFixed(2) : undefined,
-    youOwe: undefined
+    youOwe: (!this.props.msg.isMsg) ? this.getYouOwe() : 123,
   }
   this.toggleExpense = this.toggleExpense.bind(this);
   this.handleInput = this.handleInput.bind(this);
@@ -27,24 +25,28 @@ class GroupMessage extends React.Component {
   this.delete = this.delete.bind(this);
   }
 
+  /**
+   * Get the amount you owe to this expense. Return 0 if you arent part of this expense.
+   */
+  getYouOwe(){
+    const expense = this.props.msg.expense;
+    console.log(expense)
+    const members = expense.members;
+    const filtered = members.filter(member => member._id === this.props.user._id);
+    //If the user is part of the expense, length will be 1.
+    if (filtered.length !== 1){
+      return 0;
+    }
+    const currentUser = filtered[0];
+    if (currentUser.complete){
+      return 0;
+    }
+    return Number(currentUser.totalToPay - currentUser.amountPaid).toFixed(2);
+  }
+
   componentDidMount() {
     const pic = document.querySelector("#group-main-profile-pic-id-" + this.props.msg._id);
     pic.style.backgroundImage = "url('" + this.props.creator.avatarURL + "')";
-    if (!this.props.msg.isMsg){
-      this.setState({
-        youOwe: 0//Number(Number(this.props.msg.expense.cost) / this.props.msg.expense.members.length).toFixed(2)
-      });
-      // const members = this.props.msg.expense.members;
-      // const filtered = members.filter( m => m.id === this.state.currentUserId);
-      // if (filtered.length === 0 || this.props.msg.user.id === this.state.currentUserId){
-      //   //user shouldnt be able to pay this expense.
-      //   this.setState({
-      //     youOwe: Number(0).toFixed(2)
-      //   });
-      //   document.querySelector(".you-owe-container-id-" + this.props.msg.id).style.display = "none";
-      //   document.querySelector(".expense-pay-btn" + this.props.msg.id).style.display = "none";
-      // }
-    }
 
     if (this.props.admin === false){
       document.querySelector(".expense-delete-container-" + this.props.msg._id).style.display = "none";
@@ -52,7 +54,7 @@ class GroupMessage extends React.Component {
   }
 
   redirect() {
-      window.location = "/u/" + this.props.user._id;
+      window.location = "/u/" + this.state.user._id;
   }
 
   /**
@@ -63,16 +65,16 @@ class GroupMessage extends React.Component {
       this.setState({
         currentlyPaying: true
       });
-      document.querySelector(".expense-pay-btn" + this.props.msg.id ).style.display = "none";
-      document.querySelector(".expense-close-btn" + this.props.msg.id ).style.display = "block";
-      document.querySelector(".expense-payment-container" + this.props.msg.id ).style.display = "block";
+      document.querySelector(".expense-pay-btn" + this.props.msg._id ).style.display = "none";
+      document.querySelector(".expense-close-btn" + this.props.msg._id ).style.display = "block";
+      document.querySelector(".expense-payment-container" + this.props.msg._id ).style.display = "block";
     } else {
       this.setState({
         currentlyPaying: false
       });
-      document.querySelector(".expense-close-btn" + this.props.msg.id ).style.display = "none";
-      document.querySelector(".expense-pay-btn" + this.props.msg.id ).style.display = "block";
-      document.querySelector(".expense-payment-container" + this.props.msg.id).style.display = "none";
+      document.querySelector(".expense-close-btn" + this.props.msg._id ).style.display = "none";
+      document.querySelector(".expense-pay-btn" + this.props.msg._id ).style.display = "block";
+      document.querySelector(".expense-payment-container" + this.props.msg._id).style.display = "none";
     }
   }
 
@@ -188,8 +190,12 @@ class GroupMessage extends React.Component {
           <b>{this.props.creator.displayName}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
           <div className="group-main-msg-content">
             <div className="expense-container">
-              <div className={"expense-cover expense-cover-" + this.props.msg._id}>
-              </div>
+              {
+                this.state.totalPaid ? 
+                <div className={"expense-cover expense-cover-" + this.props.msg._id}>
+                </div> : null
+              }
+              
               <div className="expense-upper">
                 <div className="expense-upper-left">
                   <h3>{this.props.msg.expense.title}</h3>
@@ -214,18 +220,23 @@ class GroupMessage extends React.Component {
                   {
                     this.props.msg.expense.members.map(m => {
                       return (
-                        <ExpensePic key={uid(m)} member={m} id={this.props.msg.expense._id}/>
+                        <ExpensePic key={m._id} member={m} id={this.props.msg.expense._id}/>
                       );
                     })
                   }
                 </div>
                 <div className="expense-pay">
-                <div className={"expense-pay-btn expense-pay-btn" + this.props.msg._id} onClick={this.toggleExpense}>
-                    PAY
-                  </div>
-                  <div className={"expense-close-btn expense-close-btn" + this.props.msg._id} onClick={this.toggleExpense}>
-                    CLOSE
-                    </div>
+                  {
+                    (!this.state.totalPaid && this.state.youOwe !== 0) ? 
+                    <React.Fragment>
+                      <div className={"expense-pay-btn expense-pay-btn" + this.props.msg._id} onClick={this.toggleExpense}>
+                        PAY
+                      </div>
+                      <div className={"expense-close-btn expense-close-btn" + this.props.msg._id} onClick={this.toggleExpense}>
+                        CLOSE
+                      </div>
+                    </React.Fragment> : null
+                  }
                 </div>
               </div>
             </div>

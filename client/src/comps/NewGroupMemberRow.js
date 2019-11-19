@@ -30,6 +30,12 @@ class NewGroupMemberRow extends React.Component {
       validator.style.color = "black";
       return;
     }
+    
+    //Must do a different check if the type is expense instead of group.
+    if (this.props.type === "expense"){
+      this.expenseCheckValid(val, validator);
+      return;
+    }
     Axios.get('/api/exists/' + val)
     .then( response => {
       if (response.status === 200){
@@ -51,6 +57,34 @@ class NewGroupMemberRow extends React.Component {
         loading: false
       })
     })
+  }
+
+  //Checks if the user is a member of the group.
+  expenseCheckValid(val, validator){
+    Axios.get(`/api/membersOf/${this.props.groupID}`)
+    .then( response => {
+      const filtered = response.data.filter(member => member.displayName === val);
+      if (filtered.length === 1){
+        this.setState({
+          indicator: "valid"
+        });
+        validator.style.color = "green";
+      } else {
+        throw new Error("No user exists with that name in this group");
+      }
+    })
+    .catch( err => {
+      console.log(err)
+      this.setState({
+        indicator: "invalid"
+      })
+      validator.style.color = "red";
+    })
+    .finally( () => {
+      this.setState({
+        loading: false
+      })
+    });
   }
   render() {
     const num = this.props.num - 1;
