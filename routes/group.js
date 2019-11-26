@@ -268,9 +268,9 @@ router.post('/:group', (req, res) => {
   .then( group => {
     console.log(group)
     if (group){
-      if (group.memberIDs.includes(req.user._id)){
+      if (req.user.isAdmin || group.memberIDs.includes(req.user._id)){
         const newMsg = new Message({
-          //This needs to be filled out properly
+          //This needs to be filled out properly a
           groupID: req.body.groupID,
           isMsg: req.body.isMsg,
           creatorID: req.body.creatorID,

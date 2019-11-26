@@ -99,7 +99,7 @@ class Group extends React.Component {
     })
     .catch( err => {
       console.log(err);
-      //window.location = '/403';
+      window.location = '/403';
     });
 
     //Load OtherGroups

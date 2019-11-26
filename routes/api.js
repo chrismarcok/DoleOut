@@ -22,9 +22,10 @@ router.get('/groups', checkAuthenticated403, (req, res) => {
     .then(groups => {
       if (req.user.isAdmin){
         res.send(groups);
+      } else {
+        const filtered = groups.filter( g => g.memberIDs.includes(req.user._id));
+        res.send(filtered)
       }
-      const filtered = groups.filter( g => g.memberIDs.includes(req.user._id));
-      res.send(filtered)
     })
     .catch(err => {
       console.log(err);
@@ -63,7 +64,7 @@ router.get('/membersOf/:group', checkAuthenticated403, (req, res) => {
   Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)})
   .then( group => {
     const membersList = group.memberIDs;
-    if (!membersList.includes(req.user._id)){
+    if (!req.user.isAdmin && !membersList.includes(req.user._id)){
       throw new Error(`${req.user._id} is not a part of group members ${membersList}`);
     }
     promises = [];
@@ -98,7 +99,7 @@ router.get('/u/:id', (req, res) => {
         user.password = undefined
         res.send(user)
       } else {
-        res.sendStatus(400)
+        throw new Error("no user")
       }
     })
     .catch(err => {
@@ -117,7 +118,7 @@ router.get('/username/:name', (req, res) => {
         user.password = undefined
         res.send(user)
       } else {
-        res.sendStatus(400)
+        throw new Error("no user")
       }
     })
     .catch(err => {
@@ -135,7 +136,7 @@ router.get('/g/:id', (req, res) => {
       if (group) {
         res.send(group)
       } else {
-        res.sendStatus(400)
+        throw new Error("no group")
       }
     })
     .catch(err => {
@@ -154,8 +155,7 @@ router.get('/exists/:name', checkAuthenticated403, (req, res) => {
       if (user) {
         res.sendStatus(200);
       } else {
-
-        res.sendStatus(400);
+        throw new Error("no user");
       }
     })
     .catch(err => {
@@ -207,16 +207,15 @@ router.get('/gm/:group', checkAuthenticated403, (req, res) => {
   Group.findById(req.params.group)
   .then(group => {
     if (group){
-      if (group.memberIDs.includes(req.user._id)){
+      if (req.user.isAdmin || group.memberIDs.includes(req.user._id)){
         console.log("user is in that group.")
         return Messages.find({groupID: group._id})
       } else {
-        console.log("current user is not in that group");
-        res.sendStatus(403);
+        throw new Error("current user is not in that group");
       }
     } else {
-      console.log("null group");
-      res.sendStatus(400);
+      throw new Error("null group");
+      
     }
   })
   .then( messages => {
