@@ -1,3 +1,5 @@
+console.log("canvas loaded")
+
 const canvas = document.querySelector('canvas');
 
 canvas.width = window.innerWidth;

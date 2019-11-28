@@ -7,12 +7,12 @@ require('../models/User');
 const User = mongoose.model('users');
 
 function getUserByUsername(username) {
-  console.log(`Given Username: ${username}`);
+  console.log(`LOGIN: Trying to log in username: ${username}`);
   return User.findOne({displayName: username}).exec()
   .then( user => {
-    console.log(`Found User: ${user}`)
+    console.log(`LOGIN: Found User in DB with display name: ${user.displayName}`)
     if (user !== null){
-      console.log("Returning found user....")
+      console.log("LOGIN: Returning found user...")
       return user;
     } else {
       return null;
@@ -43,10 +43,10 @@ function initialize(passport){
     }
     try {
       if (await bcrypt.compare(password, user.password)) {
-        console.log("password matches")
+        console.log("LOGIN: User and password match - Successful login.");
         return done(null, user)
       } else {
-        console.log("password doesnt match")
+        console.log("LOGIN: Password doesnt match")
         return done(null, false, {message: "password did not match"})
       }
     } catch (error) {

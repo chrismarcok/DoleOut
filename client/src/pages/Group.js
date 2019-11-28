@@ -15,7 +15,10 @@ import Helper from '../scripts/helper';
 import ExpensePopup from '../comps/ExpensePopup'
 import Loader from '../comps/Loader'
 import Axios from 'axios';
+import openSocket from "socket.io-client";
 import '../style/Loader.css';
+
+const socket = openSocket("http://localhost:5000");
 
 /* This is the actual group page. the group page that has 3 columns*/
 
@@ -123,12 +126,39 @@ class Group extends React.Component {
       this.setState({
         user: response.data,
         loadingMe: false,
+      }, () => {
+        this.initSocket();
       });
     })
     .catch( err => {
       console.log(err);
       window.location = '/403';
     });
+  }
+
+  initSocket(){
+    socket.emit('new-user', {
+      "user": this.state.user,
+      "group": this.state.thisGroup,
+    });
+
+    socket.emit("create", this.state.thisGroup._id);
+
+    socket.on('chat-message', msgWithUserObj => {
+      const m = msgWithUserObj.message;
+      const newMsg = document.createElement("div")
+      newMsg.className = "newmsg-" + m._id
+      document.querySelector(".group-main-content").appendChild(newMsg);
+      ReactDOM.render(<GroupMessage 
+                                    admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === m.creatorID }
+                                    user={ msgWithUserObj.user } 
+                                    creator={ msgWithUserObj.user }
+                                    msg={ m } 
+                                    key={ m._id } />, 
+                                    document.querySelector(".newmsg-" + m._id));
+      this.scrollToBottomOfChat();
+    })
+
   }
 
   /**
@@ -264,6 +294,11 @@ class Group extends React.Component {
                                       key={ m._id } />, 
                                       document.querySelector(".newmsg-" + m._id));
         this.scrollToBottomOfChat();
+        socket.emit("send-chat-message", {
+          message: m,
+          user: this.state.user,
+        });
+
       })
       .catch( err => console.log(err));
       
@@ -360,6 +395,8 @@ class Group extends React.Component {
     const {loadingMe, loadingMembers, loadingMessages, loadingOtherGroups} = this.state;
     return (
       <div>
+        
+
         <Header user="admin"/>
         {
         (loadingMe || loadingMembers || loadingMessages || loadingOtherGroups) ?

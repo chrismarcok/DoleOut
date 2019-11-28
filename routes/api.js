@@ -208,7 +208,6 @@ router.get('/gm/:group', checkAuthenticated403, (req, res) => {
   .then(group => {
     if (group){
       if (req.user.isAdmin || group.memberIDs.includes(req.user._id)){
-        console.log("user is in that group.")
         return Messages.find({groupID: group._id})
       } else {
         throw new Error("current user is not in that group");
@@ -236,5 +235,7 @@ router.get('/gm/:group', checkAuthenticated403, (req, res) => {
     res.sendStatus(400);
   })
 })
+
+
 
 module.exports = router;

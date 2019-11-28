@@ -60,8 +60,6 @@ class GroupComp extends React.Component {
     Axios.get('/api/me')
     .then( response => {
       const data = response.data;
-      console.log(data);
-      console.log(this.props.superusers);
       if (this.props.superusers.includes(data._id) || data.isAdmin){
         this.setState({
           canEdit: true

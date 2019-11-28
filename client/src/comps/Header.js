@@ -12,7 +12,6 @@ class Header extends React.Component {
   componentDidMount(){
     Axios.get('/api/me')
     .then( response => {
-      console.log(`${response.data.displayName} is logged in`);
       this.setState({
         user: response.data,
         loggedIn: true

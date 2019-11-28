@@ -30,7 +30,6 @@ class GroupMessage extends React.Component {
    */
   getYouOwe(){
     const expense = this.props.msg.expense;
-    console.log(expense)
     const members = expense.members;
     const filtered = members.filter(member => member._id === this.props.user._id);
     //If the user is part of the expense, length will be 1.
