@@ -105,8 +105,9 @@ io.on("connection", socket => {
   let currentRoomId;
   socket.on("new-user", userAndGroup => {
     connections[socket.id] = userAndGroup;
-
-    socket.to(userAndGroup.group._id).broadcast.emit("user-joined", userAndGroup.user);
+    if (userAndGroup.group !== undefined){
+      socket.to(userAndGroup.group._id).broadcast.emit("user-joined", userAndGroup.user);
+    }
   });
 
   socket.on("create", (room) => {
