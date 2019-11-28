@@ -5,9 +5,9 @@
 import React from 'react'
 import ExpensePic from '../comps/ExpensePic'
 import Axios from 'axios'
-import openSocket from "socket.io-client";
+import io from "socket.io-client";
 
-const socket = openSocket();  
+const socket = io.connect();  
 // const socket = openSocket("http://localhost:5000");
 
 class GroupMessage extends React.Component {

@@ -15,11 +15,11 @@ import Helper from '../scripts/helper';
 import ExpensePopup from '../comps/ExpensePopup'
 import Loader from '../comps/Loader'
 import Axios from 'axios';
-import openSocket from "socket.io-client";
+import io from "socket.io-client";
 import '../style/Loader.css';
 
 const dateFormat = require('dateformat');
-const socket = openSocket();  
+const socket = io.connect();  
 // const socket = openSocket("http://localhost:5000");
 
 /* This is the actual group page. the group page that has 3 columns*/
