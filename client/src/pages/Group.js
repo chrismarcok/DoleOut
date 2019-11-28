@@ -19,7 +19,7 @@ import openSocket from "socket.io-client";
 import '../style/Loader.css';
 
 const dateFormat = require('dateformat');
-const socket = openSocket("https://doleout.herokuapp.com:" + process.env.PORT);  
+const socket = openSocket('/');  
 // const socket = openSocket("http://localhost:5000");
 
 /* This is the actual group page. the group page that has 3 columns*/
