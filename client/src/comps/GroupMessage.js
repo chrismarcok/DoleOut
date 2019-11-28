@@ -7,7 +7,7 @@ import ExpensePic from '../comps/ExpensePic'
 import Axios from 'axios'
 import openSocket from "socket.io-client";
 
-const socket = openSocket("https://doleout.herokuapp.com");  
+const socket = openSocket("https://doleout.herokuapp.com:" + process.env.PORT);  
 // const socket = openSocket("http://localhost:5000");
 
 class GroupMessage extends React.Component {
