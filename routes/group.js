@@ -37,7 +37,8 @@ router.patch('/:group', checkAuthenticated, (req, res) => {
         {
           name: req.body.name,
           memberIDs: req.body.memberIDs,
-        })
+        }, 
+        {useFindAndModify: false})
         .then( response => res.sendStatus(200))
         .catch(err => {
           console.log(err);
@@ -69,7 +70,8 @@ router.delete('/:group', checkAuthenticated, (req, res) => {
         Group.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.group)}, 
         {
           deleted: true
-        })
+        },
+        {useFindAndModify: false})
         .then( response => {
           console.log(`deleted ${req.params.group}`)
           res.sendStatus(200);
@@ -115,7 +117,8 @@ router.delete('/:group/msg/:msg', checkAuthenticated, (req, res) => {
         Message.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.msg), 'groupID': mongoose.Types.ObjectId(req.params.group)},
         {
           deleted: true
-        })
+        },
+        {useFindAndModify: false})
         .then( response => {
           console.log(`deleted ${req.params.msg}`)
           res.sendStatus(200);
@@ -153,7 +156,8 @@ router.delete('/:group/user/:user', checkAuthenticated, (req, res) => {
         {
           memberIDs: group.memberIDs.filter(id => id !== req.params.user),
           superusers: group.superusers.filter(id => id !== req.params.user),
-        });
+        },
+        {useFindAndModify: false});
       } else {
         res.sendStatus(403);
         sentErr = true;
@@ -198,7 +202,8 @@ router.post('/:group/user/:user', checkAuthenticated, (req, res) => {
       return Group.findOneAndUpdate({'_id': mongoose.Types.ObjectId(req.params.group)}, 
       {
         memberIDs: [...new Set(group.memberIDs.concat(userID))],
-      });
+      },
+      {useFindAndModify: false});
     } else {
       console.log("that group DNE.");
       res.sendStatus(400);
@@ -236,7 +241,8 @@ router.patch('/:group/expense/:expense', checkAuthenticated, (req, res) => {
         return Message.findOneAndUpdate({'_id': mongoose.Types.ObjectId(msgID)}, 
         {
           //Something goes here
-        });
+        },
+        {useFindAndModify: false});
       } else {
         throw new Error("User does not belong to that group");
       }

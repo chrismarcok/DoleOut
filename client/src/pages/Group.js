@@ -1,6 +1,6 @@
 /**
  * This is the group page from the ADMIN perspective (as opposed to the user's).
- *  The user cannot delete users or messages. The admin can.
+ *  The user cannot delete users or messages. The admin/superuser can.
  */
 
 import React from 'react';
@@ -144,6 +144,16 @@ class Group extends React.Component {
 
     socket.emit("create", this.state.thisGroup._id);
 
+    socket.on("chat-message-delete", msg => {
+      if (msg.requestor._id !== this.state.user._id){
+        document.querySelector(".msg-id-" + msg.message._id).style.display = "none";
+        if (!msg.message.isMsg){
+          //removes the expense from the right sidebar
+          document.querySelector(".expense-small-id-" + msg.message._id).style.display = "none";
+        }
+      }
+    });
+
     socket.on('chat-message', msgWithUserObj => {
       const m = msgWithUserObj.message;
       const newMsg = document.createElement("div")
@@ -151,7 +161,7 @@ class Group extends React.Component {
       document.querySelector(".group-main-content").appendChild(newMsg);
       ReactDOM.render(<GroupMessage 
                                     admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === m.creatorID }
-                                    user={ msgWithUserObj.user } 
+                                    user={ this.state.user } 
                                     creator={ msgWithUserObj.user }
                                     msg={ m } 
                                     key={ m._id } />, 
@@ -248,6 +258,11 @@ class Group extends React.Component {
       newDiv.className = uid(expense);
       document.querySelector(".group-col-other-ul").appendChild(newDiv);
       ReactDOM.render(newSmallExpense, document.querySelector("." + uid(expense)));
+
+      socket.emit("send-chat-message", {
+        message: expense,
+        user: this.state.user,
+      });
     })
     .catch( err => console.log(err));
     

@@ -120,6 +120,10 @@ io.on("connection", socket => {
     socket.join(room);
   });
 
+  socket.on("delete-msg", msgAndUser => {
+    socket.to(msgAndUser.message.groupID).broadcast.emit("chat-message-delete", msgAndUser);
+  });
+
   socket.on("send-chat-message",  msgWithUserObj => {
     socket.to(msgWithUserObj.message.groupID).broadcast.emit('chat-message', msgWithUserObj);
   })

@@ -22,7 +22,8 @@ router.patch('/:id', checkAuthenticated, (req, res) => {
       paypalURL: req.body.paypal,
       preference: req.body.pref,
       avatarURL: req.body.avatar
-    })
+    },
+    {useFindAndModify: false})
     .then( response => {
       console.log(`Response (old user): ${response}`)
       res.sendStatus(200);

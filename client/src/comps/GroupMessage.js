@@ -5,6 +5,9 @@
 import React from 'react'
 import ExpensePic from '../comps/ExpensePic'
 import Axios from 'axios'
+import openSocket from "socket.io-client";
+
+const socket = openSocket("http://localhost:5000");
 
 class GroupMessage extends React.Component {
  constructor(props) {
@@ -149,6 +152,10 @@ class GroupMessage extends React.Component {
     Axios.delete(`/g/${this.props.msg.groupID}/msg/${this.props.msg._id}`)
     .then( response => {
       console.log(response)
+      socket.emit("delete-msg", {
+        message: this.props.msg,
+        requestor: this.props.user,
+      });
     })
     .then(err => console.log(err));
   }
@@ -219,7 +226,7 @@ class GroupMessage extends React.Component {
                   {
                     this.props.msg.expense.members.map(m => {
                       return (
-                        <ExpensePic key={m._id} member={m} id={this.props.msg.expense._id}/>
+                        <ExpensePic key={m._id} member={m} id={this.props.msg._id}/>
                       );
                     })
                   }
