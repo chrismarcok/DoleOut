@@ -93,7 +93,7 @@ app.get("/connections", checkAuthenticated, checkAdmin, (req, res) => {
 
 // If we do not hit any of the above paths, then go to index in the public folder (react app)
 app.get('*', (req, res) =>{
-  res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+  res.render(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

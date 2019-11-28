@@ -20,25 +20,43 @@ router.get('/register', checkGuest, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
 });
 
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/groups',
-  failureRedirect: '/login',
-  failureFlash: true
-}));
+// router.post('/login', passport.authenticate('local', {
+//   successRedirect: '/groups',
+//   failureRedirect: '/login',
+//   failureFlash: true
+// }));
+
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', {session : false},
+  function(err, user, info) {
+      if (err) {
+          return res.sendStatus(500);
+      } else if (!user) {
+          return res.sendStatus(400);
+      }
+      req.logIn(user, function(err) {
+          if (err) {
+              return res.sendStatus(500);
+          }
+          res.redirect("/groups");
+      });
+  })(req, res, next);
+});
 
 router.post('/register', (req, res) => {
   const newUser = new User({
-    displayName: req.body.username,
-    password: req.body.password,
+    displayName: req.body["displayName"],
+    password: req.body["password"],
     avatarURL: "https://api.adorable.io/avatars/200/default"
   });
-
+  // console.log(JSON.stringify(req.body, null, 2));
+  // console.log(req.body["displayName"]);
   //serverside check that a user with this username doesnt already exist
-  User.findOne({displayName: req.body.username})
+  User.findOne({displayName: req.body["displayName"]})
     .then(user => {
       if (user){
-        console.log(`user ${req.body.username} already exists`);
-        res.redirect("/register");
+        console.log(`user ${req.body["displayName"]} already exists`);
+        throw new Error("user already exists");
       } else {
         //Make the user and save it to DB
         bcrypt.genSalt(10, (err, salt) => {
@@ -48,7 +66,7 @@ router.post('/register', (req, res) => {
             newUser.save()
             .then(user => {
               console.log(`${newUser.displayName} is registered and can now login.`);
-              res.redirect('/login');
+              res.sendStatus(200);
             })
             .catch(err => {
               console.log(err);
@@ -58,7 +76,10 @@ router.post('/register', (req, res) => {
         });
       }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 router.get('/logout', checkAuthenticated, (req, res) => {

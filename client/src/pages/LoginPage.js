@@ -17,18 +17,6 @@ class LoginPage extends React.Component {
       console.log("attempting to post...")
     } 
   }
-
-  getUserPassword(username){
-    const users = this.state.users
-    const user = users.filter(user => user.username === username)
-    return user[0].password
-  }
-
-  checkRegistered(username){
-    const users = this.state.users
-    const user = users.filter(user => user.username === username)
-    return user.length > 0
-  }
   
   render() {
     return (

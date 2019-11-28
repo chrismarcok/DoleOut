@@ -2,6 +2,9 @@ import React from 'react';
 import Header from '../comps/Header.js'
 import LoginHeader from '../comps/LoginHeader.js'
 import Helper from '../scripts/helper.js';
+import Axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const regex = RegExp('^([a-zA-Z0-9 _-]+)$');
 
@@ -11,7 +14,9 @@ class RegisterPage extends React.Component {
     username: "",
     password: "",
     rePassword: "",
-    users: []
+    users: [],
+    toastMsg: "",
+    error: false
   }
 
   /**
@@ -28,29 +33,75 @@ class RegisterPage extends React.Component {
   register(e) {
     //button or enter key
     if (e.keyCode === 13 || e.target.className === "register-btn"){
+      let fail = false;
+      let len = 0;
       if (this.state.username === ""){
-        alert("your username should have at least one character")
-        e.preventDefault();
+        fail = true;
+        this.makeErrNotification("Your username should have atleast one character", len)
+        len += 100;
       } 
-      else if (!regex.test(this.state.username)) {
-        alert("your username should match /^([a-zA-Z0-9 _-]+)$/")
-        e.preventDefault();
+      if (!regex.test(this.state.username)) {
+        fail = true;
+        this.makeErrNotification("Your username has invalid symbols", len)
+        len += 100;
       }
-      else if (this.state.password.length <= 3){
-        alert("your password should have more than 3 characters")
-        e.preventDefault();
+      if (this.state.password.length <= 3){
+        fail = true;
+        this.makeErrNotification("Your password should have more than 3 characters", len)
+        len += 100;
       }
-      else if (this.state.password !== this.state.rePassword){
-        alert("the passwords don't match")
-        e.preventDefault();
+      if (this.state.password !== this.state.rePassword){
+        fail = true;
+        this.makeErrNotification("The two passwords don't match", len)
+        len += 100;
       }
-      else if (this.checkRegistered(this.state.username)){
-        alert(this.state.username + " is already registered")
-        e.preventDefault();
+      if (fail === false) {
+        Axios.post('/register', JSON.stringify({
+          displayName: this.state.username,
+          password: this.state.password,
+        }), { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+        .then( response => {
+          console.log(response);
+          this.setState({
+            toastMsg: "✔️ You have been registered.",
+            error: false,
+          }, () => {
+            this.notify();
+            setTimeout( () => {
+              window.location = "/login";
+            }, 2000)
+          });
+        })
+        .catch( err => {
+          console.log(err);
+          this.makeErrNotification("That username is alaready taken")
+        });
       }
-      else {
-        console.log("Posting...");
-      }
+      e.preventDefault();
+    }
+  }
+
+  makeErrNotification(msg, time){
+    setTimeout(() => {
+      this.setState({
+        toastMsg: `❌ ${msg}.`,
+        error: true,
+      }, () => {
+        this.notify();
+      });
+    }, time);
+  }
+
+  notify = () => {
+    if (this.state.error){
+      toast.error(this.state.toastMsg, {
+        draggable: true,
+      });
+    } else {
+      toast.success(this.state.toastMsg, {
+        draggable: true,
+        autoClose: 2000,
+      });
     }
   }
 
@@ -58,10 +109,11 @@ class RegisterPage extends React.Component {
     return (
       <div>
         <Header/>
+        <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
         <div className="login-container">
           <div className="login-inner">
             <LoginHeader title="Register"/>
-            <form className="login-form" action="/register" method="post">
+            <form className="login-form">
               <h3>
                 Username
               </h3>
@@ -74,9 +126,9 @@ class RegisterPage extends React.Component {
                 Confirm Password
               </h3>
               <input id="register-repassword" type="password" required name="rePassword" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
-              <button className="register-btn" type="submit" onClick={(e) => {this.register(e)}}>Register <i className="fa fa-user-plus"></i></button>  
+               
             </form>
-            
+            <button className="register-btn" onClick={(e) => {this.register(e)}}>Register <i className="fa fa-user-plus"></i></button> 
           </div>
         </div>
       </div>
