@@ -85,18 +85,8 @@ app.get('/go/:name', (req, res) => {
 })
 
 connections = {};
-rooms = {};
 
-Group.find()
-.then( groups => {
-  groups.forEach( g => {
-    rooms[g._id] = "something"
-  });
-})
-.catch( err => console.log(err));
-
-//TODO: Should require auth admin check
-app.get("/connections", (req, res) => {
+app.get("/connections", checkAuthenticated, checkAdmin, (req, res) => {
   res.header("Content-Type",'application/json');
   res.send(JSON.stringify(connections, null, 4));
 });
@@ -112,12 +102,16 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Express Server started on port ${PORT}`));
 
 io.on("connection", socket => {
-  socket.on("new-user", name => {
-    connections[socket.id] = name;
+  let currentRoomId;
+  socket.on("new-user", userAndGroup => {
+    connections[socket.id] = userAndGroup;
+
+    socket.to(userAndGroup.group._id).broadcast.emit("user-joined", userAndGroup.user);
   });
 
   socket.on("create", (room) => {
     socket.join(room);
+    currentRoomId = room;
   });
 
   socket.on("delete-msg", msgAndUser => {
@@ -126,10 +120,14 @@ io.on("connection", socket => {
 
   socket.on("send-chat-message",  msgWithUserObj => {
     socket.to(msgWithUserObj.message.groupID).broadcast.emit('chat-message', msgWithUserObj);
-  })
+  });
 
   socket.on("disconnect", () => {
+    if (connections[socket.id] !== undefined){
+      socket.to(currentRoomId).broadcast.emit("user-disconnected", connections[socket.id].user.displayName);
+    }
     delete connections[socket.id];
-  })
-})
+    
+  });
+});
 

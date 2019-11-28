@@ -84,6 +84,19 @@
 Individual Group Page
 */
 
+.online-alert{
+  text-align: center;
+  color: #aaa;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #999;
+  margin-left: 60px;
+  margin-bottom: 10px;
+}
+
+.online-alert:hover {
+  color: black;
+}
+
 .group-container {
   font-family: 'Poppins', sans-serif;
   width:100%;

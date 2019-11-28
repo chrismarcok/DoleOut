@@ -18,6 +18,7 @@ import Axios from 'axios';
 import openSocket from "socket.io-client";
 import '../style/Loader.css';
 
+const dateFormat = require('dateformat');
 const socket = openSocket("http://localhost:5000");
 
 /* This is the actual group page. the group page that has 3 columns*/
@@ -138,11 +139,19 @@ class Group extends React.Component {
 
   initSocket(){
     socket.emit('new-user', {
-      "user": this.state.user,
-      "group": this.state.thisGroup,
+      user: this.state.user,
+      group: this.state.thisGroup,
     });
 
     socket.emit("create", this.state.thisGroup._id);
+
+    socket.on("user-joined", user => {
+      this.createChatNotification(`${user.displayName} is now online`);
+    });
+
+    socket.on("user-disconnected", name =>{
+      this.createChatNotification(`${name} is now offline`);
+    });
 
     socket.on("chat-message-delete", msg => {
       if (msg.requestor._id !== this.state.user._id){
@@ -169,6 +178,16 @@ class Group extends React.Component {
       this.scrollToBottomOfChat();
     })
 
+  }
+
+  createChatNotification(msg){
+    const newMsg = document.createElement("div")
+    newMsg.className = "online-alert newmsg-" + Date.now();
+    newMsg.innerText = `${msg} - ${dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT")}`
+    document.querySelector(".group-main-content").appendChild(newMsg);
+    setTimeout(() => {
+      this.scrollToBottomOfChat();
+    }, 100);
   }
 
   /**
