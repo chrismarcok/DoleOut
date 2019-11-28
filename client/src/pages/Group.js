@@ -19,12 +19,9 @@ import openSocket from "socket.io-client";
 import '../style/Loader.css';
 
 const dateFormat = require('dateformat');
-let socket;
-if (process.env.ON_HEROKU){
-  socket = openSocket("https://doleout.herokuapp.com/");  
-} else {
-  socket = openSocket("http://localhost:5000");
-}
+const socket = openSocket("https://doleout.herokuapp.com");  
+// const socket = openSocket("http://localhost:5000");
+
 /* This is the actual group page. the group page that has 3 columns*/
 
 class Group extends React.Component {
