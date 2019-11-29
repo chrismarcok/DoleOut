@@ -118,3 +118,17 @@ Footer
     color: white;
     overflow: hidden;
 }
+
+@media only screen and (max-width: 1000px) {
+    .header-logo {
+      display: none;
+    }
+  }
+  
+  @media only screen and (max-width: 500px) {
+    .li-content {
+      font-size: 12px;
+      padding: 0;
+    }
+  }
+  

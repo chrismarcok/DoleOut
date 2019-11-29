@@ -13,7 +13,7 @@ import OtherGroupComp from '../comps/OtherGroupComp';
 import { uid } from 'react-uid';
 import Helper from '../scripts/helper';
 import ExpensePopup from '../comps/ExpensePopup'
-import Loader from '../comps/Loader'
+import Loader from '../comps/Loader';
 import Axios from 'axios';
 import io from "socket.io-client";
 import '../style/Loader.css';
@@ -39,6 +39,7 @@ class Group extends React.Component {
       groupMemberAddInput: "",
       addingMember: false,
 
+      postingToDB: false,
 
       //Stuff to load
       usersOfMessages: undefined,
@@ -139,6 +140,11 @@ class Group extends React.Component {
   }
 
   initSocket(){
+    setTimeout(() => {
+      this.createChatNotification("You are now online");
+    }, 1000);
+    
+
     socket.emit('new-user', {
       user: this.state.user,
       group: this.state.thisGroup,
@@ -177,6 +183,21 @@ class Group extends React.Component {
                                     key={ m._id } />, 
                                     document.querySelector(".newmsg-" + m._id));
       this.scrollToBottomOfChat();
+
+      if (!m.isMsg){
+        //Got to create a small expense in the sidebar.
+        const newSmallExpense = (
+          <div onClick={(e) => this.scrollToExpense(e, m)}>
+            <OtherExpense 
+            msg={m} 
+            avatarURL={ this.state.usersOfMessages[m.creatorID].avatarURL }/>
+          </div>
+        )
+        const newDiv = document.createElement("div");
+        newDiv.className = "small-expense-id-" + m._id;
+        document.querySelector(".group-col-other-ul").appendChild(newDiv);
+        ReactDOM.render(newSmallExpense, document.querySelector(".small-expense-id-" + m._id));
+      }
     })
 
   }
@@ -244,6 +265,9 @@ class Group extends React.Component {
     //       }],
     //     },
     // };
+    this.setState({
+      postingToDB: true,
+    });
     Axios.post(`/g/${this.state.id}`,
     JSON.stringify(expense),
     { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
@@ -284,7 +308,12 @@ class Group extends React.Component {
         user: this.state.user,
       });
     })
-    .catch( err => console.log(err));
+    .catch( err => console.log(err))
+    .finally( () => {
+      this.setState({
+        postingToDB: false,
+      });
+    });
     
   }
 
@@ -306,7 +335,8 @@ class Group extends React.Component {
       //Reset the state, and make textbox empty
       document.querySelector("#group-input").value = ""
       this.setState({
-        "groupInput": ""
+        groupInput: "",
+        postingToDB: true,
       });
 
       //Make the post
@@ -333,9 +363,13 @@ class Group extends React.Component {
           message: m,
           user: this.state.user,
         });
-
       })
-      .catch( err => console.log(err));
+      .catch( err => console.log(err))
+      .finally( () => {
+        this.setState({
+          postingToDB: false,
+        });
+      });
       
     }
   }
@@ -435,7 +469,7 @@ class Group extends React.Component {
         <Header user="admin"/>
         {
         (loadingMe || loadingMembers || loadingMessages || loadingOtherGroups) ?
-          <Loader /> : null
+          <Loader msg={"Loading Group"}/> : null
         }
         <div className="group-container">
           <div className="group-col group-members-col">
@@ -464,7 +498,6 @@ class Group extends React.Component {
               </div>
               
               <div className="group-add-member-input-container">
-                
                 <input id="group-add-member-input" type="text" name="groupMemberAddInput" placeholder="Enter Username" onChange={Helper.handleInputChange.bind(this)} maxLength="150" onKeyDown={this.addMember}></input>
                 
                 <i className="fa fa-check" id="group-add-member-accept-btn" onClick={this.addMember}></i>
@@ -494,25 +527,41 @@ class Group extends React.Component {
               </div>
               
             </div>
-            <div className="group-main-content">
-              {
-                this.state.loadingMessages || this.state.loadingMe ? "Loading Messages..." :
-                groupMessages.map(msg => {
-                  return (
-                    <GroupMessage 
-                    msg={ msg } 
-                    key={ msg._id } 
-                    user={ this.state.user }
-                    creator={ this.state.usersOfMessages[msg.creatorID] }
-                    update={ this.updateSmallExpense } 
-                    hideExpense={ this.hideSmallExpense } 
-                    admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === msg.creatorID} />
-                  )
-                })
-              }
+            <div className="group-main-content-container">
+              <div className="group-main-content">
+                {
+                  this.state.loadingMessages || this.state.loadingMe ? "Loading Messages..." :
+                  groupMessages.map(msg => {
+                    return (
+                      <GroupMessage 
+                      msg={ msg } 
+                      key={ msg._id } 
+                      user={ this.state.user }
+                      creator={ this.state.usersOfMessages[msg.creatorID] }
+                      update={ this.updateSmallExpense } 
+                      hideExpense={ this.hideSmallExpense } 
+                      admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === msg.creatorID} />
+                    )
+                  })
+                }
+                {
+                  this.state.postingToDB ? 
+                  <div className="loader-inner">
+                    <div className="a" style={{'--n': 5}}>
+                      <div className="dot" style={{'--i': 0}}></div>
+                      <div className="dot" style={{'--i': 1}}></div>
+                      <div className="dot" style={{'--i': 2}}></div>
+                      <div className="dot" style={{'--i': 3}}></div>
+                      <div className="dot" style={{'--i': 4}}></div>
+                    </div>
+                  </div>                
+                  : null
+                }
+              </div>
 
             </div>
             <div className="group-input-container">
+
               <input id="group-input" type="text" name="groupInput" placeholder="Type something..." onChange={Helper.handleInputChange.bind(this)} maxLength="150" onKeyDown={this.getInput}></input>
               <div className="group-main-send-btn" onClick={this.getInput}><i className="fa fa-paper-plane"></i></div>
             </div>

@@ -28,6 +28,7 @@ const groups = require('./routes/groups');
 const { group } = require('./routes/group');
 const users = require('./routes/users');
 const api = require('./routes/api');
+const paypalRoute = require('./routes/paypal');
 
 //Mongoose connection
 mongoose.promise = global.Promise;
@@ -50,6 +51,13 @@ const { checkAuthenticated, checkAdmin } = require("./auth/authCheck");
 
 //To allow posting to express server (port 5000) via react server (port 3000)
 app.use(cors());
+app.use(function (req, res, next) {
+  //Enabling CORS
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+    next();
+  });
 
 //To allow us to use the react app
 app.use(express.static('public'));
@@ -74,6 +82,7 @@ app.use('/', groups);
 app.use('/u', users);
 app.use('/g', group);
 app.use('/api', api);
+app.use('/paypal', paypalRoute);
 app.get('/go/:name', (req, res) => {
   User.findOne({displayName: req.params.name})
   .then( user => {
@@ -93,7 +102,7 @@ app.get("/connections", checkAuthenticated, checkAdmin, (req, res) => {
 
 // If we do not hit any of the above paths, then go to index in the public folder (react app)
 app.get('*', (req, res) =>{
-  res.render(path.resolve(__dirname, 'public', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

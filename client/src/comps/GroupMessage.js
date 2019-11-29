@@ -56,8 +56,8 @@ class GroupMessage extends React.Component {
     }
   }
 
-  redirect() {
-      window.location = "/u/" + this.state.user._id;
+  redirect(id) {
+      window.location = "/u/" + id;
   }
 
   /**
@@ -168,7 +168,7 @@ class GroupMessage extends React.Component {
     return (
       <div className={"msg-id-" + this.props.msg._id}>
         <div className="group-main-msg">
-          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect()}>
+          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect(this.props.msg.creatorID)}>
           </div>
           <div className={"expense-delete-container expense-delete-container-" + this.props.msg._id} onClick={this.delete}>
             <i className="fa fa-trash"></i>
@@ -189,7 +189,7 @@ class GroupMessage extends React.Component {
     return (
       <div className={"msg-id-" + this.props.msg._id}>
         <div className="group-expense-msg-container">
-          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect()}>
+          <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect(this.props.msg.creatorID)}>
           </div>
           <div className={"expense-delete-container expense-delete-container-" + this.props.msg._id} onClick={this.delete}>
             <i className="fa fa-trash"></i>

@@ -4,7 +4,9 @@ class Loader extends React.Component{
   render() {
     return (
       <div className="loader-container">
+        <p className="loader-txt">{this.props.msg}</p>  
         <div className="loader-inner">
+        
           <div className="a" style={{'--n': 5}}>
             <div className="dot" style={{'--i': 0}}></div>
             <div className="dot" style={{'--i': 1}}></div>

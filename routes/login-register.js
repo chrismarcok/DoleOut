@@ -20,28 +20,28 @@ router.get('/register', checkGuest, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../", 'public', 'index.html'))
 });
 
-// router.post('/login', passport.authenticate('local', {
-//   successRedirect: '/groups',
-//   failureRedirect: '/login',
-//   failureFlash: true
-// }));
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/groups',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
 
-router.post('/login', function(req, res, next) {
-  passport.authenticate('local', {session : false},
-  function(err, user, info) {
-      if (err) {
-          return res.sendStatus(500);
-      } else if (!user) {
-          return res.sendStatus(400);
-      }
-      req.logIn(user, function(err) {
-          if (err) {
-              return res.sendStatus(500);
-          }
-          res.redirect("/groups");
-      });
-  })(req, res, next);
-});
+// router.post('/login', function(req, res, next) {
+//   passport.authenticate('local', {session : false},
+//   function(err, user, info) {
+//       if (err) {
+//           return res.sendStatus(500);
+//       } else if (!user) {
+//           return res.sendStatus(400);
+//       }
+//       req.logIn(user, function(err) {
+//           if (err) {
+//               return res.sendStatus(500);
+//           }
+//           res.redirect("/groups");
+//       });
+//   })(req, res, next);
+// });
 
 router.post('/register', (req, res) => {
   const newUser = new User({

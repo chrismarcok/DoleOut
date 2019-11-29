@@ -79,3 +79,22 @@
 .profile-edit-container p{
   font-size: 24px;
 }
+
+#doleout-add-funds-input{
+  font-family: "Poppins", sans-serif;
+  height: 55px;
+  font-size: 24px;
+  width: 250px;
+}
+
+#doleout-add-funds-btn{
+  background-color: #2979ff;
+  margin-top: 10px;
+  width: fit-content;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}

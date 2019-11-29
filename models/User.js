@@ -10,6 +10,10 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  balance: {
+    type: Number,
+    default: 0
+  },
   email: {
     type: String,
     default: "This user has not set an email!"

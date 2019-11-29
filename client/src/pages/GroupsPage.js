@@ -105,7 +105,7 @@ class GroupsPage extends React.Component {
         <ul className="group-ul">
           {
             loading ?
-            <Loader/> : null
+            <Loader msg={"Loading Groups"}/> : null
           }{
             (typeof(groups) === "object" && groups.length > 0 && !axiosError) ?
             groups.map( group => {

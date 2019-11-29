@@ -5,8 +5,12 @@
 import React from 'react';
 import Header from '../comps/Header';
 import Helper from '../scripts/helper';
+import Loader from '../comps/Loader';
 import '../style/Profile.css';
 import Axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 class Profile extends React.Component {
     constructor(props) {
@@ -21,9 +25,13 @@ class Profile extends React.Component {
             email: "",
             pref: "",
             paypal: "",
-            editing: false
+            balance: "",
+            editing: false,
+            userIsThisProfile: false,
+            addingMoney: false,
         }
         this.toggleEdit = this.toggleEdit.bind(this);
+        this.addMoney = this.addMoney.bind(this);
 
     }
 
@@ -42,6 +50,7 @@ class Profile extends React.Component {
                         pref: data.preference,
                         paypal: data.paypalURL,
                         displayName: data.displayName,
+                        balance: data.balance,
                     });
                     const pic = document.querySelector("#profile-pic-" + this.state.id);
                     pic.style.backgroundImage = "url('" + this.state.avatar + "')";
@@ -57,6 +66,9 @@ class Profile extends React.Component {
                 if (response.data._id === id || response.data.isAdmin){
                     //show the edit button
                     document.querySelector(".profile-edit-btn").style.display = "block";
+                    this.setState({
+                        userIsThisProfile: true,
+                    });
                 }
             })
             .catch( err => {
@@ -107,15 +119,50 @@ class Profile extends React.Component {
         return user_number
     }
 
-    render() {
-        // const user = this.getUser();
-        // if (user === undefined){
-        //     return <Redirect to='/404'/>
-        // }
+    /**
+     * Add money to doleout account
+     */
+    addMoney(){
+        this.setState({
+            addingMoney: true,
+        });
+        const amount = Number(document.querySelector("#doleout-add-funds-input").value).toFixed(2);
+        if (amount <= 0){
+            toast.error("You cannot add less than $0.01", {
+                draggable: true,
+              });
+        }
+        Axios.post("/paypal/pay", JSON.stringify(
+            {
+                amount: amount
+            }),
+        { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+        .then(response => {
+            console.log(response);
+            window.location = response.data;
+        })
+        .catch(err => {
+            console.log(err);
+            this.setState({
+                addingMoney: false,
+            }, () => {
+                toast.error("Could not POST to /paypal/pay", {
+                    draggable: true,
+                  });
+            })
+        });
+    }
 
+
+    render() {
         return (
             <div>
                 <Header />
+                {
+                    this.state.addingMoney ? 
+                    <Loader msg={"Please be patient as we redirect you to PayPal..."} /> : null    
+                }
+                <ToastContainer position={toast.POSITION.BOTTOM_RIGHT}/>
                 {
                 !this.state.editing ?
                 <div className="profile-btn profile-edit-btn" onClick={this.toggleEdit}>
@@ -146,6 +193,15 @@ class Profile extends React.Component {
                     <div className="profile-info-container">
                         <h3>Email</h3>
                         <p>{this.state.email}</p>
+                        {
+                        this.state.userIsThisProfile ? 
+                        <div>
+                            <h3>Doleout Wallet</h3>
+                            <p>${Number(this.state.balance).toFixed(2)} CAD</p>
+                            $<input type="number" min="0" defaultValue="100.00" id="doleout-add-funds-input"></input>
+                            <div id="doleout-add-funds-btn" onClick={this.addMoney}>Add Funds to Doleout Wallet</div>
+                        </div> : null
+                        }
                     </div>
                     {
                         this.state.editing ? 

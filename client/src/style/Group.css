@@ -122,7 +122,7 @@ Individual Group Page
   position: absolute;
   min-width: 400px;
   width: calc(100% - 500px);
-  height: calc(100vh - 60px);
+  max-height: calc(100vh - 60px);
   background-color: #fff;
   float: left;
 }
@@ -180,11 +180,13 @@ Individual Group Page
   padding: 12px;
   transition: all ease 0.1s;
   border-radius: 3px;
+  color: #bbb;
 }
 
 .groupmember-delete:hover{
   background-color: #ff5252;
   transition: all ease 0.1s;
+  color: black;
 }
 
 .group-add-member-container{
@@ -298,6 +300,10 @@ Individual Group Page
   overflow-y: scroll;
 }
 
+/* .group-main-content-container {
+  max-height: calc(100vh - 60px - 100px - 25px - 20px);
+} */
+
 .group-input-container {
   height: 50px;
   width: 100%;
@@ -402,11 +408,13 @@ Messages
   border-radius: 3px;
   transition: all ease 0.1s;
   cursor: pointer;
+  color: #ccc;
 }
 
 .expense-delete-container:hover{
   background-color: #ff5252;
   transition: all ease 0.1s;
+  color: black;
 }
 
 .expense-container{
@@ -628,4 +636,35 @@ Messages
 
 .group-other-col-add-group-btn{
   align-self: center;
+}
+
+@media only screen and (max-width: 1200px) {
+  .expense-container{
+    width: 300px;
+  }
+}
+@media only screen and (max-width: 900px) {
+  
+  .group-main-col {
+    width: calc(100vw - 300px);
+  }
+  .group-other-col {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .expense-container{
+    margin-top: 25px;
+    left: -50px;
+  }
+  .group-members-col {
+    display: none;
+  }
+  .group-main-col{
+    width: 100vw;
+  }
+  .date-span{
+    display: none;
+  }
 }
