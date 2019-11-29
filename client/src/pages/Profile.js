@@ -122,8 +122,10 @@ class Profile extends React.Component {
     /**
      * Add money to doleout account
      */
-    addMoney(){
+    addMoney(e){
+        e.preventDefault();
         this.setState({
+            editing: false,
             addingMoney: true,
         });
         const amount = Number(document.querySelector("#doleout-add-funds-input").value).toFixed(2);
@@ -151,6 +153,15 @@ class Profile extends React.Component {
                   });
             })
         });
+    }
+
+    /**
+     * Show the add funds input and button
+     */
+    showAddFunds(e){
+        e.preventDefault()
+        document.querySelector("#doleout-begin-add-funds-btn").style.display = "none";
+        document.querySelector(".add-doleout-funds-container").style.display = "block";
     }
 
 
@@ -198,8 +209,6 @@ class Profile extends React.Component {
                         <div>
                             <h3>Doleout Wallet</h3>
                             <p>${Number(this.state.balance).toFixed(2)} CAD</p>
-                            $<input type="number" min="0" defaultValue="100.00" id="doleout-add-funds-input"></input>
-                            <div id="doleout-add-funds-btn" onClick={this.addMoney}>Add Funds to Doleout Wallet</div>
                         </div> : null
                         }
                     </div>
@@ -221,6 +230,11 @@ class Profile extends React.Component {
                             <input type="text" name="email" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.email}></input>
                             <p>PayPal URL</p>
                             <input type="text" name="paypal" onChange={Helper.handleInputChange.bind(this)} defaultValue={this.state.paypal}></input>
+                            <button id="doleout-begin-add-funds-btn" onClick={this.showAddFunds}>Add Funds To DoleOut Wallet</button>
+                            <div className="add-doleout-funds-container">
+                                <input type="number" min="0" defaultValue="100.00" id="doleout-add-funds-input"></input>
+                                <button id="doleout-add-funds-btn" onClick={this.addMoney}>Add Funds</button>
+                            </div>
                             </form>
                         </div> : null
                     }

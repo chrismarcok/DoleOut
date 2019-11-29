@@ -6,6 +6,8 @@ When a user makes their first group, the "ur not in any groups" message still sh
 When you fail to register or login, it should tell you why after redirected.
 
 New user should be sent to their profile to be edited
+
+Autocomplete Material UI dropdown for choosing users and stuff
 */
 
 //Bring in our dependencies
@@ -53,11 +55,11 @@ const { checkAuthenticated, checkAdmin } = require("./auth/authCheck");
 app.use(cors());
 app.use(function (req, res, next) {
   //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-    next();
-  });
+res.header("Access-Control-Allow-Origin", "*");
+res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+  next();
+});
 
 //To allow us to use the react app
 app.use(express.static('public'));

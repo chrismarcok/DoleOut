@@ -13,14 +13,15 @@ const y = Math.random() * canvas.height;
 const dy = (Math.random() - 0.5) * 10;
 const radius = 30;
 const leftBorder = 0;
-const numCircles = 30;
+const numCircles = 20;
+const speed = 10;
 
-const green = "#73C557";
-const purple = "#C3648E";
-const blue = "#5380BE";
-const red = "#DB373E";
-const yellow = green;
-const colors = [green, purple, blue, red, yellow];
+var black = "#eee";
+var grey = "#ddd";
+var lightgrey = "#ddd";
+var darkgrey = "#eee";
+var accent = "#2979ff";
+var colors = [accent, black, grey, darkgrey, lightgrey];
 
 
 function Circle(x, y, dx, dy, radius) {
@@ -42,9 +43,9 @@ function Circle(x, y, dx, dy, radius) {
     }
 
     this.update = function() {
-        if (this.x + this.radius > innerWidth || this.x - this.radius < leftBorder) {
-            this.dx *= -1;
-        }
+        // if (this.x + this.radius > innerWidth || this.x - this.radius < leftBorder) {
+        //     this.dx *= -1;
+        // }
         // if (this.y + this.radius > innerHeight || this.y - this.radius < 0){
         //   this.dy *= -1;
         // }
@@ -52,8 +53,12 @@ function Circle(x, y, dx, dy, radius) {
         this.x += this.dx;
         this.y += this.dy;
 
-        if (this.y > canvas.height + this.radius + 10) {
-            this.y -= (canvas.height + this.radius * 2 + 100);
+        if (this.y > canvas.height + this.radius + 500) {
+            this.y -= (canvas.height + this.radius * 2 + 500);
+        }
+
+        if (this.x > canvas.width + this.radius + 500){
+            this.x -= (canvas.width + this.radius * 2 + 500);
         }
 
         this.draw();
@@ -69,23 +74,33 @@ addEventListener('resize', () => {
 let circleArray;
 
 function init() {
-    const speed = 0;
+    
     circleArray = [];
     for (let i = 0; i < numCircles; i++) {
-        const radius = 30 * (Math.random() * 2) + 30;
-        const x = Math.max(Math.random() * ((canvas.width - radius * 2) - leftBorder) + (radius + leftBorder), 0);
-        const dx = (Math.random() - .5) * .5 + speed;
-        const y = Math.random() * (canvas.height - radius * 2) + radius - canvas.height;
-        const dy = Math.random() + .5 + speed;
+        const radius = (Math.random() * 2) + 6;
+        // const x = Math.max(Math.random() * ((canvas.width - radius * 2) - leftBorder) + (radius + leftBorder), 0);
+        const x =  - (Math.random() * 1000);
+        const dx = (Math.random() * 1)  + speed;
+        const y = Math.random() * (2 * canvas.height - radius * 2) + radius - canvas.height;
+        const dy = (Math.random() * 2) + .5 + speed;
 
         circleArray.push(new Circle(x, y, dx, dy, radius));
     }
+    for (let x = 0; x < 100; x++){
+        for (let i = 0; i < circleArray.length; i++) {
+            circleArray[i].update();
+        }
+    }
+    c.fillStyle = 'rgba(255,255,255, 1)';
+    c.fillRect(0, 0, innerWidth + 2000, innerHeight + 2000);
+    
 }
 
 function animate() {
 
     requestAnimationFrame(animate);
-    c.clearRect(0, 0, innerWidth + 2000, innerHeight + 2000);
+    c.fillStyle = 'rgba(255,255,255, .2)';
+    c.fillRect(0, 0, innerWidth + 2000, innerHeight + 2000);
 
     for (let i = 0; i < circleArray.length; i++) {
         circleArray[i].update();

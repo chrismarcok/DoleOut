@@ -26,6 +26,7 @@ class GroupMessage extends React.Component {
   this.toggleExpense = this.toggleExpense.bind(this);
   this.handleInput = this.handleInput.bind(this);
   this.deductPayment = this.deductPayment.bind(this);
+  this.deductPaymentHelper = this.deductPaymentHelper.bind(this);
   this.delete = this.delete.bind(this);
   }
 
@@ -53,6 +54,10 @@ class GroupMessage extends React.Component {
 
     if (this.props.admin === false){
       document.querySelector(".expense-delete-container-" + this.props.msg._id).style.display = "none";
+    }
+
+    if (this.state.youOwe < 0.01){
+      document.querySelector(".you-owe-txt-" + this.props.msg._id).style.color = '#00C853';
     }
   }
 
@@ -84,7 +89,7 @@ class GroupMessage extends React.Component {
   handleInput(){
     this.setState(
       {    
-        payAmount: document.querySelector("#paymentInput" + this.props.msg.id).value
+        payAmount: document.querySelector("#paymentInput" + this.props.msg._id).value
       }
     );
   }
@@ -98,32 +103,61 @@ class GroupMessage extends React.Component {
       alert("Cannot pay a negative amount");
       return;
     }
+    const owe = Number(this.state.youOwe).toFixed(2);
+    const amt = Number(this.state.payAmount).toFixed(2);
+    if (parseFloat(owe) < parseFloat(amt)){
+      this.setState({
+        payAmount: owe
+      }, () => {
+        console.log("toast");
+        this.props.makeToast();
+        this.deductPaymentHelper();
+      });
+    } else {
+      this.deductPaymentHelper();
+    }
+
+  }
+
+  deductPaymentHelper(){
     const amount = this.state.expenseRemaining - Number(this.state.payAmount)
     let rounded = parseFloat(Math.round(amount * 100) / 100).toFixed(2);
     if (rounded < 0.01){
       rounded = Number(0).toFixed(2);
-      const closebtn = document.querySelector(".expense-close-btn" + this.props.msg.id);
-      const container = document.querySelector(".expense-payment-container" + this.props.msg.id);
+      const closebtn = document.querySelector(".expense-close-btn" + this.props.msg._id);
+      const container = document.querySelector(".expense-payment-container" + this.props.msg._id);
       closebtn.style.display = "none";
       container.style.display = "none";
-      this.props.hideExpense(this.props.msg.id);
-      document.querySelector(".expense-cover-" + this.props.msg.id).style.display = "block";
+      this.props.hideExpense(this.props.msg._id);
+      // document.querySelector(".expense-cover-" + this.props.msg._id).style.display = "block";
+      this.setState({
+        totalPaid: true,
+      });
     }
     let youOweNewAmt = Number(this.state.youOwe - Number(this.state.payAmount)).toFixed(2);
     if (youOweNewAmt < 0){
       youOweNewAmt = Number(0).toFixed(2);
       alert("You paid more than required. The max amount has been paid instead.")
+      this.setState({
+        expenseRemaining: Number(this.state.expenseRemaining - this.state.youOwe).toFixed(2),
+        youOwe: youOweNewAmt
+      });
+    } else {
+      this.setState({
+        expenseRemaining: Number(this.state.expenseRemaining - this.state.payAmount).toFixed(2),
+        youOwe: youOweNewAmt
+      });
     }
-    this.setState({
-      expenseRemaining: rounded,
-      youOwe: youOweNewAmt
-    });
     if (youOweNewAmt < 0.01){
-      document.querySelector(".you-owe-txt-" + this.props.msg.id).style.color = "#00C853";
-      document.querySelector(".expense-pic-cover-id-" + this.state.currentUserId + "-" + this.props.msg.expense.id).style.display = "block";
+      document.querySelector(".you-owe-txt-" + this.props.msg._id).style.color = "#00C853";
+      document.querySelector(".expense-pic-cover-id-" + this.state.user._id + "-" + this.props.msg._id).style.display = "block";
+      const closebtn = document.querySelector(".expense-close-btn" + this.props.msg._id);
+      const container = document.querySelector(".expense-payment-container" + this.props.msg._id);
+      closebtn.style.display = "none";
+      container.style.display = "none";
     }
     const update = this.props.update;
-    update(this.props.msg.id, rounded);
+    update(this.props.msg._id, rounded);
   }
 
   // taken from https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
@@ -187,6 +221,7 @@ class GroupMessage extends React.Component {
    */
   getExpense() {
     return (
+      
       <div className={"msg-id-" + this.props.msg._id}>
         <div className="group-expense-msg-container">
           <div className="group-main-msg-profile-pic" id={"group-main-profile-pic-id-" + this.props.msg._id} onClick={() => this.redirect(this.props.msg.creatorID)}>
@@ -209,7 +244,7 @@ class GroupMessage extends React.Component {
                   <p><i>"{this.props.msg.content}"</i></p>
                   <div className={"you-owe-container-id-" + this.props.msg._id}>
                     <p className="you-owe-title">You Owe:</p>
-                    <p className={"you-owe-txt you-owe-txt-" + this.props.msg._id}>${this.state.youOwe}</p>
+                    <p className={"you-owe-txt you-owe-txt-" + this.props.msg._id}>${Number(this.state.youOwe).toFixed(2)}</p>
                   </div>
                 </div>
                 <div className="expense-upper-right">
@@ -249,12 +284,13 @@ class GroupMessage extends React.Component {
             </div>
             <div className={"expense-payment-container expense-payment-container" + this.props.msg._id }>
               <h3>How much would you like to pay?</h3>
-              <input id={"paymentInput"+this.props.msg._id} type="number" min="0.01" max={String(this.props.msg.expense.totalRemaining)} step="0.01" defaultValue="0.01" onChange={this.handleInput} />
+              <input id={"paymentInput"+this.props.msg._id} type="number" min="0.01" max={String(this.props.msg.expense.totalRemaining)} step="1.00" defaultValue="1.00" onChange={this.handleInput} />
               <i className="fa fa-check" id="expense-make-payment-btn" onClick={this.deductPayment}></i>
               </div>
           </div>
         </div>
       </div>
+
     )
   }
 

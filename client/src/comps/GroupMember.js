@@ -54,7 +54,7 @@ class GroupMember extends React.Component {
     if (this.props.member.isAdmin){
       color = "red";
     } else if (this.props.isSuper){
-      color = "orange"
+      color = "#2979FF";
     }
 
     return (

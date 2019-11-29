@@ -15,6 +15,8 @@ import Helper from '../scripts/helper';
 import ExpensePopup from '../comps/ExpensePopup'
 import Loader from '../comps/Loader';
 import Axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import io from "socket.io-client";
 import '../style/Loader.css';
 
@@ -176,6 +178,7 @@ class Group extends React.Component {
       newMsg.className = "newmsg-" + m._id
       document.querySelector(".group-main-content").appendChild(newMsg);
       ReactDOM.render(<GroupMessage 
+                                    makeToast={this.makeToast}
                                     admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === m.creatorID }
                                     user={ this.state.user } 
                                     creator={ msgWithUserObj.user }
@@ -279,6 +282,7 @@ class Group extends React.Component {
       newMsg.id = `expense-id-${expense._id}`;
       document.querySelector(".group-main-content").appendChild(newMsg);
       ReactDOM.render(<GroupMessage 
+        makeToast={this.makeToast}
         msg={expense} 
         key={expense._id}
         user={ this.state.user } 
@@ -352,6 +356,7 @@ class Group extends React.Component {
         newMsg.className = "newmsg-" + m._id
         document.querySelector(".group-main-content").appendChild(newMsg);
         ReactDOM.render(<GroupMessage 
+                                      makeToast={this.makeToast}
                                       admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === m.creatorID }
                                       user={ this.state.user } 
                                       creator={this.state.user}
@@ -459,6 +464,15 @@ class Group extends React.Component {
     document.querySelector(".expense-small-id-" + id).style.display = "none";
   }
 
+  /**
+   * Makes a taost
+   */
+  makeToast(){
+    toast.info("⚠️ Only what you owed was deducted from your wallet.", {
+      draggable: true,
+    });
+  }
+
   render() {
     const {groupMembers, groupMessages, otherGroups} = this.state;
     const {loadingMe, loadingMembers, loadingMessages, loadingOtherGroups} = this.state;
@@ -467,6 +481,7 @@ class Group extends React.Component {
         
 
         <Header user="admin"/>
+        <ToastContainer position={toast.POSITION.BOTTOM_LEFT}/>
         {
         (loadingMe || loadingMembers || loadingMessages || loadingOtherGroups) ?
           <Loader msg={"Loading Group"}/> : null
@@ -534,6 +549,7 @@ class Group extends React.Component {
                   groupMessages.map(msg => {
                     return (
                       <GroupMessage 
+                      makeToast={this.makeToast}
                       msg={ msg } 
                       key={ msg._id } 
                       user={ this.state.user }

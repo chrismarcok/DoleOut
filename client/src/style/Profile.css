@@ -84,12 +84,16 @@
   font-family: "Poppins", sans-serif;
   height: 55px;
   font-size: 24px;
-  width: 250px;
+  width: 150px;
 }
 
 #doleout-add-funds-btn{
   background-color: #2979ff;
-  margin-top: 10px;
+  margin-left: 20px;
+  top: -5px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+  position: relative;
   width: fit-content;
   color: white;
   border-radius: 3px;
@@ -97,4 +101,25 @@
   border-radius: 3px;
   padding: 20px;
   font-family: "Poppins", sans-serif;
+  border-width: 0;
+}
+
+#doleout-begin-add-funds-btn{
+  background-color: #2979ff;
+  top: -5px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+  position: relative;
+  width: fit-content;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  border-width: 0;
+}
+
+.add-doleout-funds-container{
+  display: none;
 }

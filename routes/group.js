@@ -224,31 +224,17 @@ function expenseHasUser(expense, userID){
   return filtered.length === 1;
 }
 
-router.patch('/:group/expense/:expense', checkAuthenticated, (req, res) => {
-  let msgID = undefined
+router.patch('/expense/:expense', checkAuthenticated, (req, res) => {
   Message.findOne({'_id': mongoose.Types.ObjectId(req.params.expense)})
   .then( message => {
     if (message && !message.isMsg && expenseHasUser(message.expense, req.user._id)){
-      msgID = message._id;
-      return Group.findOne({'_id': mongoose.Types.ObjectId(req.params.group)});
-    } else {
-      throw new Error("that message DNE");
-    }
-  })
-  .then( group => {
-    if (group){
-      if (group.memberIDs.includes(req.user._id)){
-        return Message.findOneAndUpdate({'_id': mongoose.Types.ObjectId(msgID)}, 
+      return Message.findOneAndUpdate({'_id': mongoose.Types.ObjectId(message._id)}, 
         {
           //Something goes here
         },
         {useFindAndModify: false});
-      } else {
-        throw new Error("User does not belong to that group");
-      }
     } else {
-      throw new Error("that group DNE.");
-      res.sendStatus(400);
+      throw new Error("that message DNE");
     }
   })
   .then( response => {

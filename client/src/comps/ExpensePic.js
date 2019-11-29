@@ -12,6 +12,11 @@ class ExpensePic extends React.Component{
   componentDidMount(){
     const pic = document.querySelector(".expense-pic-id-" + this.props.member._id + "-" + this.props.id);
     pic.style.backgroundImage = "url('" + this.props.member.avatarURL + "')";
+    const picCover = document.querySelector(".expense-pic-cover-id-" + this.props.member._id + "-" + this.props.id);
+    picCover.style.display = "none"
+    if (this.state.complete){
+      picCover.style.display = "block";
+    }
   }
 
   /**
@@ -25,12 +30,12 @@ class ExpensePic extends React.Component{
 
     return (
       <div className="expense-pic-small-container">
-        {
-          this.state.complete ?
-          <div className={"expense-pic-cover expense-pic-cover-id-" + this.props.member._id + "-" + this.props.id} onClick={() => this.redirect()}>
-          </div>
-          : null
-        }
+        
+          
+        <div className={"expense-pic-cover expense-pic-cover-id-" + this.props.member._id + "-" + this.props.id} onClick={() => this.redirect()}>
+        </div>
+          
+        
         <div className={"expense-pic-small expense-pic-id-" + this.props.member._id + "-" + this.props.id} onClick={() => this.redirect()}>
         </div>
       </div>
