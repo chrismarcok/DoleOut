@@ -26,14 +26,29 @@ class LoginPage extends React.Component {
             <div className="login-inner">
             <LoginHeader title="Login"/>
               <form className="login-form" action="/login" method="post">
-                <h3>
+
+              <div className="group">      
+                <input id="login-username" name="username" type="text" required onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
+                <span className="highlight"></span>
+                <span className="bar"></span>
+                <label>Username</label>
+              </div>
+                
+              <div className="group">      
+                <input id="login-password" name="password" type="password" required onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
+                <span className="highlight"></span>
+                <span className="bar"></span>
+                <label>Password</label>
+              </div>
+
+                {/* <h3>
                   Username
                 </h3>
                 <input id="login-username" type="text" name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
                 <h3>
                   Password
                 </h3>
-                <input id="login-password" type="password" name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input>
+                <input id="login-password" type="password" name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.login(e)}></input> */}
                 <button className="login-btn" type="submit" onClick={(e) => this.login(e)}>Login <i className="fa fa-sign-in"></i></button>  
               </form>
             </div>

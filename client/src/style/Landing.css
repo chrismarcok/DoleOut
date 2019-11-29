@@ -100,8 +100,8 @@ Jumbotron
 
 .main-header {
     font-size: 48px;
-    color: white;
-    background-color: #666;
+    color: #eee;
+    cursor: pointer;
     padding: 15px;
 }
 

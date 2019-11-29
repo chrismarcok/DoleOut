@@ -1,6 +1,7 @@
 import React from 'react';
-import Header from '../comps/Header.js'
-import Footer from '../comps/Footer.js'
+import Header from '../comps/Header.js';
+import Footer from '../comps/Footer.js';
+import "../style/markerpen.css";
 
 class LandingPage extends React.Component {
     componentDidMount () {
@@ -19,7 +20,7 @@ class LandingPage extends React.Component {
                 </div> 
                 <div className = "above-jumbo" >
                     <h1 className="landing-main-txt">
-                    <span className = "main-header" > DoleOut </span> 
+                    <span className = "main-header underlined underlined--gradient" onClick={() => { window.location = "/login"}} > DoleOut </span> 
                     </h1> 
                 </div>
                 <Footer />

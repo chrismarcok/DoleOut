@@ -5,6 +5,8 @@ import Helper from '../scripts/helper.js';
 import Axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "../style/inputboxes.css";
+
 
 const regex = RegExp('^([a-zA-Z0-9 _-]+)$');
 
@@ -114,18 +116,41 @@ class RegisterPage extends React.Component {
           <div className="login-inner">
             <LoginHeader title="Register"/>
             <form className="login-form">
-              <h3>
+              {/* <h3>
                 Username
               </h3>
-              <input id="register-username" type="text" required name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
-              <h3>
+              <input id="register-username" type="text" required name="username" placeholder="Username" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input> */}
+              <div className="group">      
+                <input id="register-username" name="username" type="text" required onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+                <span className="highlight"></span>
+                <span className="bar"></span>
+                <label>Username</label>
+              </div>
+                
+              <div className="group">      
+                <input id="register-password" name="password" type="password" required onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+                <span className="highlight"></span>
+                <span className="bar"></span>
+                <label>Password</label>
+              </div>
+
+              <div className="group">      
+                <input id="register-repassword" name="rePassword" type="password" required onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+                <span className="highlight"></span>
+                <span className="bar"></span>
+                <label>Confirm Password</label>
+              </div>
+
+
+
+              {/* <h3>
                 Password
               </h3>
               <input id="register-password" type="password" required name="password" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
               <h3>
                 Confirm Password
               </h3>
-              <input id="register-repassword" type="password" required name="rePassword" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input>
+              <input id="register-repassword" type="password" required name="rePassword" placeholder="Password" onChange={Helper.handleInputChange.bind(this)} onKeyDown={(e) => this.register(e)}></input> */}
                
             </form>
             <button className="register-btn" onClick={(e) => {this.register(e)}}>Register <i className="fa fa-user-plus"></i></button> 
