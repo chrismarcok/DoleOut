@@ -21,8 +21,8 @@ router.post("/pay", checkAuthenticated, (req, res) => {
         "payment_method": "paypal"
     },
     "redirect_urls": {
-        "return_url": "http://localhost:5000/paypal/success",
-        "cancel_url": "http://localhost:5000"
+        "return_url": "https://doleout.herokuapp.com/paypal/success",
+        "cancel_url": "https://doleout.herokuapp.com"
     },
     "transactions": [{
         "item_list": {
