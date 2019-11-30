@@ -8,6 +8,8 @@ When you fail to register or login, it should tell you why after redirected.
 New user should be sent to their profile to be edited
 
 Autocomplete Material UI dropdown for choosing users and stuff
+
+Users can make payments even if they have no money
 */
 
 //Bring in our dependencies

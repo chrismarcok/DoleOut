@@ -43,7 +43,7 @@ class ExpensePopup extends React.Component {
       expense: {
         title: this.state.expenseTitle,
         cost: Number(this.state.expenseCost).toFixed(2),
-        totalRemaining: Number(this.state.expenseCost).toFixed(2) - (this.state.expenseCost / expenseMembers.length),
+        totalRemaining: Number(parseFloat(Number(this.state.expenseCost / expenseMembers.length).toFixed(2)) * (expenseMembers.length - 1)).toFixed(2),
         totalPaid: false,
         members: expenseMembers,
       },

@@ -6,6 +6,7 @@ import React from 'react'
 import ExpensePic from '../comps/ExpensePic'
 import Axios from 'axios'
 import io from "socket.io-client";
+const dateFormat = require('dateformat');
 
 const socket = io.connect();  
 // const socket = openSocket("http://localhost:5000");
@@ -45,7 +46,7 @@ class GroupMessage extends React.Component {
     if (currentUser.complete){
       return 0;
     }
-    return Number(currentUser.totalToPay - currentUser.amountPaid).toFixed(2);
+    return Number(currentUser.totalToPay).toFixed(2);
   }
 
   componentDidMount() {
@@ -148,6 +149,21 @@ class GroupMessage extends React.Component {
         youOwe: youOweNewAmt
       });
     }
+    //Patch request
+    Axios.patch(`/g/expense/${this.props.msg._id}`, 
+    JSON.stringify({
+      amountPaid: Number(this.state.payAmount).toFixed(2), 
+      totalPaid: (rounded < 0.01),
+      paidMyShare: (youOweNewAmt < 0.01),
+    }),
+      { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+    .then( response => {
+      console.log(response)
+    })
+    .catch( err => {
+      console.log(err)
+    });
+
     if (youOweNewAmt < 0.01){
       document.querySelector(".you-owe-txt-" + this.props.msg._id).style.color = "#00C853";
       document.querySelector(".expense-pic-cover-id-" + this.state.user._id + "-" + this.props.msg._id).style.display = "block";
@@ -162,16 +178,7 @@ class GroupMessage extends React.Component {
 
   // taken from https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
   timeConverter(UNIX_timestamp){
-    const a = new Date(UNIX_timestamp);
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const year = a.getFullYear();
-    const month = months[a.getMonth()];
-    const date = a.getDate();
-    const hour = a.getHours();
-    const min = a.getMinutes();
-    const sec = a.getSeconds();
-    const time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-    return time;
+    return dateFormat(new Date(UNIX_timestamp), "ddd mmm d yyyy hh:MM:ss TT");
   }
 
   /**
@@ -284,7 +291,7 @@ class GroupMessage extends React.Component {
             </div>
             <div className={"expense-payment-container expense-payment-container" + this.props.msg._id }>
               <h3>How much would you like to pay?</h3>
-              <input id={"paymentInput"+this.props.msg._id} type="number" min="0.01" max={String(this.props.msg.expense.totalRemaining)} step="1.00" defaultValue="1.00" onChange={this.handleInput} />
+              <input id={"paymentInput"+this.props.msg._id} type="number" min="0.01" max={String(this.props.msg.expense.totalRemaining)} step="1.00" defaultValue="0.01" onChange={this.handleInput} />
               <i className="fa fa-check" id="expense-make-payment-btn" onClick={this.deductPayment}></i>
               </div>
           </div>

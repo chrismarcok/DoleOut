@@ -182,6 +182,8 @@ class Group extends React.Component {
                                     admin={ this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id) || this.state.user._id === m.creatorID }
                                     user={ this.state.user } 
                                     creator={ msgWithUserObj.user }
+                                    update={ this.updateSmallExpense }
+                                    hideExpense={ this.hideSmallExpense }
                                     msg={ m } 
                                     key={ m._id } />, 
                                     document.querySelector(".newmsg-" + m._id));
@@ -208,7 +210,8 @@ class Group extends React.Component {
   createChatNotification(msg){
     const newMsg = document.createElement("div")
     newMsg.className = "online-alert newmsg-" + Date.now();
-    newMsg.innerText = `${msg} - ${dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT")}`
+    newMsg.innerText = `${msg} - ${dateFormat(new Date(), "ddd mmm d yyyy hh:MM:ss TT")}`;
+
     document.querySelector(".group-main-content").appendChild(newMsg);
     setTimeout(() => {
       this.scrollToBottomOfChat();
@@ -238,6 +241,47 @@ class Group extends React.Component {
   getGroupID(){
     const { group_number } = this.props.match.params;
     return group_number
+  }
+
+  /**
+   * Makes a loader. Spaghetti ahead
+   */
+  createLoader(){
+    const loader = document.createElement('div');
+    loader.className = "loader-inner-msg";
+    const a = document.createElement("div")
+    a.className = "a";
+    a.setAttribute("style", "--n: 5;");
+    loader.appendChild(a);
+    const dot0 = document.createElement("div");
+    dot0.className = "dot";
+    dot0.setAttribute("style", "--i: 0;");
+    a.appendChild(dot0);
+    const dot1 = document.createElement("div");
+    dot1.className = "dot";
+    dot1.setAttribute("style", "--i: 1;");
+    a.appendChild(dot1);
+    const dot2 = document.createElement("div");
+    dot2.className = "dot";
+    dot2.setAttribute("style", "--i: 2;");
+    a.appendChild(dot2);
+    const dot3 = document.createElement("div");
+    dot3.className = "dot";
+    dot3.setAttribute("style", "--i: 3;");
+    a.appendChild(dot3);
+    const dot4 = document.createElement("div");
+    dot4.className = "dot";
+    dot4.setAttribute("style", "--i: 4;");
+    a.appendChild(dot4);
+
+    document.querySelector(".group-main-content").appendChild(loader);
+  }
+
+  destroyLoader(){
+    const loader = document.querySelector('.loader-inner-msg');
+    if (loader){
+      loader.parentNode.removeChild(loader);
+    }
   }
 
   /**
@@ -271,6 +315,8 @@ class Group extends React.Component {
     this.setState({
       postingToDB: true,
     });
+    this.createLoader();
+
     Axios.post(`/g/${this.state.id}`,
     JSON.stringify(expense),
     { headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
@@ -317,6 +363,7 @@ class Group extends React.Component {
       this.setState({
         postingToDB: false,
       });
+      this.destroyLoader();
     });
     
   }
@@ -327,7 +374,24 @@ class Group extends React.Component {
   getInput(e) {
     const val = this.state.groupInput;
     if ((e.keyCode === 13 || e.target === document.querySelector(".group-main-send-btn") || e.target === document.querySelector(".fa-paper-plane")) && val !== "") {
-      //Here we would need to get the current user object from a server. for now, just use this dummy user.
+      
+      //Check if command
+      if (val === "!balance"){
+        Axios.get(`/api/me`)
+        .then( response => {
+          this.createChatNotification(`Your current DoleOut Wallet balance is $${Number(response.data.balance).toFixed(2)} CAD`);
+        })
+        .catch( err => {
+          console.log(err);
+        })
+        document.querySelector("#group-input").value = ""
+        this.setState({
+          groupInput: "",
+        });
+        return;
+      }
+
+
       const m = {
         groupID: this.state.id,
         isMsg: true,
@@ -342,6 +406,7 @@ class Group extends React.Component {
         groupInput: "",
         postingToDB: true,
       });
+      this.createLoader();
 
       //Make the post
       Axios.post(`/g/${this.state.id}`,
@@ -374,6 +439,7 @@ class Group extends React.Component {
         this.setState({
           postingToDB: false,
         });
+        this.destroyLoader();
       });
       
     }
@@ -560,19 +626,7 @@ class Group extends React.Component {
                     )
                   })
                 }
-                {
-                  this.state.postingToDB ? 
-                  <div className="loader-inner">
-                    <div className="a" style={{'--n': 5}}>
-                      <div className="dot" style={{'--i': 0}}></div>
-                      <div className="dot" style={{'--i': 1}}></div>
-                      <div className="dot" style={{'--i': 2}}></div>
-                      <div className="dot" style={{'--i': 3}}></div>
-                      <div className="dot" style={{'--i': 4}}></div>
-                    </div>
-                  </div>                
-                  : null
-                }
+                
               </div>
 
             </div>

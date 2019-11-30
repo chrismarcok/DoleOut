@@ -220,25 +220,50 @@ router.post('/:group/user/:user', checkAuthenticated, (req, res) => {
 });
 
 function expenseHasUser(expense, userID){
-  const filtered = expense.members.filter( person => person._id === userID);
+  const filtered = expense.members.filter( person => String(person._id) === String(userID));
   return filtered.length === 1;
 }
 
+/**
+ * Paying an expense
+ */
 router.patch('/expense/:expense', checkAuthenticated, (req, res) => {
   Message.findOne({'_id': mongoose.Types.ObjectId(req.params.expense)})
   .then( message => {
     if (message && !message.isMsg && expenseHasUser(message.expense, req.user._id)){
-      return Message.findOneAndUpdate({'_id': mongoose.Types.ObjectId(message._id)}, 
+      return Message.findOneAndUpdate(
+        {'_id': mongoose.Types.ObjectId(message._id)}, 
         {
-          //Something goes here
+          $inc: {'expense.totalRemaining': -req.body.amountPaid},
+          $set: {'expense.totalPaid': req.body.totalPaid}
         },
         {useFindAndModify: false});
     } else {
-      throw new Error("that message DNE");
+      throw new Error(`message: ${message}, isexpense? ${!message.isMsg}, expenseHasUser ${expenseHasUser(message.expense, req.user._id)}`);
     }
   })
   .then( response => {
     console.log(`Response: ${response}`);
+    // Updating invidual user stuff (amount paid, complete, totaltoPay)
+    return Message.findOneAndUpdate(
+      {'_id': mongoose.Types.ObjectId(req.params.expense), 'expense.members': {$elemMatch: {'_id': mongoose.Types.ObjectId(req.user._id)}}}, 
+      {
+        $inc: {'expense.members.$.amountPaid': req.body.amountPaid, 'expense.members.$.totalToPay': -req.body.amountPaid},
+        $set: {'expense.members.$.complete': req.body.paidMyShare}
+      },
+      {useFindAndModify: false});
+  })
+  .then( response => {
+    //Updating user balance
+    return User.findOneAndUpdate(
+      {'_id': mongoose.Types.ObjectId(req.user._id)}, 
+      {
+        $inc: {'balance': -req.body.amountPaid}
+      },
+      {useFindAndModify: false});
+  })
+  .then( response => {
+    console.log(response);
     res.sendStatus(200);
   })
   .catch(err => {
