@@ -445,6 +445,7 @@ class Group extends React.Component {
     }
   }
 
+
   /**
    * Adds a new user to the group's member list.
    */
@@ -465,6 +466,9 @@ class Group extends React.Component {
         if (!this.state.thisGroup.memberIDs.includes(addedUser._id)){
           return Axios.post(`/g/${this.state.thisGroup._id}/user/${this.state.groupMemberAddInput}`);
         } else {
+          toast.error("❌ That user is already in this group.", {
+            draggable: true,
+          });
           throw new Error("That user is already in this group");
         }
       })
@@ -478,6 +482,7 @@ class Group extends React.Component {
           admin={this.state.user.isAdmin || this.state.thisGroup.superusers.includes(this.state.user._id)}
           isSuper={ false }/>,   
           document.querySelector(`.group-member-${addedUser._id}`));
+        this.createChatNotification(`You added ${addedUser.displayName} to the group`)
       })
       .catch( err => console.log(err))
       .finally( () => {
@@ -533,10 +538,16 @@ class Group extends React.Component {
   /**
    * Makes a taost
    */
-  makeToast(){
-    toast.info("⚠️ Only what you owed was deducted from your wallet.", {
-      draggable: true,
-    });
+  makeToast(msg, type){
+    if (type === "info"){
+      toast.info(msg, {
+        draggable: true,
+      });
+    } else {
+      toast.error(msg, {
+        draggable: true,
+      });
+    }
   }
 
   render() {

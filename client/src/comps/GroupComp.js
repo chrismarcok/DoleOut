@@ -35,6 +35,7 @@ class GroupComp extends React.Component {
     const group = document.querySelector(".group-div-id-" + this.props.id);
     group.style.backgroundColor = this.props.colorBg;
 
+
     if (Color(this.props.colorBg).isDark()){
       document.querySelector(".group-div-id-" + this.props.id).style.color = "white";
     } else {
@@ -177,8 +178,8 @@ class GroupComp extends React.Component {
 
   render() {
     return (
+      <div>
         <div className={"group-div group-div-id-" + this.props.id} onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} onClick={this.redirect}>
-
           <h1 className="grouppage-title">
             <i id={"icon" + this.props.id}></i> <span className="group-name" id={"group-name-id-" + this.props.id}>{this.state.name}</span> <input className="group-comp-input" id={"group-comp-input-id-" + this.props.id } type="text" name="title" defaultValue={this.state.name} onChange={Helper.handleInputChange.bind(this)}></input>
           </h1>
@@ -199,6 +200,7 @@ class GroupComp extends React.Component {
             }
           </h3>
         </div>
+      </div>
     )
   }
 

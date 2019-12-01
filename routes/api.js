@@ -72,7 +72,10 @@ router.get('/membersOf/:group', checkAuthenticated403, (req, res) => {
     return Promise.all(promises);
   })
   .then(values => {
-    values.forEach( v => v.password = undefined);
+    values.forEach( v => {
+      v.password = undefined;
+      v.balance = undefined;
+    });
     res.send(values);
   })
   .catch(err => {
@@ -85,8 +88,8 @@ router.get('/membersOf/:group', checkAuthenticated403, (req, res) => {
  * Return logged in user
  */
 router.get('/me', checkAuthenticated403, (req, res) => {
-  req.user.password = undefined
-  res.send(req.user)
+  req.user.password = undefined;
+  res.send(req.user);
 });
 
 /**
@@ -96,8 +99,8 @@ router.get('/u/:id', (req, res) => {
   User.findById(req.params.id)
     .then(user => {
       if (user) {
-        user.password = undefined
-        res.send(user)
+        user.password = undefined;
+        res.send(user);
       } else {
         throw new Error("no user")
       }
@@ -115,8 +118,9 @@ router.get('/username/:name', (req, res) => {
   User.findOne({displayName: req.params.name})
     .then(user => {
       if (user) {
-        user.password = undefined
-        res.send(user)
+        user.password = undefined;
+        user.balance = undefined;
+        res.send(user);
       } else {
         throw new Error("no user")
       }
@@ -171,7 +175,8 @@ router.get('/users', (req, res) => {
   User.find()
     .then(users => {
       users.forEach(u => {
-        u.password = undefined
+        u.password = undefined;
+        u.balance = undefined;
       });
       res.send(users)
     })
@@ -226,6 +231,7 @@ router.get('/gm/:group', checkAuthenticated403, (req, res) => {
   .then(values => {
     values.forEach(val => {
       val.password = undefined;
+      val.balance = undefined;
       filtered = {[val._id]: val, ...filtered};
     });
     res.send(filtered);

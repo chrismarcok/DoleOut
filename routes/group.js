@@ -228,7 +228,14 @@ function expenseHasUser(expense, userID){
  * Paying an expense
  */
 router.patch('/expense/:expense', checkAuthenticated, (req, res) => {
-  Message.findOne({'_id': mongoose.Types.ObjectId(req.params.expense)})
+  User.findOne({'_id': mongoose.Types.ObjectId(req.user._id)})
+  .then(user => {
+    if (user.balance > req.body.amountPaid){
+      return Message.findOne({'_id': mongoose.Types.ObjectId(req.params.expense)});
+    } else {
+      throw new Error("User is too poor to do this");
+    }
+  })
   .then( message => {
     if (message && !message.isMsg && expenseHasUser(message.expense, req.user._id)){
       return Message.findOneAndUpdate(

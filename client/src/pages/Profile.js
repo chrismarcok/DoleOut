@@ -124,16 +124,18 @@ class Profile extends React.Component {
      */
     addMoney(e){
         e.preventDefault();
+        const amount = Number(document.querySelector("#doleout-add-funds-input").value).toFixed(2);
+        if (amount <= 0){
+            toast.error("❌ You cannot add less than $0.01", {
+                draggable: true,
+              });
+            return;
+        }
         this.setState({
             editing: false,
             addingMoney: true,
         });
-        const amount = Number(document.querySelector("#doleout-add-funds-input").value).toFixed(2);
-        if (amount <= 0){
-            toast.error("You cannot add less than $0.01", {
-                draggable: true,
-              });
-        }
+
         Axios.post("/paypal/pay", JSON.stringify(
             {
                 amount: amount

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import NewGroupMemberRow from '../comps/NewGroupMemberRow';
 import Helper from  '../scripts/helper.js';
 import '../style/ExpensePopup.css';
+import Axios from 'axios';
 
 class ExpensePopup extends React.Component {
 
@@ -16,8 +17,19 @@ class ExpensePopup extends React.Component {
       numMembers: 1,
       thisGroup: this.props.group,
       user: this.props.user,
+      thisGroupMembers: undefined,
     }
     this.createNewMemberRow = this.createNewMemberRow.bind(this)
+  }
+
+  componentDidMount(){
+    Axios.get(`/api/membersOf/${this.props.group._id}`)
+    .then( response => {
+      this.setState({
+        thisGroupMembers: response.data,
+      });
+    })
+    .catch(err => console.log(err));
   }
 
   /**
@@ -58,7 +70,7 @@ class ExpensePopup extends React.Component {
    */
   getMembers(){
     const usernameInputs = document.querySelectorAll(".group-member-input-field");
-    const memberLst = this.props.groupMembers;
+    const memberLst = this.state.thisGroupMembers;
     const numMembers = this.state.numMembers;
     const thisUser = {
       ...this.state.user,

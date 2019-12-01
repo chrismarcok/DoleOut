@@ -23,6 +23,7 @@ class GroupMessage extends React.Component {
     payAmount: "0.01",
     expenseRemaining: (!this.props.msg.isMsg) ? Number(this.props.msg.expense.totalRemaining).toFixed(2) : undefined,
     youOwe: (!this.props.msg.isMsg) ? this.getYouOwe() : 123,
+    balance: this.props.user.balance,
   }
   this.toggleExpense = this.toggleExpense.bind(this);
   this.handleInput = this.handleInput.bind(this);
@@ -100,8 +101,12 @@ class GroupMessage extends React.Component {
    * Will require a server call to edit an expense's information in our database.
    */
   deductPayment(){
-    if(Number(this.state.payAmount) < 0){
-      alert("Cannot pay a negative amount");
+    if(Number(this.state.payAmount) <= 0){
+      this.props.makeToast("❌ Please enter a positive number.", false);
+      return;
+    }
+    if (this.state.balance < this.state.payAmount){
+      this.props.makeToast("❌ You have insufficient balance.", false);
       return;
     }
     const owe = Number(this.state.youOwe).toFixed(2);
@@ -110,8 +115,7 @@ class GroupMessage extends React.Component {
       this.setState({
         payAmount: owe
       }, () => {
-        console.log("toast");
-        this.props.makeToast();
+        this.props.makeToast("⚠️ Only what you owed was deducted from your wallet.", true);
         this.deductPaymentHelper();
       });
     } else {
@@ -136,19 +140,13 @@ class GroupMessage extends React.Component {
       });
     }
     let youOweNewAmt = Number(this.state.youOwe - Number(this.state.payAmount)).toFixed(2);
-    if (youOweNewAmt < 0){
-      youOweNewAmt = Number(0).toFixed(2);
-      alert("You paid more than required. The max amount has been paid instead.")
-      this.setState({
-        expenseRemaining: Number(this.state.expenseRemaining - this.state.youOwe).toFixed(2),
-        youOwe: youOweNewAmt
-      });
-    } else {
-      this.setState({
-        expenseRemaining: Number(this.state.expenseRemaining - this.state.payAmount).toFixed(2),
-        youOwe: youOweNewAmt
-      });
-    }
+
+    this.setState({
+      expenseRemaining: Number(this.state.expenseRemaining - this.state.payAmount).toFixed(2),
+      youOwe: youOweNewAmt,
+      balance: this.state.balance - this.state.payAmount,
+    });
+    
     //Patch request
     Axios.patch(`/g/expense/${this.props.msg._id}`, 
     JSON.stringify({
@@ -236,7 +234,7 @@ class GroupMessage extends React.Component {
           <div className={"expense-delete-container expense-delete-container-" + this.props.msg._id} onClick={this.delete}>
             <i className="fa fa-trash"></i>
           </div>
-          <b>{this.props.creator.displayName}</b> created a new expense for ${this.props.msg.expense.cost}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
+          <b>{this.props.creator.displayName}</b> created a new expense for ${Number(this.props.msg.expense.cost).toFixed(2)}: <span className="date-span">{this.timeConverter(this.props.msg.date)}</span>
           <div className="group-main-msg-content">
             <div className="expense-container">
               {
